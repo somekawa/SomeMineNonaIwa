@@ -7,9 +7,9 @@ public class playerController : MonoBehaviour
     private CharacterController controller;
 
     [SerializeField]
-    private float speed = 3.0f;
-    private float gravity = 9.8f;
-    private bool walkFlg = false;
+    private float speed_  = 3.0f;
+    private float gravity_= 9.8f;
+    private bool walkFlg_ = false;
 
     void Start()
     {
@@ -29,21 +29,21 @@ public class playerController : MonoBehaviour
 
         if(direction.x != 0 || direction.z != 0)
         {
-            walkFlg = true;
+            walkFlg_ = true;
         }
         else
         {
-            walkFlg = false;
+            walkFlg_ = false;
         }
 
-        Vector3 velocity = direction * speed;
-        velocity.y -= gravity;
+        Vector3 velocity = direction * speed_;
+        velocity.y -= gravity_;
         velocity = transform.transform.TransformDirection(velocity);
         controller.Move(velocity * Time.deltaTime);
     }
 
     public bool GetWalkFlg()
     {
-        return walkFlg;
+        return walkFlg_;
     }
 }
