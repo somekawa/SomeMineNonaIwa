@@ -12,6 +12,8 @@ public class playerController : MonoBehaviour
     private bool walkFlg_  = false;  // 移動中はtrue
     private bool slowWalk_ = false;  // 移動速度が遅くなる場合はtrue
 
+    private bool batteryGetFlag_=false; // バッテリーを拾ったかのチェック
+
     // ゆっくり歩く処理が必要
     // 特定のキーの押下状態を調べて、押下ならフラグか何かをtrueにする
 
@@ -69,6 +71,31 @@ public class playerController : MonoBehaviour
         velocity = transform.transform.TransformDirection(velocity);
         controller.Move(velocity * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 両方のColliderのIsTrrigerにチェックを入れる
+        if (other.gameObject.tag == "Battery")
+        {
+           // Debug.Log("GetBatteryFlag+++++++電池ゲット");
+            batteryGetFlag_ = true;
+            Destroy(other.gameObject);            // オブジェクトを削除
+        }
+    }
+
+    public bool SetBatteryFlag()
+    {
+        // Debug.Log("SetBatteryFlag+++++++電池ゲット");
+        return batteryGetFlag_;
+    }
+
+    public void GetBatteryFlag(bool flag)
+    {
+       // Debug.Log("GetBatteryFlag+++++++電池ゲット");
+        batteryGetFlag_ = flag;
+
+    }
+
 
     public bool GetWalkFlg()
     {
