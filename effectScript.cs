@@ -5,11 +5,11 @@ using UnityEngine;
 public class effectScript : MonoBehaviour
 {
     [SerializeField]
-    private int count = 0;
-    private bool countFlg = false;
-    private bool onceFlg  = false;
-    private float playTime = 0.0f;
-    private GameObject effect = null;
+    private int count_ = 0;
+    private bool countFlg_  = false;
+    private bool onceFlg_   = false;
+    private float playTime_ = 0.0f;
+    private GameObject effect_ = null;
 
     private GameObject player;
     private playerController plSc;
@@ -37,52 +37,61 @@ public class effectScript : MonoBehaviour
     void Update()
     {
         // 120秒でフラグを立てる
-        count++;
-        if (count >= 120 && !countFlg)
+        count_++;
+        if (count_ >= 120 && !countFlg_)
         {
-            countFlg = true;
-            onceFlg = true;
+            countFlg_ = true;
+            onceFlg_ = true;
         }
 
         // フラグがtrueの時、エフェクトを再生させる
-        if (countFlg)
+        if (countFlg_)
         {
-            if (onceFlg)
+            if (onceFlg_)
             {
-                if (effect == null)
+                if (effect_ == null)
                 {
-                    effect = GameObject.Find("FootEffect");
-                    if (effect == null)
+                    if(plSc.GetSlowWalkFlg())
                     {
-                        Debug.Log("FootEffectがnullでエラー");
+                        // 低速歩行
+                        effect_ = GameObject.Find("FootEffect");
+                    }
+                    else
+                    {
+                        // 通常歩行
+                        effect_ = GameObject.Find("FootEffect_Y");
+                    }
+                    if (effect_ == null)
+                    {
+                        Debug.Log("FootEffect関連がnullでエラー");
                     }
                 }
 
                 // プレイヤーが移動しているときだけ再生するように設定
                 if (plSc.GetWalkFlg())
                 {
-                    effect.GetComponent<ParticleSystem>().Play();
+                    effect_.GetComponent<ParticleSystem>().Play();
                 }
 
-                count = 0;
-                countFlg = false;
+                count_ = 0;
+                countFlg_ = false;
             }
         }
 
-        if (onceFlg)
+        if (onceFlg_)
         {
-            playTime += Time.deltaTime;
+            playTime_ += Time.deltaTime;
         }
 
-        if (playTime >= 0.5f)
+        if (playTime_ >= 0.5f)
         {
-            if (effect != null)
+            if (effect_ != null)
             {
-                effect.GetComponent<ParticleSystem>().Stop();
-                playTime = 0.0f;
+                effect_.GetComponent<ParticleSystem>().Stop();
+                playTime_ = 0.0f;
             }
-            effect = null;
-            onceFlg = false;
+            effect_ = null;
+            onceFlg_ = false;
         }
     }
 }
