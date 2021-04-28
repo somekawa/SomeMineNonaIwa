@@ -41,6 +41,7 @@ public class NoiseControl : MonoBehaviour
         {
             rawImageN_.material.SetFloat("alpha", parameter_ * maxN_ );
         }
+        rawImageN_.material.SetFloat("time", Time.time);
 
         // 血(80以上から出現)
         if (parameter_ >= 0.8f)
