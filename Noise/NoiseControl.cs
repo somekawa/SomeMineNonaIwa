@@ -73,6 +73,7 @@ public class NoiseControl : MonoBehaviour
             else
             {
                 startB_ = 0.0f;
+                minB_ = 0.0f;
                 rawImageB_.material.SetFloat("alpha", 0.0f);
             }
         }
