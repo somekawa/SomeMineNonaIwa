@@ -15,6 +15,10 @@ public class NoiseControl : MonoBehaviour
     private float minB_ = 0.0f;     // 血の最小値
     private float startB_ = 0.0f;   // 血出現開始時間
 
+    private RawImage rawImageSN_;   // 横ノイズ
+    private float startSN_;
+    public float moveTimeSN_;       // 稼働時間
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,11 @@ public class NoiseControl : MonoBehaviour
             {
                 rawImageB_ = rawImage;
                 rawImageB_.material.SetFloat("alpha", 0.0f);
+            }
+            else if (rawImage.name == "SN_RawImage")
+            {
+                rawImageSN_ = rawImage;
+                rawImageSN_.material.SetFloat("flag", 0.0f);
             }
         }
     }
@@ -78,5 +87,25 @@ public class NoiseControl : MonoBehaviour
             }
         }
         //Debug.Log(rawImageB_.material.GetFloat("alpha"));
+
+        if(rawImageSN_.material.GetFloat("flag")!=0.0f)
+        {
+            if(startSN_==0.0f)
+            {
+                startSN_ = Time.time;
+            }
+            rawImageSN_.material.SetFloat("time", Time.time);
+            if (moveTimeSN_ < Time.time - startSN_) 
+            {
+                rawImageSN_.material.SetFloat("flag", 0.0f);
+                startSN_ = 0.0f;
+            }
+        }
+    }
+
+    public void DiscoveryNoise()
+    {
+        rawImageSN_.material.SetFloat("flag", 1.0f);
+        startSN_ = Time.time;
     }
 }
