@@ -5,7 +5,7 @@ using UnityEngine;
 public class LookX : MonoBehaviour
 {
     [SerializeField]
-    private float x_sensitivity = 3f;
+    private float x_sensitivity = 3.0f;
 
     void Update()
     {
@@ -13,6 +13,8 @@ public class LookX : MonoBehaviour
 
         Vector3 newRotation = transform.localEulerAngles;
         newRotation.y += x_mouse * x_sensitivity;
+
         transform.localEulerAngles = newRotation;
+        //Debug.Log("LookX:マウス座標"+ transform.localEulerAngles);
     }
 }

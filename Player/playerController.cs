@@ -8,12 +8,17 @@ public class playerController : MonoBehaviour
 
     private float speed_ = 3.0f;          // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
-    private bool walkFlg_ = false;        // 移動中はtrue
+    private bool walkFlg_  = false;       // 移動中はtrue
     private bool slowWalk_ = false;       // 移動速度が遅くなる場合はtrue
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
+    private bool quickTurnFlg_ = false;   // クイックターンを行う際にtrue
+    private float quickTurnTime_ = 0.0f;  // クイックターン用のキーが時間中に2度押しされるか計測する
+    private Vector3 oldRotation_;         // 1フレーム前のプレイヤー回転度
 
-    private const float speedMax_ = 3.0f; // 移動速度の最大値
-    private const int   countMax_ = 120;  // エフェクト再生時間の最大値
+    private const float rotateSpeed_ = 0.5f;        // 回転速度
+    private const float speedMax_ = 3.0f;           // 移動速度の最大値
+    private const int   countMax_ = 120;            // エフェクト再生時間の最大値
+    private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
 
     void Start()
     {
@@ -22,6 +27,8 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
+        PlRotate();
+        QuickTurn();
         if (Input.GetKey(KeyCode.Return))
         {
             //エンターキー入力
@@ -36,14 +43,68 @@ public class playerController : MonoBehaviour
         CalculateMove();
     }
 
+    void PlRotate()
+    {
+        // 回転処理
+        if (oldRotation_.y < transform.localEulerAngles.y)
+        {
+            // 前回座標 < 現在座標　→加算
+            transform.Rotate(new Vector3(0.0f, rotateSpeed_, 0.0f));
+        }
+        else if (oldRotation_.y > transform.localEulerAngles.y)
+        {
+            // 前回座標 > 現在座標　→減算
+            transform.Rotate(new Vector3(0.0f, -rotateSpeed_, 0.0f));
+        }
+        else
+        {
+            // 処理なし
+        }
+        oldRotation_ = transform.localEulerAngles;
+    }
+
+    void QuickTurn()
+    {
+        // Sキー連続押しでクイックターン
+        // 連続押下時間を過ぎたらフラグと時間を初期値に戻す
+        if (quickTurnTime_ > quickTurnTimeMax_)
+        {
+            quickTurnFlg_  = false;
+            quickTurnTime_ = 0.0f;
+        }
+
+        // キーの2回目押下までの時間を計測して、時間内に押下されていたら回転処理を行う
+        if (quickTurnFlg_ && (quickTurnTime_ <= quickTurnTimeMax_))
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                // 180度回転
+                transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
+                quickTurnFlg_ = false;
+                quickTurnTime_ = 0.0f;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            quickTurnFlg_ = true;
+        }
+
+        if (quickTurnFlg_)
+        {
+            quickTurnTime_ += Time.deltaTime;
+        }
+    }
+
     void CalculateMove()
     {
+        // 基本移動処理
         float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float verticalInput   = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
 
         // 移動中かを調べてフラグを切り替える
-        if (direction.x != 0 || direction.z != 0)
+        if ((direction.x != 0) || (direction.z != 0))
         {
             walkFlg_ = true;    // 移動中
         }
@@ -117,5 +178,6 @@ public class playerController : MonoBehaviour
         }
 
         Debug.Log("GetCountMaxでエラー");
+        return 0;
     }
 }
