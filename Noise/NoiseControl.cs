@@ -5,19 +5,20 @@ using UnityEngine.UI;
 
 public class NoiseControl : MonoBehaviour
 {
-    public float parameter_ = 0.0f; // パラメーター(0.0f～1.0f)
+    public float parameter_         = 0.0f;     // パラメーター(0.0f～1.0f)
 
-    private RawImage rawImageN_;
-    public float maxN_;             // ノイズの最大値
+    private RawImage rawImageN_;                // ノイズ
+    public float maxN_;                         // ノイズの最大値
 
-    private RawImage rawImageB_;
-    public float maxB_;             // 血の最大値
-    private float minB_ = 0.0f;     // 血の最小値
-    private float startB_ = 0.0f;   // 血出現開始時間
+    private RawImage rawImageB_;                // 血
+    public float  maxB_;                         // 血の最大値
+    private float minB_             = 0.6f;     // 血の最小値
+    private float startB_           = 0.0f;     // 血出現開始時間
+    private const float parameterB_ = 0.8f;     // 血出現開始条件(パラメーター)
 
-    private RawImage rawImageSN_;   // 横ノイズ
-    private float startSN_;
-    public float moveTimeSN_;       // 稼働時間
+    private RawImage rawImageSN_;               // 横ノイズ
+    private float startSN_          = 0.0f;     // 横ノイズ開始時間
+    public float moveTimeSN_;                   // 稼働時間
 
     // Start is called before the first frame update
     void Start()
@@ -46,48 +47,17 @@ public class NoiseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (parameter_ < 1.0f)
+        // ノイズ
+        if (parameter_ <= 1.0f)
         {
             rawImageN_.material.SetFloat("alpha", parameter_ * maxN_ );
         }
         rawImageN_.material.SetFloat("time", Time.time);
 
-        // 血(80以上から出現)
-        if (parameter_ >= 0.8f)
-        {
-            if (startB_ == 0.0f) 
-            {
-                startB_ = Time.time;
-            }
-            if ((minB_ == 0.0f) && (rawImageB_.material.GetFloat("alpha") >= 0.6f)) 
-            {
-                // 最小値の設定
-                minB_ = 0.6f;
-            }
+        // 血(0.8以上から出現)
+        BloodUpdate();
 
-            float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_);
-            if (alpha <= minB_) 
-            {
-                alpha = minB_;
-            }
-            rawImageB_.material.SetFloat("alpha", alpha);
-        }
-        else
-        {    
-            if (Mathf.Floor(rawImageB_.material.GetFloat("alpha") * 100) / 100 > 0.0f) 
-            {
-                float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_);
-                rawImageB_.material.SetFloat("alpha", alpha);
-            }
-            else
-            {
-                startB_ = 0.0f;
-                minB_ = 0.0f;
-                rawImageB_.material.SetFloat("alpha", 0.0f);
-            }
-        }
-        //Debug.Log(rawImageB_.material.GetFloat("alpha"));
-
+        // 横ノイズ
         if(rawImageSN_.material.GetFloat("flag")!=0.0f)
         {
             if(startSN_==0.0f)
@@ -101,6 +71,42 @@ public class NoiseControl : MonoBehaviour
                 startSN_ = 0.0f;
             }
         }
+    }
+
+    private void BloodUpdate()
+    {
+        float min = 0.0f;
+        if (parameter_ < 0.8f)
+        {
+            if (Mathf.Floor(rawImageB_.material.GetFloat("alpha") * 100.0f) / 100.0f <= 0.0f)
+            {
+                startB_ = 0.0f;
+                rawImageB_.material.SetFloat("alpha", 0.0f);
+                return;
+            }
+        }
+        else
+        {
+            if (startB_ == 0.0f)
+            {
+                startB_ = Time.time;
+            }
+            
+            if (Mathf.Ceil(rawImageB_.material.GetFloat("alpha") * 100.0f) / 100.0f >= minB_) 
+            {
+                // 最小値を設定
+                min = minB_;
+            }    
+        }
+
+        float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_);
+        if ((min!=0.0f)&&(alpha <= min))
+        {
+            alpha = min;
+        }
+        rawImageB_.material.SetFloat("alpha", alpha);
+
+        //Debug.Log(rawImageB_.material.GetFloat("alpha"));
     }
 
     public void DiscoveryNoise()
