@@ -5,7 +5,7 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     private CharacterController controller_;
-    private HideControl hideScrip_;
+    private HideControl hideControl_;
 
     private float speed_ = 3.0f;          // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
@@ -24,12 +24,12 @@ public class playerController : MonoBehaviour
     void Start()
     {
         controller_ = GetComponent<CharacterController>();
-        hideScrip_ = GetComponent<HideControl>();
+        hideControl_ = GetComponent<HideControl>();
     }
 
     void Update()
     {
-        if (hideScrip_.GetHideFlg())
+        if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
             return;

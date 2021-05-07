@@ -7,16 +7,16 @@ public class LookX : MonoBehaviour
     [SerializeField]
     private float x_sensitivity = 3.0f;
 
-    private HideControl hideScrip_;
+    private HideControl hideControl_;
 
     void Start()
     {
-        hideScrip_ = GetComponent<HideControl>();
+        hideControl_ = GetComponent<HideControl>();
     }
 
     void Update()
     {
-        if (hideScrip_.GetHideFlg())
+        if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
             return;
