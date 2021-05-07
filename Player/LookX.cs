@@ -7,8 +7,21 @@ public class LookX : MonoBehaviour
     [SerializeField]
     private float x_sensitivity = 3.0f;
 
+    private HideControl hideScrip_;
+
+    void Start()
+    {
+        hideScrip_ = GetComponent<HideControl>();
+    }
+
     void Update()
     {
+        if (hideScrip_.GetHideFlg())
+        {
+            // 箱に隠れている
+            return;
+        }
+
         float x_mouse = Input.GetAxis("Mouse X");
 
         Vector3 newRotation = transform.localEulerAngles;
