@@ -47,9 +47,9 @@ public class HideControl : MonoBehaviour
             return;
         }
 
-        if (other.gameObject.tag == "HideObj")
+        if (other.gameObject.tag == "kakureObj")
         {
-            Debug.Log("F:隠れる");
+            Debug.Log("当たった");
             if (!Input.GetKey(KeyCode.F))
             {
                 return;
