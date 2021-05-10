@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class tBatteryScript : MonoBehaviour
 {
     public tLightScript lightScript;
-    public playerController playerScript;
+    public playerController playerController;
 
     // lightONの時に消費する量
     private float erasePoint_;       // 1秒間に減る量（0.05f）
@@ -63,7 +63,7 @@ public class tBatteryScript : MonoBehaviour
             "右電池" + status_[(int)type.RIGHT].batteryImage);
 
         countdown_ = 1.0f;
-        erasePoint_ = 0.1f;
+        erasePoint_ = 0.05f;
         overBattery_ = 0.0f;
         chargingNum_ = 0.8f;
 
@@ -74,14 +74,14 @@ public class tBatteryScript : MonoBehaviour
     void Update()
     { 
         countdown_ -= Time.deltaTime;        // カウントダウンする
-        timeText.text = countdown_.ToString("f1") + "秒";        // 時間を表示する
+        timeText.text = countdown_.ToString("f1") + "秒"+"("+ count_.ToString("f1")+")";        // 時間を表示する
                                                               
         // 両方の充電がないとき
         if (status_[(int)type.RIGHT].batteryImage.fillAmount <= status_[(int)type.RIGHT].min)
-        {             // 両方の電池が0になった
+        {            
+            // 両方の電池が0になった
             lightScript.GetAccidentFlag(true);// 強制的にライトオフ
             status_[(int)type.RIGHT].batteryImage.fillAmount = status_[(int)type.RIGHT].min;
-
         }
         else  // 電池があるとき
         {
@@ -112,10 +112,11 @@ public class tBatteryScript : MonoBehaviour
             }
         }
 
-        if (playerScript.SetBatteryFlag() == true)
+        if (playerController.SetBatteryFlag() == true)
         {
-            playerScript.GetBatteryFlag(false);
-            BatteryCharging();            //プレイヤーが電池を拾ったら充電をする
+            //プレイヤーが電池を拾ったら充電をする
+            playerController.GetBatteryFlag(false);
+            BatteryCharging(); 
         }
         // 各電池の充電量を保存
         status_[(int)type.LEFT].save = status_[(int)type.LEFT].batteryImage.fillAmount;
@@ -132,15 +133,18 @@ public class tBatteryScript : MonoBehaviour
             return;            // RIGHTじゃなかったらこの行以下の処理を行わない
         }
 
-        // 右が呼ばれたら左の値に最小値を代入
-        status_[(int)type.LEFT].batteryImage.fillAmount = status_[(int)type.LEFT].min;
-
         // type_内にRIGHT以外だとreturnのため　type_=RIGHTになってる
         // ↓右のBatteryのfillAmountが残りが0.03f以下になったら赤いゲージを表示する
         if (status_[(int)type_].batteryImage.fillAmount <= status_[(int)type_].danger)
         {
             status_[(int)type_].batteryImage.color = Color.red;
         }
+        else
+        {
+            status_[(int)type_].batteryImage.color = new Color(255, 255, 255, 1.0f);
+        }
+        // 右が呼ばれたら左の値に最小値を代入
+        status_[(int)type.LEFT].batteryImage.fillAmount = status_[(int)type.LEFT].min;
     }
     
     private void BatteryCharging()
@@ -149,8 +153,8 @@ public class tBatteryScript : MonoBehaviour
         {
             // アクシデント＝両方の充電が0になったときに回復した場合
             // 1.0以上の回復はないため左の電池の充電の計算はいらない
-            status_[(int)type.RIGHT].batteryImage.fillAmount += chargingNum_;
             status_[(int)type.RIGHT].batteryImage.color = new Color(255, 255, 255, 1.0f);
+            status_[(int)type.RIGHT].batteryImage.fillAmount += chargingNum_;
             lightScript.GetAccidentFlag(false);            // false=アクシデント終了
         }
         else
@@ -178,10 +182,12 @@ public class tBatteryScript : MonoBehaviour
     {
         // 保存した分に電池分を足す
         status_[(int)type_].save += chargingNum_;
+        Debug.Log("アイテムを拾いました");
 
         // 充電が危険域より多くあるなら通常の色にする
-        if (status_[(int)type_].danger < status_[(int)type_].batteryImage.fillAmount)
+        if (status_[(int)type_].danger <= status_[(int)type_].save)
         {
+            Debug.Log("危険域から回復しました");
             status_[(int)type_].batteryImage.color = new Color(255, 255, 255, 1.0f);
         }
 
@@ -191,7 +197,7 @@ public class tBatteryScript : MonoBehaviour
             // 1.0を超えてないならsaveした値をfillAmountに代入
             status_[(int)type_].batteryImage.fillAmount = status_[(int)type_].save;
         }
-        else//if (status_[(int)type_].max < status_[(int)type_].save)
+        else
         {
             // MAX(1.0f)を超えたら            // fillAmountが1.0を超えないようにする
             status_[(int)type_].batteryImage.fillAmount = status_[(int)type_].max;
@@ -209,7 +215,7 @@ public class tBatteryScript : MonoBehaviour
             // overした分を左の電池に代入
             // 拾った電池は1.0以上がないから　左側が1.0を超えたかどうかの確認はいらない
             status_[(int)type.LEFT].batteryImage.fillAmount += overBattery_;
-            Debug.Log("両方の電池だけ充電しました");
+            Debug.Log("両方の電池を充電しました");
         }
     }
 }
