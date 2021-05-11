@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TrhowTest : MonoBehaviour
 {
+    private HideControl hideControl_;  // 箱に隠れる処理
+
     public GameObject ball;            // ボール生成
 
     private Vector3 cursorPos_;        // マウスカーソル座標
@@ -16,11 +18,17 @@ public class TrhowTest : MonoBehaviour
 
     void Start()
     {
-
+        hideControl_ = GetComponent<HideControl>();
     }
 
     void Update()
     {
+        if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
+        {
+            // 箱に隠れている
+            return;
+        }
+
         cameraPos_ = Camera.main.transform.position; // カメラの位置
 
         cursorPos_ = Input.mousePosition;            // 画面上のカーソルの位置
