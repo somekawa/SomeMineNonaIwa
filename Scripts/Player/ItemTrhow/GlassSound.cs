@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class GlassSound : MonoBehaviour
 {
-    public AudioClip sound1;
-    AudioSource audioSource;
+    private AudioSource audioSource_;   // SE情報を取得して際に保存する
 
-    // Start is called before the first frame update
     void Start()
     {
         //Componentを取得
-        audioSource = GetComponent<AudioSource>();
-        if(audioSource == null)
+        audioSource_ = GetComponent<AudioSource>();
+        if(audioSource_ == null)
         {
             Debug.Log("audioSourceがnull");
         }
@@ -20,7 +18,7 @@ public class GlassSound : MonoBehaviour
 
     private void Update()
     {
-        if(!audioSource.isPlaying)
+        if(!audioSource_.isPlaying)
         {
             // 鳴り終わったらdestroyする
             Destroy(this.gameObject);
