@@ -28,18 +28,25 @@ public class NoiseControl : MonoBehaviour
         {
             if(rawImage.name== "N_RawImage")
             {
+                // ノイズ
                 rawImageN_ = rawImage;
                 rawImageN_.material.SetFloat("alpha",0.0f); 
             }
             else if(rawImage.name == "B_RawImage")
             {
+                // 血
                 rawImageB_ = rawImage;
                 rawImageB_.material.SetFloat("alpha", 0.0f);
             }
             else if (rawImage.name == "SN_RawImage")
             {
+                // 横ノイズ
                 rawImageSN_ = rawImage;
                 rawImageSN_.material.SetFloat("flag", 0.0f);
+            }
+            else
+            {
+                // 何もしない
             }
         }
     }

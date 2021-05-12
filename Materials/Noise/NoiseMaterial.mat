@@ -27,6 +27,6 @@ Material:
     m_Floats:
     - Vector1_20CC994D: 0.3
     - _MainTex: 0
-    - alpha: 0.32000002
-    - time: 38.55441
+    - alpha: 0
+    - time: 4.524715
     m_Colors: []

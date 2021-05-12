@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class HideControl : MonoBehaviour
 {
-    //private Vector3 defaltCameraPos_;
-    //private Quaternion defaltCameraRot_;
-    private bool hideFlg_ = false;
+    private bool hideFlg_ = false;              // 箱に隠れているか
 
-    //private Vector3 offsetPos = new Vector3(0.0f, 1.0f, 0.0f);
-    //private Vector3 offsetRot = new Vector3(-10.0f, 90.0f, 0.0f);
+    private GameObject mainCamera_;             // player側のカメラ
 
-    private GameObject mainCamera_;
-    private GameObject boxCamera_;
+    private GameObject boxCamera_;              // 箱の中のカメラ
+    private GameObject boxLamp_;                // 箱の中のランプ
 
-    private float time_;
-    private float timeMax_           = 1.0f;
-    private float coolTime_;
-    private const float coolTimeMax_ = 1.0f;
+    private float stayTime_;                    // 箱の中に隠れた時間
+    private float timeMin_        = 1.0f;       // 箱の中に隠れる最小時間
+    private float releaseTime_;                 // 箱から出た時間
+    private const float coolTime_ = 1.0f;       // 次に箱の中に入れるまでの時間
 
     // Start is called before the first frame update
     void Start()
     {
         mainCamera_ = gameObject.transform.Find("LookY/Main Camera").gameObject;
-        coolTime_ = Time.time - coolTimeMax_;
+        releaseTime_ = Time.time - coolTime_;
     }
 
     // Update is called once per frame
@@ -31,62 +28,67 @@ public class HideControl : MonoBehaviour
     {
         if (!hideFlg_)
         {
+            // 箱から出ている
             return;
         }
 
-        if ((Input.GetKey(KeyCode.F)) && (Time.time - time_ >= timeMax_)) 
+        if ((Input.GetKey(KeyCode.F)) && (Time.time - stayTime_ >= timeMin_)) 
         {
-            //Camera.main.transform.position = defaltCameraPos_;
-            //Camera.main.transform.rotation = defaltCameraRot_;
-
-            if (boxCamera_ != null)
+            // 箱から出る処理
+            if (IsBoxCamera())
             {
+                // カメラを箱の中からPlayer側に切り替える
                 boxCamera_.gameObject.SetActive(false);
                 mainCamera_.gameObject.SetActive(true);
                 boxCamera_ = null;
             }
+            if (IsBoxLamp())
+            {
+                // ランプを消す
+                boxLamp_.gameObject.SetActive(false);
+                boxLamp_ = null;
+            }
 
-            time_ = 0.0f;
-            coolTime_ = Time.time;
+            stayTime_ = 0.0f;
+            releaseTime_ = Time.time;
             hideFlg_ = false;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (hideFlg_ || (Time.time - coolTime_ <= coolTimeMax_)) 
+        if (hideFlg_ || (Time.time - releaseTime_ <= coolTime_)) 
         {
+            // 箱の中に隠れている、またはクールタイムが終わっていない
             return;
         }
 
         if (other.gameObject.tag == "HideObj")
         {
-            Debug.Log("当たった");
             if (!Input.GetKey(KeyCode.F))
             {
                 return;
             }
 
             // 隠れる処理
-            //defaltCameraPos_ = Camera.main.transform.position;
-            //defaltCameraRot_ = Camera.main.transform.rotation;
-
-            //Vector3 pos = other.gameObject.transform.position;
-            //Camera.main.transform.position = pos + offsetPos;
-
-            //Quaternion rot = other.gameObject.transform.rotation;
-            //Camera.main.transform.rotation = Quaternion.Euler(rot.x + offsetRot.x, rot.y + offsetRot.y, rot.z + offsetRot.z);
-
-            boxCamera_= other.gameObject.transform.Find("BoxInCamera").gameObject;
-            if(boxCamera_!=null)
+            boxCamera_= other.gameObject.transform.Find("BoxCamera").gameObject;
+            if (IsBoxCamera()) 
             {
+                // カメラをPlayer側から箱の中に切り替える
                 mainCamera_.gameObject.SetActive(false);
                 boxCamera_.gameObject.SetActive(true);
             }
 
+            boxLamp_ = other.gameObject.transform.Find("BoxLight").gameObject;
+            if(IsBoxLamp())
+            {
+                // ランプをつける
+                boxLamp_.gameObject.SetActive(true);
+            }
+
             hideFlg_ = true;
-            time_ = Time.time;
-            coolTime_ = 0.0f;
+            stayTime_ = Time.time;
+            releaseTime_ = 0.0f;
         }
     }
 
@@ -95,4 +97,21 @@ public class HideControl : MonoBehaviour
         return hideFlg_;
     }
 
+    private bool IsBoxCamera()
+    {
+        if (boxCamera_ != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBoxLamp()
+    {
+        if (boxLamp_ != null)
+        {
+            return true;
+        }
+        return false;
+    }
 }
