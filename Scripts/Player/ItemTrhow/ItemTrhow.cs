@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrhowTest : MonoBehaviour
+public class ItemTrhow : MonoBehaviour
 {
     private HideControl hideControl_;  // 箱に隠れる処理
 

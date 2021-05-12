@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundTest : MonoBehaviour
+public class GlassSound : MonoBehaviour
 {
     public AudioClip sound1;
     AudioSource audioSource;
@@ -18,11 +18,11 @@ public class SoundTest : MonoBehaviour
         }
     }
 
-    // なり終わったらdestroyしないといけない???
     private void Update()
     {
         if(!audioSource.isPlaying)
         {
+            // 鳴り終わったらdestroyする
             Destroy(this.gameObject);
         }
     }
