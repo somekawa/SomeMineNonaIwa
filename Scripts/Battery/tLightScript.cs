@@ -13,6 +13,7 @@ public class tLightScript : MonoBehaviour
     }
     public light_Status lightStatus;
 
+    public HideControl hideCtl;
 
     // 懐中電灯関連
     public GameObject spotLight;    // spotlightを参照するため
@@ -36,6 +37,20 @@ public class tLightScript : MonoBehaviour
 
     void Update()
     {
+        if(hideCtl.GetHideFlg()==true)
+        {
+           // 隠れたときに自動的にライトOFF
+            NowLightStatus(light_Status.OFF, false);
+        }
+        else if (hideCtl.GetHideFlg() == false&& Input.GetKey(KeyCode.F))
+        {
+            // ボックスから出たとき＝false
+            // hideFlagは隠れてないとき基本falseのため、出ていくときの
+            // Fキー押下を自動的にオンしているようにみせる
+            NowLightStatus(light_Status.ON, true);
+
+        }
+
         // ライトオンオフ
         if (Input.GetMouseButtonDown(0))
         {
