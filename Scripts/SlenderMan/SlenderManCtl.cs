@@ -30,10 +30,11 @@ public class SlenderManCtl : MonoBehaviour
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
         soundPoint = new Vector3(0, 0, 0);
         soundWarpPoint = new Vector3(0, 0, 0);
-        SetTargetPoint();                                                  // 移動先の決定
 
         targetObjects_ = targetObject.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
         warpPoints_ = warpPoint.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+
+        SetTargetPoint();                                                  // 移動先の決定
     }
 
     // Update is called once per frame
