@@ -17,20 +17,24 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))                    // キーが押されたとき
+        if (Input.GetKeyDown(KeyCode.Space))                    // キーが押されたとき
         {
             if (fullMapCamera.gameObject.active == false)
             {
-                fullMapCamera.gameObject.SetActive(true);
-                Time.timeScale = 0f;
-                miniMap.gameObject.SetActive(false);
+                Active(true, 0.0f, false);
             }
             else
             {
-                fullMapCamera.gameObject.SetActive(false);
-                Time.timeScale = 1f;
-                miniMap.gameObject.SetActive(true);
+                Active(false, 1.0f, true);
             }
         }
+    }
+
+    void Active(bool cameraActFlg,float time,bool miniMapFlg)
+    {
+        // 共通処理
+        fullMapCamera.gameObject.SetActive(cameraActFlg);
+        Time.timeScale = time;
+        miniMap.gameObject.SetActive(miniMapFlg);
     }
 }
