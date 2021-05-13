@@ -152,12 +152,15 @@ public class playerController : MonoBehaviour
         // ここに防御アイテムを拾ったときの処理とワインボトルの処理を書く
         if (other.gameObject.tag == "BarrierItem")
         {
-            // 同じオブジェクト(Cube)内の他のスクリプトを参照する場合
-            GetComponent<Barrier>().SetBarrierItemFlg(true);
-
-            // Barrierクラスのflagをtrueにしたい
-            Debug.Log("BarrierItemゲット");
-            Destroy(other.gameObject);            // オブジェクトを削除
+            Barrier barrier = GetComponent<Barrier>();
+            if (!barrier.GetBarrierItemFlg())
+            {
+                // 同じオブジェクト内の他のスクリプトを参照する場合
+                barrier.SetBarrierItemFlg(true);
+                // Barrierクラスのflagをtrueにしたい
+                Debug.Log("BarrierItemゲット");
+                Destroy(other.gameObject);            // オブジェクトを削除
+            }
         }
     }
 

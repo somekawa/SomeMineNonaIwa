@@ -10,7 +10,7 @@ using UnityEngine;
 public class Barrier : MonoBehaviour
 {
     public string targeTag;
-    private bool BarrierItemHave_ = false;  // アイテム所持時にtrue
+    private bool BarrierItemHaveFlg_ = false;  // アイテム所持時にtrue
 
     // Start is called before the first frame update
     void Start()
@@ -24,10 +24,10 @@ public class Barrier : MonoBehaviour
         if (collider.gameObject.tag == targeTag)
         {
             Debug.Log("敵と衝突しました");
-            if (BarrierItemHave_)
+            if (BarrierItemHaveFlg_)
             {
                 Debug.Log("防御アイテム使用");
-                BarrierItemHave_ = false;
+                BarrierItemHaveFlg_ = false;
             }
             else
             {
@@ -39,6 +39,11 @@ public class Barrier : MonoBehaviour
     public void SetBarrierItemFlg(bool flag)
     {
         // プレイヤーコントロールクラスからセットされるようにする
-        BarrierItemHave_ = flag;
+        BarrierItemHaveFlg_ = flag;
+    }
+
+    public bool GetBarrierItemFlg()
+    {
+        return BarrierItemHaveFlg_;
     }
 }
