@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class tBatteryScript : MonoBehaviour
 {
     public tLightScript lightScript;
-    public playerController playerController;
+    public PlayerCollision playerCollision;
+
 
     // lightONの時に消費する量
     private float erasePoint_;       // 1秒間に減る量（0.05f）
@@ -112,10 +113,10 @@ public class tBatteryScript : MonoBehaviour
             }
         }
 
-        if (playerController.SetBatteryFlag() == true)
+        if (playerCollision.SetBatteryFlag() == true)
         {
             //プレイヤーが電池を拾ったら充電をする
-            playerController.GetBatteryFlag(false);
+            playerCollision.GetBatteryFlag(false);
             BatteryCharging(); 
         }
         // 各電池の充電量を保存
