@@ -53,7 +53,7 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-      // 脱出アイテムとの当たり判定
+        // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscarpItem")
         {
             if (Input.GetKeyUp(KeyCode.E))
@@ -75,17 +75,35 @@ public class PlayerCollision : MonoBehaviour
             }
         }
 
-        // ここに防御アイテムを拾ったときの処理とワインボトルの処理を書く
+        // 防御アイテム取得処理
         if (other.gameObject.tag == "BarrierItem")
         {
             if (Input.GetKeyUp(KeyCode.E))
             {
-                // 同じオブジェクト(Cube)内の他のスクリプトを参照する場合
-                GetComponent<Barrier>().SetBarrierItemFlg(true);
+                Barrier barrier = GetComponent<Barrier>();
+                if (!barrier.GetBarrierItemFlg())
+                {
+                    // 同じオブジェクト内の他のスクリプトを参照する場合
+                    barrier.SetBarrierItemFlg(true);
+                    // Barrierクラスのflagをtrueにしたい
+                    Debug.Log("防御アイテムゲット");
+                    Destroy(other.gameObject);            // オブジェクトを削除
+                }
+            }
+        }
 
-                // Barrierクラスのflagをtrueにしたい
-                Debug.Log("BarrierItemゲット");
-                Destroy(other.gameObject);            // オブジェクトを削除
+        // 誘導アイテム取得処理
+        if (other.gameObject.tag == "InductionItem")
+        {
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+                ItemTrhow itemTrhow = GetComponent<ItemTrhow>();
+                if (!itemTrhow.GetTrhowItemFlg())
+                {
+                    itemTrhow.SetTrhowItemFlg(true);
+                    Debug.Log("誘導アイテムゲット");
+                    Destroy(other.gameObject);
+                }
             }
         }
     }
