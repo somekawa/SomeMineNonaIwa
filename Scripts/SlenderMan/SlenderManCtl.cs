@@ -10,8 +10,8 @@ public class SlenderManCtl : MonoBehaviour
     private NavMeshAgent navMeshAgent_;         // Nav Mesh Agentの格納用
     private Animator anim_;                     // Animatorの格納用
 
-    public GameObject targetObject;             // 移動予定地の親オブジェクト格納用
-    public GameObject warpPoint;                // ワープ予定地の親オブジェクト格納用
+    public GameObject destinationPoints;             // 移動予定地の親オブジェクト格納用
+    public GameObject warpPoints;                // ワープ予定地の親オブジェクト格納用
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
@@ -31,8 +31,8 @@ public class SlenderManCtl : MonoBehaviour
         soundPoint = new Vector3(0, 0, 0);
         soundWarpPoint = new Vector3(0, 0, 0);
 
-        targetObjects_ = targetObject.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
-        warpPoints_ = warpPoint.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        targetObjects_ = destinationPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        warpPoints_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
 
         SetTargetPoint();                                                  // 移動先の決定
     }
