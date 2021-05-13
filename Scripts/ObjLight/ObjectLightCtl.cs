@@ -6,26 +6,27 @@ public class ObjectLightCtl : MonoBehaviour
 {
     public GameObject comingObject;     // 自身との距離を計算するターゲットオブジェクト格納用
 
-    private GameObject objectLight;     // 発光するための子オブジェクト格納用
+    private GameObject objectLight_;     // 発光するための子オブジェクト格納用
+
+    const float displayRange = 20;
 
     // Start is called before the first frame update
     void Start()
     {
-        objectLight = gameObject.GetComponentInChildren<Light>().gameObject;     // 子オブジェクトのlightを取得
+        objectLight_ = gameObject.GetComponentInChildren<Light>().gameObject;     // 子オブジェクトのlightを取得
     }
 
     // Update is called once per frame
     void Update()
     {
-        //　距離を計算
-        var distance = Vector3.Distance(gameObject.transform.position, comingObject.transform.position);
-        if (distance > 20)
+        // 距離を計算
+        if (Vector3.Distance(gameObject.transform.position, comingObject.transform.position) > displayRange)
         {
-            objectLight.SetActive(false);       // 範囲外なら非表示にする
+            objectLight_.SetActive(false);
         }
         else
         {
-            objectLight.SetActive(true);       // 範囲内なら表示にする
+            objectLight_.SetActive(true);
         }
     }
 }

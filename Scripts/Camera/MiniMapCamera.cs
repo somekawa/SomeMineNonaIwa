@@ -15,6 +15,7 @@ public class MiniMapCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 高さ以外の軸で対象と同じ座標に追従
         this.gameObject.transform.position = new Vector3(followObject.transform.position.x, this.gameObject.transform.position.y, followObject.transform.position.z);
     }
 }
