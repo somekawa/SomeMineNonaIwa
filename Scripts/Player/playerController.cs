@@ -148,6 +148,17 @@ public class playerController : MonoBehaviour
             batteryGetFlag_ = true;
             Destroy(other.gameObject);            // オブジェクトを削除
         }
+
+        // ここに防御アイテムを拾ったときの処理とワインボトルの処理を書く
+        if (other.gameObject.tag == "BarrierItem")
+        {
+            // 同じオブジェクト(Cube)内の他のスクリプトを参照する場合
+            GetComponent<Barrier>().SetBarrierItemFlg(true);
+
+            // Barrierクラスのflagをtrueにしたい
+            Debug.Log("BarrierItemゲット");
+            Destroy(other.gameObject);            // オブジェクトを削除
+        }
     }
 
     public bool SetBatteryFlag()
