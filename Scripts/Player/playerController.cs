@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class playerController : MonoBehaviour
     private float gravity_ = 9.8f;        // 重力
     private bool walkFlg_  = false;       // 移動中はtrue
     private bool slowWalk_ = false;       // 移動速度が遅くなる場合はtrue
-    private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
     private bool quickTurnFlg_ = false;   // クイックターンを行う際にtrue
     private float quickTurnTime_ = 0.0f;  // クイックターン用のキーが時間中に2度押しされるか計測する
     private Vector3 oldRotation_;         // 1フレーム前のプレイヤー回転度
@@ -21,10 +21,12 @@ public class playerController : MonoBehaviour
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
 
+
+    //private bool clearFlag=false;
     void Start()
     {
         controller_ = GetComponent<CharacterController>();
-        hideControl_ = GetComponent<HideControl>();
+       hideControl_ = GetComponent<HideControl>();
     }
 
     void Update()
@@ -49,6 +51,19 @@ public class playerController : MonoBehaviour
         }
 
         CalculateMove();
+
+
+        //// クリアしたときの処理
+        //// クリア条件：脱出アイテム8つ所持状態で出口に向かう
+        //if (Input.GetKey(KeyCode.C))
+        //{
+        //    clearFlag = true;
+        //}
+        //if (clearFlag == true)
+        //{
+        //    SceneManager.LoadScene("ClearScene");
+        //}
+
     }
 
     void PlRotate()
@@ -137,43 +152,6 @@ public class playerController : MonoBehaviour
         velocity.y -= gravity_;
         velocity = transform.transform.TransformDirection(velocity);
         controller_.Move(velocity * Time.deltaTime);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // 両方のColliderのIsTrrigerにチェックを入れる
-        if (other.gameObject.tag == "Battery")
-        {
-            // Debug.Log("GetBatteryFlag+++++++電池ゲット");
-            batteryGetFlag_ = true;
-            Destroy(other.gameObject);            // オブジェクトを削除
-        }
-
-        // ここに防御アイテムを拾ったときの処理とワインボトルの処理を書く
-        if (other.gameObject.tag == "BarrierItem")
-        {
-            Barrier barrier = GetComponent<Barrier>();
-            if (!barrier.GetBarrierItemFlg())
-            {
-                // 同じオブジェクト内の他のスクリプトを参照する場合
-                barrier.SetBarrierItemFlg(true);
-                // Barrierクラスのflagをtrueにしたい
-                Debug.Log("BarrierItemゲット");
-                Destroy(other.gameObject);            // オブジェクトを削除
-            }
-        }
-    }
-
-    public bool SetBatteryFlag()
-    {
-        // Debug.Log("SetBatteryFlag+++++++電池ゲット");
-        return batteryGetFlag_;
-    }
-
-    public void GetBatteryFlag(bool flag)
-    {
-        // Debug.Log("GetBatteryFlag+++++++電池ゲット");
-        batteryGetFlag_ = flag;
 
     }
 
