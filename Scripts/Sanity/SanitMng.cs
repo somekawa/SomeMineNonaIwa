@@ -11,7 +11,8 @@ public class SanitMng : MonoBehaviour
     public GameObject text_;
 
     private float maxSanit_       = 100.0f;         // 最大正気度
-    private float sanit_          =   0.0f;         // 正気度
+    // 別シーンに持っていくためにpublic staticに変更
+    public static float sanit_    = 0.0f;         // 正気度 
 
     private bool oldLightFlag_;
     private float onTime_;                          // 懐中電灯をオンにした時間
