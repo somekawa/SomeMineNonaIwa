@@ -7,7 +7,7 @@ public class SetItemCtl : MonoBehaviour
 {
     public GameObject escapeItem;                       // 生成するオブジェクト格納用
 
-    private int itemCnt = 8;                            // 生成する数
+    public int itemCnt;                                 // 生成する数
     private int pointRange;                             // 配置予定地の乱数格納用
     private List<int> setPoint = new List<int>();       // 同じ場所にしないために使うリスト
 
