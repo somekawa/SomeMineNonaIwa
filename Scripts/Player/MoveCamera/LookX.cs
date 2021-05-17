@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class LookX : MonoBehaviour
 {
+    public PauseScript pause;   // pause中の処理
+
     [SerializeField]
     private float x_sensitivity = 3.0f;
 
     private HideControl hideControl_;
+
+    private bool rotateCheck_ = true;
 
     void Start()
     {
@@ -16,6 +20,12 @@ public class LookX : MonoBehaviour
 
     void Update()
     {
+        if (pause.SetPauseFlag() == true)
+        {
+            // pause中はカメラが動かないようにする
+            return;
+        }
+        
         if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
@@ -30,4 +40,5 @@ public class LookX : MonoBehaviour
         transform.localEulerAngles = newRotation;
         //Debug.Log("LookX:マウス座標"+ transform.localEulerAngles);
     }
+
 }

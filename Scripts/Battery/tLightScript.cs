@@ -7,25 +7,27 @@ public class tLightScript : MonoBehaviour
     // enumはc++でいうenum class
     public enum light_Status
     {
-        ON,
-        OFF,
-        ACCIDENT,
+        ON,             // ライトがついている時
+        OFF,            // ライトが消えている時
+        ACCIDENT,       // ライトが強制OFFの時
     }
     public light_Status lightStatus;
 
-    public HideControl hideCtl;
+    public HideControl hideControl;     // 箱に隠れる処理
+    public PauseScript pause;           // pause中の処理
 
     // 懐中電灯関連
     public GameObject spotLight;    // spotlightを参照するため
-    private bool accidentFlag_;// 充電が0になったとき　true＝0になった　false＝0ではない
-
+    private bool accidentFlag_;// 充電が0になったとき　true=0になった　false=0ではない
 
     // 音楽関連
     private AudioSource audioSource_;
-    [SerializeField] private AudioClip normalSE_; // 充電があるときに懐中電灯SE
+    [SerializeField] private AudioClip normalSE_;   // 充電があるときに懐中電灯SE
     [SerializeField] private AudioClip accidentSE_; // 充電がないときの懐中電灯SE
-    private bool seAccidentFlag_;// 電池切れの時1度だけ鳴らすSE　true=なる　false=鳴らさない
-    private bool hideSEFlag_;
+   // 電池切れの時1度だけ鳴らすSE　true=なる　false=鳴らさない
+    private bool seAccidentFlag_;
+    // true=隠れている(音が出ない)　false=隠れる、出る時　ライトの音が出る
+    private bool hideSEFlag_;  
 
     void Start()
     {
@@ -40,8 +42,13 @@ public class tLightScript : MonoBehaviour
 
     void Update()
     {
+        if (pause.SetPauseFlag() == true)
+        {
+            return;            // pause中は何の処理もできないようにする
+        }
+
         // ライトオンオフ            // 隠れている時は音はならない
-        if (Input.GetMouseButtonDown(0) && hideCtl.GetHideFlg() == false) 
+        if (Input.GetMouseButtonDown(0) && hideControl.GetHideFlg() == false) 
         {
             //// 電池があるとき通常のSE
             if (accidentFlag_ == true)
@@ -82,7 +89,6 @@ public class tLightScript : MonoBehaviour
         }
     }
 
-
     private void NothingBattery()
     {
         // 電池がなくなったときは強制的にライトをオフにする
@@ -114,15 +120,14 @@ public class tLightScript : MonoBehaviour
 
     private void HideNowLight()
     {
-        if (hideCtl.GetHideFlg() == true)
+        if (hideControl.GetHideFlg() == true)
         {
             // 隠れたときに自動的にライトOFF
             NowLightStatus(light_Status.OFF, false);
             if (hideSEFlag_ == false)
             {
                 hideSEFlag_ = true;
-                SE(normalSE_);//AccidentSE();
-                Debug.Log("電池残量0：強制OFFのSE");
+                SE(normalSE_);
             }
         }
         else
@@ -134,16 +139,10 @@ public class tLightScript : MonoBehaviour
                 // Fキー押下を自動的にオンしているようにみせる
                 NowLightStatus(light_Status.ON, true);
                 hideSEFlag_ = false;
-                SE(normalSE_);//AccidentSE();
-                Debug.Log("電池残量0：強制OFFのSE");
+                SE(normalSE_);
             }
-
         }
-
-
-
     }
-
 
     private void NowLightStatus(light_Status status, bool active)
     {
