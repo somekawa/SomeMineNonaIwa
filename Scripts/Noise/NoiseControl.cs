@@ -124,6 +124,11 @@ public class NoiseControl : MonoBehaviour
         startSN_ = Time.time;
     }
 
+    public float GetMoveTimeSN()
+    {
+        return moveTimeSN_;
+    }
+
     public void SetParameter(float parameter)
     {
         parameter_ = parameter;

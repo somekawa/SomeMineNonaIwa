@@ -9,12 +9,14 @@ public class SanitMng : MonoBehaviour
     public GameObject spotLight_;
     public NoiseControl noiseControl_;
     public HideControl hideControl_;
+    public tLightRange tLightRange_;
     public GameObject text_;
 
     private float maxSanit_       = 100.0f;         // 最大正気度
     // 別シーンに持っていくためにpublic staticに変更
-    public static float sanit_    = 0.0f;         // 正気度 
+    public static float sanit_    = 0.0f;           // 正気度 
 
+    private bool loghtDecrease_   = false;          // ライトによる正気度減少
     private bool oldLightFlag_;
     private float onTime_         = 0.0f;           // 懐中電灯をオンにした時間
     private float offTime_        = 0.0f;           // 懐中電灯をオフにした時間
@@ -23,7 +25,12 @@ public class SanitMng : MonoBehaviour
     public float d_recoveryTime_;                   // 耐久時間1秒回復にかかる時間
     private float d_nowTime_;                       // 耐久出来る残り時間
 
-    private bool recoveryFlag_ = false;             // 回復中
+    private bool enemyDecrease_   = false;          // 敵による正気度減少
+    private float enemyHitTime_;
+
+    private bool recoveryFlag_    = false;          // 回復中
+
+    private bool noisFlag_        = false;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +44,11 @@ public class SanitMng : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // ライト
         LightCheck();
+
+        // 敵
+        EnemyCheck();
 
         if (sanit_ < 0.0f) 
         {
@@ -66,7 +77,6 @@ public class SanitMng : MonoBehaviour
             // 箱の中に隠れている
             DurableRecovery();
             DurableReset();
-
             return;
         }
 
@@ -95,18 +105,60 @@ public class SanitMng : MonoBehaviour
             {
                 if (offTime_ != 0.0f)
                 {
-                    d_nowTime_ = d_time_ - (Time.time - offTime_);
-                }
-
-                if ((offTime_ != 0.0f) && (d_nowTime_ <= 0.0f)) 
-                {
-                    sanit_ -= 0.1f;
-                    d_nowTime_ = 0.0f;
+                    OffAction();
                 }
             }
         }
 
         oldLightFlag_ = lightFlag;
+    }
+
+    private void EnemyCheck()
+    {
+        if((!tLightRange_.GetHitCheck())||(!spotLight_.activeSelf))
+        {
+            // 遭遇していない
+            // または懐中電灯をつけていない
+            enemyHitTime_ = 0.0f;
+            if (!loghtDecrease_)
+            {
+                noisFlag_ = false;
+            }
+            enemyDecrease_ = false;
+            return;
+        }
+
+        if (!noisFlag_)
+        {
+            noiseControl_.DiscoveryNoise();
+            enemyHitTime_ = Time.time;
+            noisFlag_ = true;
+        }
+
+        if((Time.time - enemyHitTime_)>= noiseControl_.GetMoveTimeSN())
+        {
+            sanit_ -= 0.1f;
+            enemyDecrease_ = true;
+        }
+
+    }
+
+    private void OffAction()
+    {
+        d_nowTime_ = d_time_ - (Time.time - offTime_);
+
+        if ((!noisFlag_) && (d_nowTime_ <= noiseControl_.GetMoveTimeSN()))
+        {
+            noiseControl_.DiscoveryNoise();
+            noisFlag_ = true;
+        }
+
+        if (d_nowTime_ <= 0.0f)
+        {
+            sanit_ -= 0.1f;
+            d_nowTime_ = 0.0f;
+            loghtDecrease_ = true;
+        }
     }
 
     // 耐久時間のリセット
@@ -124,6 +176,8 @@ public class SanitMng : MonoBehaviour
         }
         onTime_ = Time.time;
         offTime_ = 0.0f;
+        noisFlag_ = false;
+        loghtDecrease_ = false;
     }
 
     // 耐久時間の回復

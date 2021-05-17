@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class tLightRange : MonoBehaviour
 {
-    private bool hitCheck_ = false;
+    private bool hitCheck_  = false;
 
     void Start()
     {
@@ -12,7 +12,6 @@ public class tLightRange : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,6 +20,20 @@ public class tLightRange : MonoBehaviour
         {
             hitCheck_ = true;
             Debug.Log("ライトの範囲内に敵を確認しました。");
-       }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            hitCheck_ = false;
+            Debug.Log("敵がライトの範囲外にいきました。");
+        }
+    }
+
+    public bool GetHitCheck()
+    {
+        return hitCheck_;
     }
 }
