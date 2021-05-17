@@ -12,6 +12,7 @@ public class LookX : MonoBehaviour
     private HideControl hideControl_;
 
     private bool rotateCheck_ = true;
+    public CameraController cameraController_;
 
     void Start()
     {
@@ -20,7 +21,7 @@ public class LookX : MonoBehaviour
 
     void Update()
     {
-        if (pause.SetPauseFlag() == true)
+        if (pause.SetPauseFlag() == true|| cameraController_.fullMapCamera.gameObject.active == true)
         {
             // pause中はカメラが動かないようにする
             return;
