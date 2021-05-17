@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2845919215861472355}
   - component: {fileID: 6016307909302588393}
+  - component: {fileID: 9048608266026496119}
   m_Layer: 0
   m_Name: Battery
-  m_TagString: Untagged
+  m_TagString: Battery
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +48,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   comingObject: {fileID: 2485423448918158066, guid: 506c2e307bc976d4dbda44ece081cf53,
     type: 3}
+--- !u!65 &9048608266026496119
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5673506054308828862}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3, y: 0.3728652, z: 0.3}
+  m_Center: {x: 0, y: 0.15097284, z: 0}
 --- !u!1 &8198198516931361898
 GameObject:
   m_ObjectHideFlags: 0
