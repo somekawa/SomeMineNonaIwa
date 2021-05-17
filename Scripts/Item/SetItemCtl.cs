@@ -14,8 +14,8 @@ public class SetItemCtl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject[] setItemPoints = gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
-        for (int i = 0; i <= setItemPoints.Length; i++)
+        GameObject[] setItemPoints = this.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        for (int i = 0; i < setItemPoints.Length; i++)
         {
             setPoint.Add(i);                 // 配置先のオブジェクトをリストに格納
         }
