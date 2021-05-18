@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class tLightRange : MonoBehaviour
 {
+    private GameObject slenderMan_;
+    private SlenderManCtl slenderManCtl_;
     private bool hitCheck_  = false;
 
     void Start()
     {
+        slenderMan_=GameObject.Find("Slender");
+        slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
     }
 
     void Update()
@@ -18,6 +22,7 @@ public class tLightRange : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
+            slenderManCtl_.inSightFlag = true;
             hitCheck_ = true;
             Debug.Log("ライトの範囲内に敵を確認しました。");
         }
