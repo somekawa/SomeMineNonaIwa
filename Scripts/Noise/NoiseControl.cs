@@ -12,7 +12,6 @@ public class NoiseControl : MonoBehaviour
 
     private RawImage rawImageB_;                // 血
     public float  maxB_;                        // 血の最大値
-    //private float minB_;                        // 血の最小値
     private float startB_           = 0.0f;     // 血出現開始時間
     private const float parameterB_ = 0.8f;     // 血出現開始条件(パラメーター)
 

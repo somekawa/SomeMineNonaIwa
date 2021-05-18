@@ -10,11 +10,14 @@ public class SanitMng : MonoBehaviour
     public NoiseControl noiseControl_;
     public HideControl hideControl_;
     public tLightRange tLightRange_;
-    public GameObject text_;
+    private GameObject text_;
+    private GameObject gameOverText_;
 
     private float maxSanit_       = 100.0f;         // 最大正気度
     // 別シーンに持っていくためにpublic staticに変更
     public static float sanit_    = 0.0f;           // 正気度 
+
+    private bool gameOvreFlag_    = false;
 
     private bool loghtDecrease_   = false;          // ライトによる正気度減少
     private bool oldLightFlag_;
@@ -39,20 +42,24 @@ public class SanitMng : MonoBehaviour
         sanit_ = maxSanit_;
         d_time_ = d_timeMax_;
         d_nowTime_ = d_time_;
+
+        text_= gameObject.transform.Find("SanitCanvas/Text").gameObject;
+        gameOverText_ = gameObject.transform.Find("SanitCanvas/GameOvreText").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // ライト
-        LightCheck();
-
-        // 敵
-        EnemyCheck();
-
-        if (sanit_ < 0.0f) 
+        if (sanit_ <= 0.0f)
         {
-            sanit_ = 0.0f;
+            GameOverSetAction();
+        }
+        else 
+        {
+            // ライト
+            LightCheck();
+            // 敵
+            EnemyCheck();
         }
 
         float parameter = (maxSanit_ - sanit_) * 0.01f;
@@ -66,6 +73,11 @@ public class SanitMng : MonoBehaviour
 
     private void LightCheck()
     {
+        if (sanit_ <= 0.0f) 
+        {
+            return;
+        }
+
         if(spotLight_ == null)
         {
             Debug.Log("spotLight_が入っていません");
@@ -115,7 +127,12 @@ public class SanitMng : MonoBehaviour
 
     private void EnemyCheck()
     {
-        if((!tLightRange_.GetHitCheck())||(!spotLight_.activeSelf))
+        if (sanit_ <= 0.0f)
+        {
+            return;
+        }
+
+        if ((!tLightRange_.GetHitCheck())||(!spotLight_.activeSelf))
         {
             // 遭遇していない
             // または懐中電灯をつけていない
@@ -135,9 +152,9 @@ public class SanitMng : MonoBehaviour
             noisFlag_ = true;
         }
 
-        if((Time.time - enemyHitTime_)>= noiseControl_.GetMoveTimeSN())
+        if((Time.time - enemyHitTime_)>= 0.0f)
         {
-            sanit_ -= 0.1f;
+            sanit_ -= 1.0f;
             enemyDecrease_ = true;
         }
 
@@ -174,9 +191,12 @@ public class SanitMng : MonoBehaviour
         {
             recoveryFlag_ = true;
         }
+        if (!enemyDecrease_)
+        {
+            noisFlag_ = false;
+        }
         onTime_ = Time.time;
         offTime_ = 0.0f;
-        noisFlag_ = false;
         loghtDecrease_ = false;
     }
 
@@ -197,5 +217,18 @@ public class SanitMng : MonoBehaviour
         {
             d_nowTime_ = d_timeMax_;         
         }
+    }
+
+    public void GameOverSetAction()
+    {
+        if(gameOvreFlag_)
+        {
+            return;
+        }
+
+        noiseControl_.DiscoveryNoise();
+        sanit_ = 0.0f;
+        gameOverText_.SetActive(true);
+        gameOvreFlag_ = true;
     }
 }
