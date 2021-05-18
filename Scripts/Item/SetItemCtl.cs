@@ -10,22 +10,41 @@ public class SetItemCtl : MonoBehaviour
     public int itemCnt;                                 // 生成する数
     private int pointRange;                             // 配置予定地の乱数格納用
     private List<int> setPoint = new List<int>();       // 同じ場所にしないために使うリスト
+    private int[] rangeStock_;
 
     // Start is called before the first frame update
     void Start()
     {
+
         GameObject[] setItemPoints = this.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
-        for (int i = 0; i < setItemPoints.Length; i++)
+        for (int i = 1; i < setItemPoints.Length; i++)
         {
             setPoint.Add(i);                 // 配置先のオブジェクトをリストに格納
+        }
+        rangeStock_ = new int[setPoint.Count];
+        for (int x = 0; x < setPoint.Count; x++)
+        {
+            rangeStock_[x] = x;
         }
 
         while (itemCnt-- > 0)                // 生成する数だけループ
         {
-            pointRange = Random.Range(1, setPoint.Count);
-
-            Instantiate(escapeItem, setItemPoints[pointRange].transform.position, setItemPoints[pointRange].transform.rotation);
-            setPoint.RemoveAt(pointRange);   // 配置された場所はリストから除外
+            pointRange = Random.Range(0, setPoint.Count);
+            for (int x = 0; x < setPoint.Count; x++)
+            {
+                if (rangeStock_[pointRange] == -1)
+                {
+                    pointRange = Random.Range(0, setPoint.Count);
+                }
+                else
+                {
+                    rangeStock_[pointRange] = -1;
+                    Instantiate(escapeItem, setItemPoints[pointRange].transform.position, setItemPoints[pointRange].transform.rotation);
+                    Debug.Log("" + pointRange + ":" + this.gameObject.name);
+                    break;
+                }
+            }
+            //setPoint.RemoveAt(pointRange);   // 配置された場所はリストから除外
         }
     }
 
