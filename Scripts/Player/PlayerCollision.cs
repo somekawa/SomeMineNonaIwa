@@ -55,6 +55,11 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag == "Untagged")
+        {
+            return;
+        }
+
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscapeItem")
         {
@@ -75,10 +80,10 @@ public class PlayerCollision : MonoBehaviour
                 keyItemColFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
+            return;
         }
-
         // 電池との当たり判定
-        if (other.gameObject.tag == "Battery")
+        else if (other.gameObject.tag == "Battery")
         {
             if (outline == null)
             {
@@ -99,10 +104,10 @@ public class PlayerCollision : MonoBehaviour
                 batteryGetFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
+            return;
         }
-
         // 防御アイテム取得処理
-        if (other.gameObject.tag == "BarrierItem")
+        else if (other.gameObject.tag == "BarrierItem")
         {
             if (outline == null)
             {
@@ -128,10 +133,10 @@ public class PlayerCollision : MonoBehaviour
                     Destroy(other.gameObject);            // オブジェクトを削除
                 }
             }
+            return;
         }
-
         // 誘導アイテム取得処理
-        if (other.gameObject.tag == "InductionItem")
+        else if (other.gameObject.tag == "InductionItem")
         {
             if (outline == null)
             {
@@ -155,10 +160,18 @@ public class PlayerCollision : MonoBehaviour
                     Destroy(other.gameObject);
                 }
             }
+            return;
+        }
+        else
+        {
+            if(outline != null)
+            {
+                Destroy(outline);
+            }
         }
 
         // 敵との当たり判定
-        if(other.gameObject.tag=="Enemy")
+        if (other.gameObject.tag=="Enemy")
         {
             Debug.Log("敵と当たってしまった");
             GameObject light = GameObject.Find("Spot Light");
