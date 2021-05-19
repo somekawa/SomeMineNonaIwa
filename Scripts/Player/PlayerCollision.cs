@@ -56,6 +56,14 @@ public class PlayerCollision : MonoBehaviour
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscarpItem")
         {
+            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline != null)
+            {
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.yellow;
+                outline.OutlineWidth = 5f;
+            }
+
             if (Input.GetKeyUp(KeyCode.E))
             {
                 keyItemColFlag_ = true;
@@ -66,6 +74,14 @@ public class PlayerCollision : MonoBehaviour
         // 電池との当たり判定
         if (other.gameObject.tag == "Battery")
         {
+            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline != null)
+            {
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.yellow;
+                outline.OutlineWidth = 5f;
+            }
+
             Debug.Log("電池と接触");
             if (Input.GetKeyUp(KeyCode.E))
             {
@@ -78,6 +94,14 @@ public class PlayerCollision : MonoBehaviour
         // 防御アイテム取得処理
         if (other.gameObject.tag == "BarrierItem")
         {
+            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline != null)
+            {
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.yellow;
+                outline.OutlineWidth = 5f;
+            }
+
             if (Input.GetKeyUp(KeyCode.E))
             {
                 Barrier barrier = GetComponent<Barrier>();
@@ -95,6 +119,14 @@ public class PlayerCollision : MonoBehaviour
         // 誘導アイテム取得処理
         if (other.gameObject.tag == "InductionItem")
         {
+            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline != null)
+            {
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.yellow;
+                outline.OutlineWidth = 5f;
+            }
+
             if (Input.GetKeyUp(KeyCode.E))
             {
                 ItemTrhow itemTrhow = GetComponent<ItemTrhow>();
