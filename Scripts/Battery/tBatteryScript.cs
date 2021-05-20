@@ -8,6 +8,9 @@ public class tBatteryScript : MonoBehaviour
     public tLightScript lightScript;
     public PlayerCollision playerCollision;
 
+    private bool testFlag = false;
+    public Canvas rightMap;
+    public Canvas leftMap;
 
     // lightONの時に消費する量
     private float erasePoint_;       // 1秒間に減る量（0.05f）
@@ -20,7 +23,7 @@ public class tBatteryScript : MonoBehaviour
    
     // デバッグ用変数
     private int count_;      // 1秒カウントダウンするたびにカウントする
-    public Text timeText;    //時間を表示するText型の変数
+   // public Text timeText;    //時間を表示するText型の変数
 
     // 電池のタイプ
     public enum type
@@ -68,6 +71,8 @@ public class tBatteryScript : MonoBehaviour
         overBattery_ = 0.0f;
         chargingNum_ = 0.8f;
 
+        rightMap.enabled = true;
+        leftMap.enabled = false;
         // デバッグ用
         count_ = 0;
     }
@@ -75,8 +80,9 @@ public class tBatteryScript : MonoBehaviour
     void Update()
     { 
         countdown_ -= Time.deltaTime;        // カウントダウンする
-        timeText.text = countdown_.ToString("f1") + "秒"+"("+ count_.ToString("f1")+")";        // 時間を表示する
-                                                              
+        //   timeText.text = countdown_.ToString("f1") + "秒"+"("+ count_.ToString("f1")+")";        // 時間を表示する
+      //  Debug.Log("あと" + countdown_.ToString("f1") + "秒" + "(" + count_.ToString("f1") + "秒目)");                                     
+      
         // 両方の充電がないとき
         if (status_[(int)type.RIGHT].batteryImage.fillAmount <= status_[(int)type.RIGHT].min)
         {            
@@ -142,7 +148,7 @@ public class tBatteryScript : MonoBehaviour
         }
         else
         {
-            status_[(int)type_].batteryImage.color = new Color(255, 255, 255, 1.0f);
+            status_[(int)type_].batteryImage.color = new Color(255, 255, 0, 1.0f);
         }
         // 右が呼ばれたら左の値に最小値を代入
         status_[(int)type.LEFT].batteryImage.fillAmount = status_[(int)type.LEFT].min;
@@ -154,7 +160,7 @@ public class tBatteryScript : MonoBehaviour
         {
             // アクシデント＝両方の充電が0になったときに回復した場合
             // 1.0以上の回復はないため左の電池の充電の計算はいらない
-            status_[(int)type.RIGHT].batteryImage.color = new Color(255, 255, 255, 1.0f);
+            status_[(int)type.RIGHT].batteryImage.color = new Color(255, 255, 0, 1.0f);
             status_[(int)type.RIGHT].batteryImage.fillAmount += chargingNum_;
             lightScript.GetAccidentFlag(false);            // false=アクシデント終了
         }
