@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.UI;
+using UnityEditor.SceneManagement;
 
 public class SanitMng : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class SanitMng : MonoBehaviour
     public HideControl hideControl_;
     public tLightRange tLightRange_;
     private GameObject text_;
-    private GameObject gameOverText_;
 
     private float maxSanit_       = 100.0f;         // 最大正気度
     // 別シーンに持っていくためにpublic staticに変更
@@ -44,7 +44,6 @@ public class SanitMng : MonoBehaviour
         d_nowTime_ = d_time_;
 
         text_= gameObject.transform.Find("SanitCanvas/Text").gameObject;
-        gameOverText_ = gameObject.transform.Find("SanitCanvas/GameOvreText").gameObject;
     }
 
     // Update is called once per frame
@@ -228,7 +227,8 @@ public class SanitMng : MonoBehaviour
 
         noiseControl_.DiscoveryNoise();
         sanit_ = 0.0f;
-        gameOverText_.SetActive(true);
         gameOvreFlag_ = true;
+
+        EditorSceneManager.LoadScene("GameOvreScene");
     }
 }
