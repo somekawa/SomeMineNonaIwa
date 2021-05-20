@@ -15,6 +15,7 @@ public class tLightScript : MonoBehaviour
 
     public HideControl hideControl;     // 箱に隠れる処理
     public PauseScript pause;           // pause中の処理
+    public GameObject inSightArea;      // 敵の処理を働かせる範囲
 
     // 懐中電灯関連
     public GameObject spotLight;    // spotlightを参照するため
@@ -148,6 +149,7 @@ public class tLightScript : MonoBehaviour
     {
         lightStatus = status;            // lightがついてるかのステータス
         spotLight.SetActive(active);     // 表示されるかどうか　false:OFF  true:ON
+        inSightArea.SetActive(active);
     }
 
     public void GetAccidentFlag(bool flag)
