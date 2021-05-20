@@ -229,6 +229,6 @@ public class SanitMng : MonoBehaviour
         sanit_ = 0.0f;
         gameOvreFlag_ = true;
 
-        EditorSceneManager.LoadScene("GameOvreScene");
+        EditorSceneManager.LoadScene("GameOverScene");
     }
 }
