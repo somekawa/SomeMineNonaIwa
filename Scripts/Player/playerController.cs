@@ -21,16 +21,128 @@ public class playerController : MonoBehaviour
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
 
+    // リーン
+    private bool eD;
+    private bool eU;
+    private bool eG;
+    private bool qD;
+    private bool qU;
+    private bool qG;
+    private int lean = 0;
+    private int leanOld = 0;
+    private int cntR = 0;
+    private int cntL = 0;
+
+    // PlayerCameraControllに覗き込んでいる際中のフラグを送って、Y座標のみ移動可能にする
 
     //private bool clearFlag=false;
     void Start()
     {
-        controller_ = GetComponent<CharacterController>();
+       controller_ = GetComponent<CharacterController>();
        hideControl_ = GetComponent<HideControl>();
     }
 
     void Update()
     {
+        eD = Input.GetKeyDown(KeyCode.T);
+        eU = Input.GetKeyUp(KeyCode.T);
+        eG = Input.GetKey(KeyCode.T);
+        qD = Input.GetKeyDown(KeyCode.R);
+        qU = Input.GetKeyUp(KeyCode.R);
+        qG = Input.GetKey(KeyCode.R);
+
+        // 何もしていない
+        if (lean == 0)
+        {
+            if (cntR >= 0)
+            {
+                cntR--;
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + 1));
+            }
+            else if (cntL >= 0)
+            {
+                cntL--;
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z - 1));
+            }
+            else
+            {
+                Debug.Log("lean平行に戻る");
+            }
+
+            if (leanOld != lean)
+            {
+                if(leanOld == 3)
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x - 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+                else
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+            }
+
+            // 右へ
+            if (!eU && eD && !(!qU && qD))
+            {
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                lean = 3;
+            }
+
+            // 左へ
+            if (qD && !qU)
+            {
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x - 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                lean = 1;
+            }
+
+            leanOld = lean;
+        }
+        else if (lean == 3)
+        {
+            cntR++;
+
+            if (cntR <= 30)
+            {
+                // ローカルが毎回newで新しくされてるから-1
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z - 1));
+            }
+            else
+            {
+                cntR = 30;
+                Debug.Log("lean傾け終わり");
+            }
+
+            // 押してないときにlean==0に戻さないといけない
+            if (eU)
+            {
+                leanOld = lean;
+                lean = 0;
+            }
+        }
+        else if(lean == 1)
+        {
+            cntL++;
+
+            if (cntL <= 30)
+            {
+                // ローカルが毎回newで新しくされてるから-1
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + 1));
+            }
+            else
+            {
+                cntL = 30;
+                Debug.Log("lean傾け終わり");
+            }
+
+            // 押してないときにlean==0に戻さないといけない
+            if (qU)
+            {
+                leanOld = lean;
+                lean = 0;
+            }
+        }
+
+
         if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
