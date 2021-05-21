@@ -15,6 +15,8 @@ public class PlayerCameraControll : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -28,14 +30,22 @@ public class PlayerCameraControll : MonoBehaviour
     {
         if(cameraController_.FullMapFlag()==false)
         {
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
             x_Rotation_ = Input.GetAxis("Mouse X");                   // マウスのX座標の取得
             y_Rotation_ = Input.GetAxis("Mouse Y");                   // マウスのY座標の取得
 
             x_Rotation_ = x_Rotation_ * x_sensi;                      // カメラのX座標の回転速度の計算
             y_Rotation_ = y_Rotation_ * y_sensi;                      // カメラのY座標の回転速度の計算
+
+            this.transform.Rotate(0, x_Rotation_, 0);                 // X座標の回転はスクリプトをアタッチしているオブジェクトに
+            playerCamera.transform.Rotate(-y_Rotation_, 0, 0);      　// Y座標の回転は子オブジェクトのカメラに
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
-        this.transform.Rotate(0, x_Rotation_, 0);                 // X座標の回転はスクリプトをアタッチしているオブジェクトに
-        playerCamera.transform.Rotate(-y_Rotation_, 0, 0);      　// Y座標の回転は子オブジェクトのカメラに
     }
 }
