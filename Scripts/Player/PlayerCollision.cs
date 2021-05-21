@@ -60,7 +60,7 @@ public class PlayerCollision : MonoBehaviour
         }
         
         // 脱出アイテムとの当たり判定
-        if (other.gameObject.tag == "EscarpItem")
+        if (other.gameObject.tag == "EscapeItem")
         {
             if (outline == null)
             {
