@@ -14,6 +14,7 @@ public class PlayerCollision : MonoBehaviour
     // 脱出アイテムと接触したか　true=接触 false=接触してない
     private bool keyItemColFlag_ = false;  
 
+    private Outline outline;
 
     void Start()
     {
@@ -53,10 +54,19 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag == "Untagged")
+        {
+            return;
+        }
+        
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscarpItem")
         {
-            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline == null)
+            {
+                outline = other.gameObject.AddComponent<Outline>();
+            }
+
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -69,12 +79,17 @@ public class PlayerCollision : MonoBehaviour
                 keyItemColFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
+            return;
         }
 
         // 電池との当たり判定
-        if (other.gameObject.tag == "Battery")
+        else if (other.gameObject.tag == "Battery")
         {
-            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline == null)
+            {
+                outline = other.gameObject.AddComponent<Outline>();
+            }
+            
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -89,12 +104,17 @@ public class PlayerCollision : MonoBehaviour
                 batteryGetFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
+            return;
         }
 
         // 防御アイテム取得処理
-        if (other.gameObject.tag == "BarrierItem")
+        else if (other.gameObject.tag == "BarrierItem")
         {
-            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline == null)
+            {
+                outline = other.gameObject.AddComponent<Outline>();
+            }
+            
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -104,7 +124,7 @@ public class PlayerCollision : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.E))
             {
-                Barrier barrier = GetComponent<Barrier>();
+                Barrier barrier = transform.parent.gameObject.GetComponent<Barrier>();
                 if (!barrier.GetBarrierItemFlg())
                 {
                     // 同じオブジェクト内の他のスクリプトを参照する場合
@@ -114,12 +134,17 @@ public class PlayerCollision : MonoBehaviour
                     Destroy(other.gameObject);            // オブジェクトを削除
                 }
             }
+            return;
         }
 
         // 誘導アイテム取得処理
-        if (other.gameObject.tag == "InductionItem")
+        else if (other.gameObject.tag == "InductionItem")
         {
-            var outline = other.gameObject.AddComponent<Outline>();
+            if (outline == null)
+            {
+                outline = other.gameObject.AddComponent<Outline>();
+            }
+            
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -129,13 +154,21 @@ public class PlayerCollision : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.E))
             {
-                ItemTrhow itemTrhow = GetComponent<ItemTrhow>();
+                ItemTrhow itemTrhow = transform.parent.gameObject.GetComponent<ItemTrhow>();
                 if (!itemTrhow.GetTrhowItemFlg())
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
                     Destroy(other.gameObject);
                 }
+            }
+            return;
+        }
+        else
+        {
+            if(outline != null)
+            {
+                Destroy(outline);
             }
         }
     }
