@@ -12,9 +12,7 @@ public class PlayerCollision : MonoBehaviour
     private int maxKeyItemNum_ = 8;  // 脱出アイテムの個数　8個まで
 
     // 脱出アイテムと接触したか　true=接触 false=接触してない
-    private bool keyItemColFlag_ = false;
-
-    private Outline outline;
+    private bool keyItemColFlag_ = false;  
 
 
     void Start()
@@ -55,19 +53,10 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Untagged")
-        {
-            return;
-        }
-
         // 脱出アイテムとの当たり判定
-        if (other.gameObject.tag == "EscapeItem")
+        if (other.gameObject.tag == "EscarpItem")
         {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
-
+            var outline = other.gameObject.AddComponent<Outline>();
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -80,16 +69,12 @@ public class PlayerCollision : MonoBehaviour
                 keyItemColFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
-            return;
         }
-        // 電池との当たり判定
-        else if (other.gameObject.tag == "Battery")
-        {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
 
+        // 電池との当たり判定
+        if (other.gameObject.tag == "Battery")
+        {
+            var outline = other.gameObject.AddComponent<Outline>();
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -104,16 +89,12 @@ public class PlayerCollision : MonoBehaviour
                 batteryGetFlag_ = true;
                 Destroy(other.gameObject);            // オブジェクトを削除
             }
-            return;
         }
-        // 防御アイテム取得処理
-        else if (other.gameObject.tag == "BarrierItem")
-        {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
 
+        // 防御アイテム取得処理
+        if (other.gameObject.tag == "BarrierItem")
+        {
+            var outline = other.gameObject.AddComponent<Outline>();
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -123,7 +104,7 @@ public class PlayerCollision : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.E))
             {
-                Barrier barrier = transform.parent.gameObject.GetComponent<Barrier>();
+                Barrier barrier = GetComponent<Barrier>();
                 if (!barrier.GetBarrierItemFlg())
                 {
                     // 同じオブジェクト内の他のスクリプトを参照する場合
@@ -133,16 +114,12 @@ public class PlayerCollision : MonoBehaviour
                     Destroy(other.gameObject);            // オブジェクトを削除
                 }
             }
-            return;
         }
-        // 誘導アイテム取得処理
-        else if (other.gameObject.tag == "InductionItem")
-        {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
 
+        // 誘導アイテム取得処理
+        if (other.gameObject.tag == "InductionItem")
+        {
+            var outline = other.gameObject.AddComponent<Outline>();
             if (outline != null)
             {
                 outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -152,33 +129,13 @@ public class PlayerCollision : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.E))
             {
-                ItemTrhow itemTrhow = transform.parent.gameObject.GetComponent<ItemTrhow>();
+                ItemTrhow itemTrhow = GetComponent<ItemTrhow>();
                 if (!itemTrhow.GetTrhowItemFlg())
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
                     Destroy(other.gameObject);
                 }
-            }
-            return;
-        }
-        else
-        {
-            if(outline != null)
-            {
-                Destroy(outline);
-            }
-        }
-
-        // 敵との当たり判定
-        if (other.gameObject.tag=="Enemy")
-        {
-            Debug.Log("敵と当たってしまった");
-            GameObject light = GameObject.Find("Spot Light");
-            if (light == null) 
-            {
-                GameObject sanitMng = GameObject.Find("SanitMng");
-                sanitMng.GetComponent<SanitMng>().GameOverSetAction();
             }
         }
     }
