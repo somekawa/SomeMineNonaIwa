@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 6197574304276158211}
   - component: {fileID: 1428865219220454546}
   - component: {fileID: 5133353088415593684}
-  - component: {fileID: 4436579520149785102}
+  - component: {fileID: -6425216813101250001}
   m_Layer: 15
   m_Name: Before Throwing Wine Bottle
   m_TagString: Untagged
@@ -144,7 +144,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4436579520149785102
+--- !u!114 &-6425216813101250001
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,10 +153,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6199788867102125271}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 461b6f5831a97654382f54741284fa76, type: 3}
+  m_Script: {fileID: 11500000, guid: 1eabcf44f7b4ab54499713524862a07b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targeTag: Target
+  displayRange: 5
 --- !u!1 &6199899489853909141
 GameObject:
   m_ObjectHideFlags: 0

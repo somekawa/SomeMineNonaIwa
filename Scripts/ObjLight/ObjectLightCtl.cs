@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class ObjectLightCtl : MonoBehaviour
 {
-    public GameObject comingObject;     // 自身との距離を計算するターゲットオブジェクト格納用
+    public float displayRange;
+
+    //public GameObject comingObject;     // 自身との距離を計算するターゲットオブジェクト格納用
+    private GameObject comingObject;
 
     private GameObject cameraControll_;
     private CameraController cameraController_;
     private GameObject objectLight_;     // 発光するための子オブジェクト格納用
 
-    const float displayRange = 20;
 
     // Start is called before the first frame update
     void Start()
     {
+        comingObject = GameObject.Find("Player");
         cameraControll_ = GameObject.Find("CameraControll");
         cameraController_ = cameraControll_.GetComponent<CameraController>();
         objectLight_ = gameObject.GetComponentInChildren<Light>().gameObject;     // 子オブジェクトのlightを取得
