@@ -14,7 +14,7 @@ public class PlayerCollision : MonoBehaviour
     // 脱出アイテムと接触したか　true=接触 false=接触してない
     private bool keyItemColFlag_ = false;  
 
-    private Outline outline;
+    private Outline outline_;        // アウトライン表示
 
     void Start()
     {
@@ -62,67 +62,27 @@ public class PlayerCollision : MonoBehaviour
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscapeItem")
         {
-            if (outline == null)
+            if (Common(other))
             {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
-
-            if (outline != null)
-            {
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.yellow;
-                outline.OutlineWidth = 5f;
-            }
-
-            if (Input.GetKeyUp(KeyCode.E))
-            {
+                Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
-                Destroy(other.gameObject);            // オブジェクトを削除
             }
             return;
         }
-
         // 電池との当たり判定
         else if (other.gameObject.tag == "Battery")
         {
-            if (outline == null)
+            if(Common(other))
             {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
-            
-            if (outline != null)
-            {
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.yellow;
-                outline.OutlineWidth = 5f;
-            }
-
-            Debug.Log("電池と接触");
-            if (Input.GetKeyUp(KeyCode.E))
-            {
-
+                Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
-                Destroy(other.gameObject);            // オブジェクトを削除
             }
             return;
         }
-
         // 防御アイテム取得処理
         else if (other.gameObject.tag == "BarrierItem")
         {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
-            
-            if (outline != null)
-            {
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.yellow;
-                outline.OutlineWidth = 5f;
-            }
-
-            if (Input.GetKeyUp(KeyCode.E))
+            if(Common(other))
             {
                 Barrier barrier = transform.parent.gameObject.GetComponent<Barrier>();
                 if (!barrier.GetBarrierItemFlg())
@@ -131,44 +91,29 @@ public class PlayerCollision : MonoBehaviour
                     barrier.SetBarrierItemFlg(true);
                     // Barrierクラスのflagをtrueにしたい
                     Debug.Log("防御アイテムゲット");
-                    Destroy(other.gameObject);            // オブジェクトを削除
                 }
             }
             return;
         }
-
         // 誘導アイテム取得処理
         else if (other.gameObject.tag == "InductionItem")
         {
-            if (outline == null)
-            {
-                outline = other.gameObject.AddComponent<Outline>();
-            }
-            
-            if (outline != null)
-            {
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.yellow;
-                outline.OutlineWidth = 5f;
-            }
-
-            if (Input.GetKeyUp(KeyCode.E))
+            if(Common(other))
             {
                 ItemTrhow itemTrhow = transform.parent.gameObject.GetComponent<ItemTrhow>();
                 if (!itemTrhow.GetTrhowItemFlg())
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
-                    Destroy(other.gameObject);
                 }
             }
             return;
         }
         else
         {
-            if(outline != null)
+            if(outline_ != null)
             {
-                Destroy(outline);
+                Destroy(outline_);
             }
         }
     }
@@ -186,5 +131,30 @@ public class PlayerCollision : MonoBehaviour
 
     }
 
+    bool Common(Collider other)
+    {
+        // 共通処理をまとめた関数
 
+        // アウトライン
+        if (outline_ == null)
+        {
+            outline_ = other.gameObject.AddComponent<Outline>();
+        }
+
+        if (outline_ != null)
+        {
+            outline_.OutlineMode = Outline.Mode.OutlineAll;
+            outline_.OutlineColor = Color.yellow;
+            outline_.OutlineWidth = 5f;
+        }
+
+        // Eキーの押下時にtrueを返す
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            Destroy(other.gameObject);   // オブジェクトを削除
+            return true;
+        }
+
+        return false;
+    }
 }
