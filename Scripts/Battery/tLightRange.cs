@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class tLightRange : MonoBehaviour
 {
+    public Barrier barrier;
+
     private GameObject slenderMan_;
     private SlenderManCtl slenderManCtl_;
     private bool hitCheck_  = false;
@@ -23,7 +25,18 @@ public class tLightRange : MonoBehaviour
         if (other.gameObject.tag == "Enemy")
         {
             slenderManCtl_.inSightFlag = true;
-            hitCheck_ = true;
+            //hitCheck_ = true;
+
+            if(barrier.GetBarrierItemFlg())
+            {
+                hitCheck_ = false;
+                barrier.SetBarrierItemFlg(false);
+                Debug.Log("防御アイテムを使用しました。");
+            }
+            else
+            {
+                hitCheck_ = true;
+            }
             Debug.Log("ライトの範囲内に敵を確認しました。");
         }
     }
