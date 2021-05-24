@@ -721,7 +721,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0d3e58bb90924afba39e665277b5f80a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -730,9 +730,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -839,20 +839,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b0a29163872f24d95f5aedfc9fb9bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  warpPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  destinationPoints: {fileID: 0}
+  warpPoints: {fileID: 0}
   soundPoint: {x: 0, y: 0, z: 0}
   listenFlag: 0
+  inSightFlag: 0
 --- !u!136 &7847503065156188086
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -866,7 +857,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2587092800457352090
 GameObject:
   m_ObjectHideFlags: 0
