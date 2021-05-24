@@ -292,4 +292,9 @@ public class playerController : MonoBehaviour
         Debug.Log("GetCountMaxでエラー");
         return 0;
     }
+
+    public int GetNowLean()
+    {
+        return lean;
+    }
 }
