@@ -20,6 +20,7 @@ public class playerController : MonoBehaviour
     private const float speedMax_ = 3.0f;           // 移動速度の最大値
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
+    private bool turnCheckFlag_ = false;  // チュートリアルでターンができたか確認用 ターンしたらtrue
 
     // リーン
     private bool eD;
@@ -217,6 +218,8 @@ public class playerController : MonoBehaviour
                 transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
                 quickTurnFlg_ = false;
                 quickTurnTime_ = 0.0f;
+          // チュートリアル用
+                turnCheckFlag_ = true;
             }
         }
 
@@ -275,6 +278,11 @@ public class playerController : MonoBehaviour
     public bool GetSlowWalkFlg()
     {
         return slowWalk_;
+    }
+
+    public bool GetTurnCheckFlag()
+    {
+        return turnCheckFlag_;
     }
 
     public int GetCountMax()
