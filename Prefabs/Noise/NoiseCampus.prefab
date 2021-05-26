@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1024, y: 768}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8194093630001593611
 CanvasRenderer:
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: e321d9ca95d8cf542b8c751a9f1ae34a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -105,7 +106,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1024, y: 768}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8194093630388849442
 CanvasRenderer:
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: b7946e84e27927c4b909745dc76a16bc, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -153,6 +155,7 @@ GameObject:
   - component: {fileID: 8194093631582979290}
   - component: {fileID: 8194093631582979285}
   - component: {fileID: 8194093631582979284}
+  - component: {fileID: 8312728949311672458}
   m_Layer: 5
   m_Name: NoiseCampus
   m_TagString: Untagged
@@ -258,6 +261,18 @@ MonoBehaviour:
   maxN_: 0.4
   maxB_: 0.7
   moveTimeSN_: 0.5
+--- !u!114 &8312728949311672458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8194093631582979287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a410fbd3847354147ae1722dbd33f122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8194093631902204040
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +308,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 768}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8194093631902204047
 CanvasRenderer:
@@ -318,6 +333,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: 2ff3e4bb1c599e6438d8b16f062392e2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

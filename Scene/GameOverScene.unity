@@ -473,6 +473,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8194093630388849500, guid: 14f844536eb990e42abe03c915964c76,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8194093630388849500, guid: 14f844536eb990e42abe03c915964c76,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8194093631582979284, guid: 14f844536eb990e42abe03c915964c76,
         type: 3}
       propertyPath: parameter_
@@ -664,7 +674,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 320, y: 100}
+  m_SizeDelta: {x: 1000, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1185973597
 MonoBehaviour:
@@ -679,19 +689,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8679245, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.735849, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 48
+    m_Font: {fileID: 12800000, guid: 58b647c5b2ec4184e9a07a561cdf0644, type: 3}
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 50
+    m_MaxSize: 120
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -996,7 +1006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eabcf44f7b4ab54499713524862a07b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  comingObject: {fileID: 0}
+  displayRange: 0
 --- !u!114 &1538608468622025171
 MonoBehaviour:
   m_ObjectHideFlags: 0
