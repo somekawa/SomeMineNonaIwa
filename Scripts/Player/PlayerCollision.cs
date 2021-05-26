@@ -8,7 +8,7 @@ public class PlayerCollision : MonoBehaviour
     public TutorialScript tutorial;
 
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
-
+    private bool itemGetFlag_=false;
     // 脱出アイテム関連
     private int keyItemCnt_ = 0;     // 現在所持してる脱出アイテムの数
     private int maxKeyItemNum_ = 8;  // 脱出アイテムの個数　8個まで
@@ -68,7 +68,7 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
-                tutorial.SetItemFlag(true);
+                itemGetFlag_ = true;
             }
             return;
         }
@@ -79,7 +79,7 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
-                tutorial.SetItemFlag(true);
+                itemGetFlag_ = true;
             }
             return;
         }
@@ -95,7 +95,7 @@ public class PlayerCollision : MonoBehaviour
                     barrier.SetBarrierItemFlg(true);
                     // Barrierクラスのflagをtrueにしたい
                     Debug.Log("防御アイテムゲット");
-                    tutorial.SetItemFlag(true);
+                    itemGetFlag_ = true;
                 }
             }
             return;
@@ -110,14 +110,15 @@ public class PlayerCollision : MonoBehaviour
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
-                    tutorial.SetItemFlag(true);
+                    itemGetFlag_ = true;
                 }
             }
             return;
         }
         else
         {
-            if(outline_ != null)
+            itemGetFlag_ = false;
+            if (outline_ != null)
             {
                 Destroy(outline_);
             }
@@ -134,6 +135,12 @@ public class PlayerCollision : MonoBehaviour
     {
         // Debug.Log("GetBatteryFlag+++++++電池ゲット");
         batteryGetFlag_ = flag;
+
+    }
+
+    public bool SetItemFlag()
+    {
+       return itemGetFlag_ ;
 
     }
 
