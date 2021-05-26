@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 56308784}
   - component: {fileID: 56308783}
   - component: {fileID: 56308782}
+  - component: {fileID: 56308786}
   m_Layer: 0
   m_Name: Cube
   m_TagString: target
@@ -288,6 +289,18 @@ Transform:
   m_Father: {fileID: 1107115053}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &56308786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56308781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69754a57dd27f0468e06f91b44ab9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &59738524
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,6 +1468,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 727577006191098381, guid: 743442031528f9a49b4032ea9fa9bdb5,
+        type: 3}
+      propertyPath: tutorial
+      value: 
+      objectReference: {fileID: 768453216}
     - target: {fileID: 727577006191098383, guid: 743442031528f9a49b4032ea9fa9bdb5,
         type: 3}
       propertyPath: m_Name
@@ -1872,7 +1890,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768453210}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2be87cdaf9b3aff4690f011bcd5c181e, type: 3}
@@ -1968,7 +1986,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768453210}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 26f8ad74f16010f43b80a6567d3568b1, type: 3}
@@ -2072,7 +2090,7 @@ MonoBehaviour:
   lightStatus: 0
   hideControl: {fileID: 627365948}
   pause: {fileID: 768453211}
-  inSightArea: {fileID: 829273566}
+  inSightArea: {fileID: 1736498232}
   spotLight: {fileID: 882954556}
   normalSE_: {fileID: 8300000, guid: 26f8ad74f16010f43b80a6567d3568b1, type: 3}
   accidentSE_: {fileID: 8300000, guid: 2be87cdaf9b3aff4690f011bcd5c181e, type: 3}
@@ -2104,6 +2122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missionRound: 0
   playerCollision: {fileID: 197737648}
+  player: {fileID: 627365944}
   playerController: {fileID: 627365950}
   trhow: {fileID: 627365946}
   hideCtl: {fileID: 627365948}
@@ -3621,6 +3640,7 @@ GameObject:
   - component: {fileID: 1185232032}
   - component: {fileID: 1185232031}
   - component: {fileID: 1185232030}
+  - component: {fileID: 1185232034}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: target
@@ -3702,6 +3722,18 @@ Transform:
   m_Father: {fileID: 1107115053}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1185232034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185232029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69754a57dd27f0468e06f91b44ab9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1209879884
 GameObject:
   m_ObjectHideFlags: 0
@@ -5113,7 +5145,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863797013}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 67cdfae57f8ff124d9a318ff027a2a5d, type: 3}
@@ -5551,6 +5583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739396c0169d2644fba4649ec159c28c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrier: {fileID: 0}
 --- !u!54 &2132425554
 Rigidbody:
   m_ObjectHideFlags: 0

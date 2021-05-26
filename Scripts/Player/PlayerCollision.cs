@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
+    public TutorialScript tutorial;
+
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
 
     // 脱出アイテム関連
@@ -66,6 +68,7 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
+                tutorial.SetItemFlag(true);
             }
             return;
         }
@@ -76,6 +79,7 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
+                tutorial.SetItemFlag(true);
             }
             return;
         }
@@ -91,6 +95,7 @@ public class PlayerCollision : MonoBehaviour
                     barrier.SetBarrierItemFlg(true);
                     // Barrierクラスのflagをtrueにしたい
                     Debug.Log("防御アイテムゲット");
+                    tutorial.SetItemFlag(true);
                 }
             }
             return;
@@ -105,6 +110,7 @@ public class PlayerCollision : MonoBehaviour
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
+                    tutorial.SetItemFlag(true);
                 }
             }
             return;
