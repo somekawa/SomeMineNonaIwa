@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class TitleTextAnimation : MonoBehaviour
 {
     public Animator[] textAnim_;
+    public AudioSource noiseSound;
     private int randomVibCnt_;
-    public float randomCnt_;
-    public float textCnt_;
+    private float randomCnt_;
+    private float textCnt_;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class TitleTextAnimation : MonoBehaviour
             {
                 textAnim_[i].SetBool("vibFlag", true);
             }
+            noiseSound.enabled = true;
         }
 
         if (textCnt_>= randomVibCnt_)
@@ -37,6 +39,7 @@ public class TitleTextAnimation : MonoBehaviour
             {
                 textAnim_[i].SetBool("vibFlag", false);
             }
+            noiseSound.enabled = false;
             randomVibCnt_ = Random.Range(1, 5);
             randomCnt_ = Random.value;
         }
