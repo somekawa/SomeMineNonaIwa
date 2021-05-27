@@ -7,6 +7,14 @@ using UnityEditor.SceneManagement;
 
 public class SanitMng : MonoBehaviour
 {
+    public enum DeadType
+    {
+        NON,
+        SANIT,
+        HIT,
+        MAX
+    }
+
     public GameObject spotLight_;
     public NoiseControl noiseControl_;
     public HideControl hideControl_;
@@ -35,6 +43,8 @@ public class SanitMng : MonoBehaviour
 
     private bool noisFlag_        = false;
 
+    public static DeadType deadType_            = DeadType.NON;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,8 +60,8 @@ public class SanitMng : MonoBehaviour
     void Update()
     {
         if (sanit_ <= 0.0f)
-        {
-            GameOverSetAction();
+        {  
+            GameOverSetAction(DeadType.SANIT);
         }
         else 
         {
@@ -218,7 +228,7 @@ public class SanitMng : MonoBehaviour
         }
     }
 
-    public void GameOverSetAction()
+    public void GameOverSetAction(DeadType deadType)
     {
         if(gameOvreFlag_)
         {
@@ -226,6 +236,7 @@ public class SanitMng : MonoBehaviour
         }
 
         noiseControl_.DiscoveryNoise();
+        deadType_ = deadType;
         sanit_ = 0.0f;
         gameOvreFlag_ = true;
 

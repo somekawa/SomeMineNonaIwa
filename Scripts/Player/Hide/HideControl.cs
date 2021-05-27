@@ -99,7 +99,7 @@ public class HideControl : MonoBehaviour
             if (light == null)
             {
                 GameObject sanitMng = GameObject.Find("SanitMng");
-                sanitMng.GetComponent<SanitMng>().GameOverSetAction();
+                sanitMng.GetComponent<SanitMng>().GameOverSetAction(SanitMng.DeadType.HIT);
             }
         }
     }
