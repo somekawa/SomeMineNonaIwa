@@ -155,7 +155,6 @@ GameObject:
   - component: {fileID: 8194093631582979290}
   - component: {fileID: 8194093631582979285}
   - component: {fileID: 8194093631582979284}
-  - component: {fileID: 8312728949311672458}
   m_Layer: 5
   m_Name: NoiseCampus
   m_TagString: Untagged
@@ -261,18 +260,7 @@ MonoBehaviour:
   maxN_: 0.4
   maxB_: 0.7
   moveTimeSN_: 0.5
---- !u!114 &8312728949311672458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8194093631582979287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a410fbd3847354147ae1722dbd33f122, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  randomSNFlag_: 0
 --- !u!1 &8194093631902204040
 GameObject:
   m_ObjectHideFlags: 0

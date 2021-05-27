@@ -19,13 +19,17 @@ public class NoiseControl : MonoBehaviour
     private float startSN_          = 0.0f;     // 横ノイズ開始時間
     public float moveTimeSN_;                   // 稼働時間
 
+    public bool randomSNFlag_;
+
     // Start is called before the first frame update
     void Start()
     {
+        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
         RawImage[] rawImageList =gameObject.GetComponentsInChildren<RawImage>();
         foreach(RawImage rawImage in rawImageList)
         {
-            if(rawImage.name== "N_RawImage")
+            rawImage.rectTransform.sizeDelta = screenSize;
+            if (rawImage.name== "N_RawImage")
             {
                 // ノイズ
                 rawImageN_ = rawImage;
@@ -55,6 +59,8 @@ public class NoiseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RandomSN();
+
         // ノイズ
         if (parameter_ <= 1.0f)
         {
@@ -114,7 +120,22 @@ public class NoiseControl : MonoBehaviour
         //}
         rawImageB_.material.SetFloat("alpha", alpha);
 
+
+
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
+    }
+
+    private void RandomSN()
+    {
+        if (!randomSNFlag_)
+        {
+            return;
+        }
+
+        if (Random.value * 100.0f < 0.1f)
+        {
+            DiscoveryNoise();
+        }
     }
 
     public void DiscoveryNoise()
