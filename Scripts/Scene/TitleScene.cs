@@ -21,6 +21,10 @@ public class TitleScene : MonoBehaviour
     public void TransitionGame()
     {
         SceneManager.LoadScene("MainScene");
+    }
 
+    public void TransitionTutorial()
+    {
+        SceneManager.LoadScene("TutorialScene");
     }
 }
