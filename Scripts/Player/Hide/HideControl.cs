@@ -19,7 +19,7 @@ public class HideControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera_ = gameObject.transform.Find("LookY/Main Camera").gameObject;
+        mainCamera_ = gameObject.transform.Find("Main Camera").gameObject;
         releaseTime_ = Time.time - coolTime_;
     }
 
