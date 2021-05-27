@@ -10,8 +10,8 @@ public class SlenderManCtl : MonoBehaviour
     private NavMeshAgent navMeshAgent_;         // Nav Mesh Agentの格納用
     private Animator anim_;                     // Animatorの格納用
 
-    public GameObject destinationPoints;             // 移動予定地の親オブジェクト格納用
-    public GameObject warpPoints;                // ワープ予定地の親オブジェクト格納用
+    public GameObject destinationPoints;        // 移動予定地の親オブジェクト格納用
+    public GameObject warpPoints;               // ワープ予定地の親オブジェクト格納用
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
@@ -23,16 +23,25 @@ public class SlenderManCtl : MonoBehaviour
     private float warpCnt_;                     // ワープが発生するまでの時間格納用
     private Vector3 soundWarpPoint;             // 音のした場所近くの座標格納用
 
+
+    Vector2 smoothDeltaPosition = Vector2.zero;
+    Vector2 velocity = Vector2.zero;
+
     // Start is called before the first frame update
     void Start()
     {
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
+
+        navMeshAgent_.updatePosition = false;
+
         soundPoint = new Vector3(0, 0, 0);
         soundWarpPoint = new Vector3(0, 0, 0);
 
         targetObjects_ = destinationPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
         warpPoints_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+
+        this.gameObject.transform.position = warpPoints_[Random.Range(1, warpPoints_.Length)].transform.position;
 
         SetTargetPoint();                                                  // 移動先の決定
     }
@@ -72,8 +81,23 @@ public class SlenderManCtl : MonoBehaviour
             listenFlag = false;
             inSightFlag = false;
         }
+
+        Vector3 worldDeltaPosition = navMeshAgent_.nextPosition - transform.position;
+
+        // worldDeltaPosition をローカル空間にマップします
+        float dx = Vector3.Dot(transform.right, worldDeltaPosition);
+        float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
+        Vector2 deltaPosition = new Vector2(dx, dy);
+
+        velocity = deltaPosition / Time.deltaTime;
+
+
+        // アニメーションのパラメーターを更新します
+        anim_.SetFloat("velx", velocity.x);
+        anim_.SetFloat("vely", velocity.y);
+
     }
-    
+
     private void SetTargetPoint()
     {
         targetRange_ = Random.Range(1, targetObjects_.Length);                                  // 決まった移動先の乱数を格納
@@ -111,4 +135,15 @@ public class SlenderManCtl : MonoBehaviour
             }
         }
     }
+
+    void OnAnimatorMove()
+    {
+        // 案: アニメーションの移動を正とする
+        //Vector3 position = anim_.rootPosition;
+        //position.y = navMeshAgent_.nextPosition.y;
+        //transform.position = position;
+        // position (位置) を agent (エージェント) の位置に更新します
+        transform.position = navMeshAgent_.nextPosition;
+    }
+
 }
