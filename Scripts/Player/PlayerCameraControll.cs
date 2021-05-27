@@ -9,15 +9,18 @@ public class PlayerCameraControll : MonoBehaviour
     public GameObject playerCamera;                // 動かすカメラ格納用
     public CameraController cameraController_;
     public playerController playerController_;
+    public PauseScript pause;                      // pause中の処理
 
     private float x_Rotation_;
     private float y_Rotation_;
+    private HideControl hideControl_;
 
     // Start is called before the first frame update
     void Start()
     {
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
+        hideControl_ = GetComponent<HideControl>();
     }
 
     // Update is called once per frame
@@ -29,7 +32,7 @@ public class PlayerCameraControll : MonoBehaviour
 
     private void cameracon()
     {
-        if(cameraController_.FullMapFlag()==false)
+        if (pause.SetPauseFlag() == false || cameraController_.FullMapFlag() == false || ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
         {
             //Cursor.visible = false;
             //Cursor.lockState = CursorLockMode.Locked;
