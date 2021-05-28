@@ -5,10 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
-    public TutorialScript tutorial;
-
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
-    private bool itemGetFlag_=false;
     // 脱出アイテム関連
     private int keyItemCnt_ = 0;     // 現在所持してる脱出アイテムの数
     private int maxKeyItemNum_ = 8;  // 脱出アイテムの個数　8個まで
@@ -50,8 +47,7 @@ public class PlayerCollision : MonoBehaviour
                 Debug.Log("ドアに接触");
                 //SceneManager.LoadScene("ClearScene");
             }
-        }
-
+       }
     }
 
     private void OnTriggerStay(Collider other)
@@ -68,7 +64,6 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
-                itemGetFlag_ = true;
             }
             return;
         }
@@ -79,7 +74,6 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
-                itemGetFlag_ = true;
             }
             return;
         }
@@ -95,7 +89,6 @@ public class PlayerCollision : MonoBehaviour
                     barrier.SetBarrierItemFlg(true);
                     // Barrierクラスのflagをtrueにしたい
                     Debug.Log("防御アイテムゲット");
-                    itemGetFlag_ = true;
                 }
             }
             return;
@@ -110,14 +103,12 @@ public class PlayerCollision : MonoBehaviour
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
-                    itemGetFlag_ = true;
                 }
             }
             return;
         }
         else
         {
-            itemGetFlag_ = false;
             if (outline_ != null)
             {
                 Destroy(outline_);
@@ -125,23 +116,16 @@ public class PlayerCollision : MonoBehaviour
         }
     }
 
-    public bool SetBatteryFlag()
+    public bool GetBatteryFlag()
     {
         // Debug.Log("SetBatteryFlag+++++++電池ゲット");
         return batteryGetFlag_;
     }
 
-    public void GetBatteryFlag(bool flag)
+    public void SetBatteryFlag(bool flag)
     {
         // Debug.Log("GetBatteryFlag+++++++電池ゲット");
         batteryGetFlag_ = flag;
-
-    }
-
-    public bool SetItemFlag()
-    {
-       return itemGetFlag_ ;
-
     }
 
     bool Common(Collider other)
