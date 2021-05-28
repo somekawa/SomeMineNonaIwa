@@ -81,5 +81,4 @@ public class PauseScript : MonoBehaviour
         // マウス処理はpause中でも入ってしまうためフラグで管理
         return pauseFlag_;
     }
-
 }
