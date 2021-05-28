@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CameraController : MonoBehaviour
 {
     public Image fullMap;        // 全体マップを映すカメラの格納用
-    public Image miniMap;               // ミニマップ画像の格納用
+    public Image miniMap;        // ミニマップ画像の格納用
 
     // Start is called before the first frame update
     void Start()
