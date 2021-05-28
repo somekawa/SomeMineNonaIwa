@@ -25,17 +25,11 @@ public class TutorialScript : MonoBehaviour
     }
     public round missionRound;
 
-
-    // アイテムを拾えたか（Eキー）のチェック　現在はバッテリーのみ
-    public PlayerCollision playerCollision;
-    private bool getUpFlag_;
-    public GameObject player;
-
     // クイックターン、スローペースのフラグを見るため
-    public playerController playerController;
+    public playerController playerCtl;
 
-    public PlayerCollision playerCol;
-
+    // チュートリアル用のCollisionを使ってアイテムを拾ったか確認
+    private bool getUpFlag_;
 
     // ビンを拾ったかのフラグを見る　
     public ItemTrhow trhow;
@@ -43,6 +37,7 @@ public class TutorialScript : MonoBehaviour
 
     // 隠れれるかのチェックをするため　出るは次のtrue後のFキー押下でチェック
     public HideControl hideCtl;
+    private bool hideCheckFlag_;
 
     // ラウンドごとのミッション内容を格納[round,mission]
     private string[,] textString;
@@ -50,7 +45,7 @@ public class TutorialScript : MonoBehaviour
     struct status
     {
         public Text moveText;       // どのテキストであるか
-        public Image textBackImage; // どのイメージか
+        public Image textBackImage; // どの背景画像か
         public bool checkFlag;      // 指定の行動をとったかどうか
         public bool activeFlag;     // 指示を終わらせたかどうか
     }
@@ -71,10 +66,11 @@ public class TutorialScript : MonoBehaviour
         getUpFlag_ = false;
         completeFlag_ = false;
         haveFlag_ = false;
+        hideCheckFlag_ = false;
         missionRound = round.FIRST;
         textString = new string[(int)round.MAX, (int)mission.MAX]{ 
         { "前【Wキー】", "後ろ【Sキー】", "右【Dキー】", "左【Aキー】" },
-        { "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "誘導アイテム使用\n【右クリック】", "スロースピード\n【移動+Enterキー】" }        ,
+        { "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "誘導アイテム使用\n【右クリック】", "スロースピード\n【移動+Enterキー】" },
         { "箱の中に隠れる\n【Fキー】", "メニューの表示\n【Tabキー】", "クイックターン\n【Sキー連続押し】", "ゲームスタート\n【ドアに接触】" } };
 
 
@@ -106,9 +102,10 @@ public class TutorialScript : MonoBehaviour
                 checkFlag = false,
             };
             nouNum_ = i;
-            //status_[i].textBackImage.color=new Color(255, 255, 255, alphaNum_);
-            image_object[i].GetComponent<Image>().color = new Color(255, 255, 255, alphaNum_);
+            status_[i].textBackImage.color=new Color(255, 255, 255, alphaNum_);
+           // image_object[i].GetComponent<Image>().color = new Color(255, 255, 255, alphaNum_);
             image_object[i].SetActive(true);
+            text_object[i].GetComponent<Text>().color = new Color(0, 0, 0, alphaNum_*2);
             status_[i].moveText.text = textString[(int)missionRound, i];
         }
     }
@@ -174,19 +171,25 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
-            // ライトonoffチェック
-            if (Input.GetMouseButtonDown(0))             // マウスの左クリックをしたとき
+            if (status_[(int)mission.ONE].activeFlag == true)
             {
-                nouNum_ = (int)mission.ONE;
-                status_[(int)mission.ONE].checkFlag = true;
+                // ライトonoffチェック
+                if (Input.GetMouseButtonDown(0))             // マウスの左クリックをしたとき
+                {
+                    nouNum_ = (int)mission.ONE;
+                    status_[(int)mission.ONE].checkFlag = true;
+                }
             }
 
-            //// アイテムを拾うミッション　どのアイテムでも良い
-            if (playerCol.SetItemFlag() == true)
-            {
-                nouNum_ = (int)mission.TWO;
-                status_[(int)mission.TWO].checkFlag = true;
-            }
+            //if (status_[(int)mission.TWO].activeFlag == true)
+            //{
+                //// アイテムを拾うミッション　どのアイテムでも良い
+                if (getUpFlag_==true)
+                {
+                    nouNum_ = (int)mission.TWO;
+                    status_[(int)mission.TWO].checkFlag = true;
+                }
+           // }
 
             // 誘導アイテム使用ミッション
             if (trhow.GetTrhowItemFlg() == true)
@@ -207,11 +210,14 @@ public class TutorialScript : MonoBehaviour
                 }
             }
 
-            // 遅い歩き
-            if (playerController.GetSlowWalkFlg() == true)
+            if (status_[(int)mission.FOUR].activeFlag == true)
             {
-                nouNum_ = (int)mission.FOUR;
-                status_[(int)mission.FOUR].checkFlag = true;
+                // 遅い歩き
+                if (playerCtl.GetSlowWalkFlg() == true)
+                {
+                    nouNum_ = (int)mission.FOUR;
+                    status_[(int)mission.FOUR].checkFlag = true;
+                }
             }
         }
 
@@ -229,14 +235,10 @@ public class TutorialScript : MonoBehaviour
             // 隠れることができたか
             if (hideCtl.GetHideFlg() == true)
             {
-                status_[(int)mission.ONE].moveText.text = "箱から出る\n【Fキー】";
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    nouNum_ = (int)mission.ONE;
-                    // 箱から出たらミッションのフラグをtrueにする
-                    status_[(int)mission.ONE].checkFlag = true;
-                }
+                status_[(int)mission.ONE].checkFlag = true;
+                nouNum_ = (int)mission.ONE;
             }
+
 
             // メニュー画面の表示
             if (Input.GetKeyUp(KeyCode.Tab))
@@ -246,7 +248,7 @@ public class TutorialScript : MonoBehaviour
             }
 
             // クイックターンができたかどうか
-            if (playerController.GetTurnCheckFlag() == true)
+            if (playerCtl.GetTurnCheckFlag() == true)
             {
                 nouNum_ = (int)mission.THREE;
                status_[(int)mission.THREE].checkFlag = true;
@@ -259,11 +261,66 @@ public class TutorialScript : MonoBehaviour
         RoundCheck();
     }
 
+
+    private void Choice(mission move_)
+    {
+        if (hideCtl.GetHideFlg() == true)
+        {
+           // 隠れたとき用　"隠れる"から"出る"に変更するため
+            if (hideCheckFlag_ == true)
+            {
+               // 表示したい文字を出す
+                status_[(int)move_].moveText.text = "箱から出る\n【Fキー】";
+                alphaNum_ = 0.5f;
+                image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 255, alphaNum_);
+            }
+            else
+            {
+                // 他と同じように表示を消してから
+                if (alphaNum_ <= 0.0f)
+                {
+                    hideCheckFlag_ = true;
+                    alphaNum_ = 0.0f;
+                }
+                else
+                {
+                    alphaNum_ -= 0.005f;
+                    image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
+                    text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, 1.0f - alphaNum_);
+                }
+            }
+        }
+        else
+        {
+            if (alphaNum_ <= 0.0f)
+            {
+                Debug.Log("alpha値が最小のため非表示にします。");
+                // アルファ値が0以下になったら非表示に
+                alphaNum_ = 0.0f;
+                image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
+                text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, alphaNum_);
+                image_object[(int)move_].SetActive(false);// 非表示に
+                status_[(int)move_].activeFlag = false;
+                // 別のキーが押されても良いようにアルファ値を初期値に戻す
+                status_[(int)move_].checkFlag = false;
+                alphaNum_ = 0.5f;
+            }
+            else
+            {
+                Debug.Log("alpha値を減少させます");
+                // 達成された表示ミッションを徐々に消す
+                alphaNum_ -= 0.005f;
+                image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
+                text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0,  alphaNum_*2);
+            }
+        }
+    }
+
     private void RoundCheck()
-    {        
+    {
         if (roundFlag_[(int)missionRound] == false)
         {
-         // 通過したラウンドはflagをtrueにする
+            // 通過したラウンドはflagをtrueにする
             roundFlag_[(int)missionRound] = true;
 
             if (missionRound != round.FIRST)
@@ -287,69 +344,27 @@ public class TutorialScript : MonoBehaviour
                 }
                 // 最後のラウンドではないため1ラウンドプラスする
                 missionRound++;
-
             }
         }
     }
 
-    private void Choice(mission move_)
+
+    public bool GetCompleteFlag()
     {
-        if (alphaNum_ <= 0.0f)
-        {
-            Debug.Log("alpha値が最小のため非表示にします。");
-            // アルファ値が0以下になったら非表示に
-            alphaNum_ = 0.0f;
-            image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
-            image_object[(int)move_].SetActive(false);// 非表示に
-            status_[(int)move_].activeFlag = false;
-            // 別のキーが押されても良いようにアルファ値を初期値に戻す
-            status_[(int)move_].checkFlag = false;
-            alphaNum_ = 0.5f;
-        }
-        else
-        {
-            Debug.Log("alpha値を減少させます");
-            // 達成された表示ミッションを徐々に消す
-            // どれかのキーが押されたらミッション達成＝色のアルファ値を下げる
-            alphaNum_ -= 0.005f;
-            image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
-            text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, 1.0f - alphaNum_);
-        }
+        // 全てのミッションを終わらせたらシーンを移す準備をする
+        return completeFlag_;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    // 全てのミッションが終わっていたら
-    //    if (completeFlag_ == true)
-    //    {
-    //        // ドアと接触したらクリアシーンに移る
-    //        if (other.gameObject.tag == "Door")
-    //        {
-    //            Debug.Log("ドアに接触");
-    //            SceneManager.LoadScene("MainScene");
-    //        }
-    //    }
-    //}
+    public bool GetMissionFlag()
+    {
+        // 全てのミッションを終わらせたらシーンを移す準備をする
+        return roundFlag_[(int)round.SECONDE];
+    }
 
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    string[] item = new string[4] { "Battery", "InductionItem", "BarrierItem", "EscapeItem" };
-    //    // ドアと接触したらクリアシーンに移る
-    //    if (other.gameObject.tag == "Battery"
-    //    || other.gameObject.tag == "InductionItem"
-    //    || other.gameObject.tag == "BarrierItem"
-    //    || other.gameObject.tag == "EscapeItem")
-    //    {
-    //        if (Input.GetKeyUp(KeyCode.E))
-    //        {
-    //            getUpFlag_ = true;
-    //        }
-    //    }
-    //}
 
     public void SetItemFlag(bool flag)
     {
-         getUpFlag_=flag;
+         getUpFlag_ = flag;
     }
 
 }
