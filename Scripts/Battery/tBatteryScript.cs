@@ -119,10 +119,10 @@ public class tBatteryScript : MonoBehaviour
             }
         }
 
-        if (playerCollision.SetBatteryFlag() == true)
+        if (playerCollision.GetBatteryFlag() == true)
         {
             //プレイヤーが電池を拾ったら充電をする
-            playerCollision.GetBatteryFlag(false);
+            playerCollision.SetBatteryFlag(false);
             BatteryCharging(); 
         }
         // 各電池の充電量を保存
