@@ -7,6 +7,7 @@ public class TitleTextAnimation : MonoBehaviour
 {
     public Animator[] textAnim_;
     public AudioSource noiseSound;
+    public RawImage rawImageSN_;
     private int randomVibCnt_;
     private float randomCnt_;
     private float textCnt_;
@@ -30,6 +31,7 @@ public class TitleTextAnimation : MonoBehaviour
                 textAnim_[i].SetBool("vibFlag", true);
             }
             noiseSound.enabled = true;
+            rawImageSN_.material.SetFloat("flag", 1.0f);
         }
 
         if (textCnt_>= randomVibCnt_)
@@ -40,6 +42,7 @@ public class TitleTextAnimation : MonoBehaviour
                 textAnim_[i].SetBool("vibFlag", false);
             }
             noiseSound.enabled = false;
+            rawImageSN_.material.SetFloat("flag", 0.0f);
             randomVibCnt_ = Random.Range(1, 5);
             randomCnt_ = Random.value;
         }
