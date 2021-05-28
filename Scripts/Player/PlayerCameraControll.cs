@@ -50,8 +50,8 @@ public class PlayerCameraControll : MonoBehaviour
         }
         else
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;                                    // マウスカーソルの表示
+            Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
         }
     }
 }
