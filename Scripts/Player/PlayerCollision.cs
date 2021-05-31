@@ -13,8 +13,6 @@ public class PlayerCollision : MonoBehaviour
     // 脱出アイテムと接触したか　true=接触 false=接触してない
     private bool keyItemColFlag_ = false;  
 
-    private Outline outline_;        // アウトライン表示
-
     void Start()
     {
     }
@@ -109,10 +107,7 @@ public class PlayerCollision : MonoBehaviour
         }
         else
         {
-            if (outline_ != null)
-            {
-                Destroy(outline_);
-            }
+            return;
         }
     }
 
@@ -131,20 +126,6 @@ public class PlayerCollision : MonoBehaviour
     bool Common(Collider other)
     {
         // 共通処理をまとめた関数
-
-        // アウトライン
-        if (outline_ == null)
-        {
-            outline_ = other.gameObject.AddComponent<Outline>();
-        }
-
-        if (outline_ != null)
-        {
-            outline_.OutlineMode = Outline.Mode.OutlineAll;
-            outline_.OutlineColor = Color.yellow;
-            outline_.OutlineWidth = 5f;
-        }
-
         // Eキーの押下時にtrueを返す
         if (Input.GetKeyUp(KeyCode.E))
         {
