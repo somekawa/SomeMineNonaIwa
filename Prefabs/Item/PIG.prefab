@@ -105,6 +105,8 @@ GameObject:
   - component: {fileID: 6279241049467387292}
   - component: {fileID: 6262658373998580722}
   - component: {fileID: 614628832622604313}
+  - component: {fileID: 2268948503160401364}
+  - component: {fileID: 4236671030834215257}
   m_Layer: 0
   m_Name: PIG
   m_TagString: Untagged
@@ -199,4 +201,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc39abfbd5017e44a887352cd5dbd6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
+--- !u!114 &2268948503160401364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6301472822314871594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.9795611, b: 0, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &4236671030834215257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6301472822314871594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74491e81e0d847e40a552c33e0c87f99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

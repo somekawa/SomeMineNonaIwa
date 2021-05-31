@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7806899993731395214}
   - component: {fileID: 7806899993730264142}
   - component: {fileID: 7806899991797545708}
+  - component: {fileID: 6608468749907902646}
+  - component: {fileID: 1471575510458917593}
   m_Layer: 0
   m_Name: BarrierItem
   m_TagString: BarrierItem
@@ -93,3 +95,33 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.4691854, y: 1.8888118, z: 1.2306082}
   m_Center: {x: -0.00000008940697, y: 0.4487621, z: 0.15734382}
+--- !u!114 &6608468749907902646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7806899993732199054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.9713696, g: 1, b: 0, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &1471575510458917593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7806899993732199054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74491e81e0d847e40a552c33e0c87f99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
