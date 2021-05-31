@@ -107,9 +107,10 @@ GameObject:
   - component: {fileID: 614628832622604313}
   - component: {fileID: 2268948503160401364}
   - component: {fileID: 4236671030834215257}
+  - component: {fileID: 6195622442572163799}
   m_Layer: 0
   m_Name: PIG
-  m_TagString: Untagged
+  m_TagString: BarrierItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,3 +232,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74491e81e0d847e40a552c33e0c87f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &6195622442572163799
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6301472822314871594}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.6488353, y: 1.8823668, z: 1.2402782}
+  m_Center: {x: 0, y: 0.45343897, z: 0.16110975}
