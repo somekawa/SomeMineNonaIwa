@@ -9,8 +9,8 @@ public class tBatteryScript : MonoBehaviour
     public PlayerCollision playerCollision;
 
     private bool testFlag = false;
-    public Canvas rightMap;
-    public Canvas leftMap;
+    //public Canvas rightMap;
+    //public Canvas leftMap;
 
     // lightONの時に消費する量
     private float erasePoint_;       // 1秒間に減る量（0.05f）
@@ -71,8 +71,8 @@ public class tBatteryScript : MonoBehaviour
         overBattery_ = 0.0f;
         chargingNum_ = 0.8f;
 
-        rightMap.enabled = true;
-        leftMap.enabled = false;
+        //rightMap.enabled = true;
+        //leftMap.enabled = false;
         // デバッグ用
         count_ = 0;
     }
@@ -109,12 +109,12 @@ public class tBatteryScript : MonoBehaviour
                     // カウント0以下＝1秒経過
                    
                     UsingBattery(type.LEFT);
-                    Debug.Log("左電池" + status_[(int)type.LEFT].batteryImage.fillAmount);
+                    //Debug.Log("左電池" + status_[(int)type.LEFT].batteryImage.fillAmount);
                 }
                 else                    // gauge1が0になったらgauge2を減らし始める
                 {
                     UsingBattery(type.RIGHT);
-                    Debug.Log("右電池" + status_[(int)type.RIGHT].batteryImage.fillAmount);
+                   // Debug.Log("右電池" + status_[(int)type.RIGHT].batteryImage.fillAmount);
                 }
             }
         }
@@ -122,8 +122,8 @@ public class tBatteryScript : MonoBehaviour
         if (playerCollision.GetBatteryFlag() == true)
         {
             //プレイヤーが電池を拾ったら充電をする
+            BatteryCharging();
             playerCollision.SetBatteryFlag(false);
-            BatteryCharging(); 
         }
         // 各電池の充電量を保存
         status_[(int)type.LEFT].save = status_[(int)type.LEFT].batteryImage.fillAmount;
@@ -195,7 +195,7 @@ public class tBatteryScript : MonoBehaviour
         if (status_[(int)type_].danger <= status_[(int)type_].save)
         {
             Debug.Log("危険域から回復しました");
-            status_[(int)type_].batteryImage.color = new Color(255, 255, 255, 1.0f);
+            status_[(int)type_].batteryImage.color = new Color(255, 255, 0, 1.0f);
         }
 
         // ↓足した際に右の充電が1.0を超えていなかったら
