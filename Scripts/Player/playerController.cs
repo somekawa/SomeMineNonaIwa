@@ -237,6 +237,11 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // マップに含まれるかチェック
+        if (!leanMap_.ContainsKey(other.gameObject.tag))
+        {
+            return;
+        }
         lean = 1;
         Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
@@ -244,6 +249,11 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        // マップに含まれるかチェック
+        if (!leanMap_.ContainsKey(other.gameObject.tag))
+        {
+            return;
+        }
         // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
         lean = 0;
         Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * (leanMap_[other.gameObject.tag].rotate * -1.0f))));
