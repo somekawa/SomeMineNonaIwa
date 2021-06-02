@@ -15,35 +15,33 @@ public class SanitMng : MonoBehaviour
         MAX
     }
 
-    public GameObject spotLight_;
-    public NoiseControl noiseControl_;
-    public HideControl hideControl_;
-    public tLightRange tLightRange_;
-    private GameObject text_;
+    public GameObject spotLight_;                   // ライト
+    public NoiseControl noiseControl_;              // ノイズ
+    public HideControl hideControl_;                // 箱に隠れる処理
+    public tLightRange tLightRange_;                // ライトのあたり判定
 
-    private float maxSanit_       = 100.0f;         // 最大正気度
-    // 別シーンに持っていくためにpublic staticに変更
-    public static float sanit_    = 0.0f;           // 正気度 
+    private float maxSanit_         = 100.0f;       // 最大正気度
+    public static float sanit_       = 0.0f;        // 正気度 
 
-    private bool gameOvreFlag_    = false;
+    private bool gameOvreFlag_       = false;       // ゲームオーバーになったか
 
-    private bool loghtDecrease_   = false;          // ライトによる正気度減少
-    private bool oldLightFlag_;
-    private float onTime_         = 0.0f;           // 懐中電灯をオンにした時間
-    private float offTime_        = 0.0f;           // 懐中電灯をオフにした時間
+    private bool loghtDecrease_      = false;       // ライトによる正気度減少
+    private bool oldLightFlag_;                     // 前回のライトの状態
+    private float onTime_            = 0.0f;        // 懐中電灯をオンにした時間
+    private float offTime_           = 0.0f;        // 懐中電灯をオフにした時間
     public float d_timeMax_;                        // 懐中電灯をオフにしてから耐久出来る最大時間
     private float d_time_;                          // 懐中電灯をオフにしてから耐久出来る実際の時間
     public float d_recoveryTime_;                   // 耐久時間1秒回復にかかる時間
     private float d_nowTime_;                       // 耐久出来る残り時間
 
-    private bool enemyDecrease_   = false;          // 敵による正気度減少
+    private bool enemyDecrease_      = false;       // 敵による正気度減少
     private float enemyHitTime_;
 
-    private bool recoveryFlag_    = false;          // 回復中
+    private bool recoveryFlag_       = false;       // 回復中
 
-    private bool noisFlag_        = false;
+    private bool noisFlag_           = false;       // ノイズが走っているか
 
-    public static DeadType deadType_            = DeadType.NON;
+    public static DeadType deadType_ = DeadType.NON;
 
     // Start is called before the first frame update
     void Start()
@@ -52,8 +50,6 @@ public class SanitMng : MonoBehaviour
         sanit_ = maxSanit_;
         d_time_ = d_timeMax_;
         d_nowTime_ = d_time_;
-
-        text_= gameObject.transform.Find("SanitCanvas/Text").gameObject;
     }
 
     // Update is called once per frame
@@ -73,11 +69,6 @@ public class SanitMng : MonoBehaviour
 
         float parameter = (maxSanit_ - sanit_) * 0.01f;
         noiseControl_.SetParameter(parameter);
-
-
-        // 確認用
-        text_.GetComponent<Text>().text = "耐久時間:" + d_nowTime_;
-
     }
 
     private void LightCheck()
@@ -241,5 +232,15 @@ public class SanitMng : MonoBehaviour
         gameOvreFlag_ = true;
 
         EditorSceneManager.LoadScene("GameOverScene");
+    }
+
+    public float GetDTimeMax()
+    {
+        return d_timeMax_;
+    }
+
+    public float GetDNTimeMax()
+    {
+        return d_nowTime_;
     }
 }
