@@ -23,127 +23,56 @@ public class playerController : MonoBehaviour
     private bool turnCheckFlag_ = false;  // チュートリアルでターンができたか確認用 ターンしたらtrue
 
     // リーン
-    private bool eD;
-    private bool eU;
-    private bool eG;
-    private bool qD;
-    private bool qU;
-    private bool qG;
     private int lean = 0;
-    private int leanOld = 0;
-    private int cntR = 0;
-    private int cntL = 0;
+    // リーンの計算式に必要な値をまとめた構造体
+    struct leanSt
+    {
+        public float rotate;    // 回転角度
+        public float moveX;     // 移動X軸
+        public float moveZ;     // 移動Z軸
+    }
+    private leanSt[] leanSt_;
 
-    // PlayerCameraControllに覗き込んでいる際中のフラグを送って、Y座標のみ移動可能にする
+    IDictionary<string, leanSt> leanMap_;   // ボックスとの接触時に使用される値をまとめている(string->タグ名,leanSt->構造体)
+
 
     //private bool clearFlag=false;
     void Start()
     {
        controller_ = GetComponent<CharacterController>();
        hideControl_ = GetComponent<HideControl>();
+
+       // 初期化
+       leanSt_ = new leanSt[4];
+       leanSt_[0] = new leanSt()
+       {
+           rotate = 1.0f,moveX = -1.0f,moveZ = 0.0f
+       };
+       leanSt_[1] = new leanSt()
+       {
+           rotate = -1.0f,moveX = 1.0f,moveZ = 0.0f
+       };
+       leanSt_[2] = new leanSt()
+       {
+           rotate = -1.0f,moveX = 0.0f,moveZ = -1.0f
+       };
+       leanSt_[3] = new leanSt()
+       {
+           rotate = 1.0f,moveX = 0.0f,moveZ = 1.0f
+       };
+
+       //マップの定義
+       leanMap_ = new Dictionary<string, leanSt>();
+
+       //マップに値の追加
+       leanMap_.Add("ReanX_M", leanSt_[0]);
+       leanMap_.Add("ReanX_P", leanSt_[1]);
+       leanMap_.Add("ReanZ_P", leanSt_[2]);
+       leanMap_.Add("ReanZ_M", leanSt_[3]);
     }
 
     void Update()
     {
-        eD = Input.GetKeyDown(KeyCode.T);
-        eU = Input.GetKeyUp(KeyCode.T);
-        eG = Input.GetKey(KeyCode.T);
-        qD = Input.GetKeyDown(KeyCode.R);
-        qU = Input.GetKeyUp(KeyCode.R);
-        qG = Input.GetKey(KeyCode.R);
-
-        // 何もしていない
-        if (lean == 0)
-        {
-            if (cntR >= 0)
-            {
-                cntR--;
-                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + 1));
-            }
-            else if (cntL >= 0)
-            {
-                cntL--;
-                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z - 1));
-            }
-            else
-            {
-                Debug.Log("lean平行に戻る");
-            }
-
-            if (leanOld != lean)
-            {
-                if(leanOld == 3)
-                {
-                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x - 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
-                }
-                else
-                {
-                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
-                }
-            }
-
-            // 右へ
-            if (!eU && eD && !(!qU && qD))
-            {
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
-                lean = 3;
-            }
-
-            // 左へ
-            if (qD && !qU)
-            {
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x - 1.0f, Camera.main.transform.position.y, Camera.main.transform.position.z);
-                lean = 1;
-            }
-
-            leanOld = lean;
-        }
-        else if (lean == 3)
-        {
-            cntR++;
-
-            if (cntR <= 30)
-            {
-                // ローカルが毎回newで新しくされてるから-1
-                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z - 1));
-            }
-            else
-            {
-                cntR = 30;
-                Debug.Log("lean傾け終わり");
-            }
-
-            // 押してないときにlean==0に戻さないといけない
-            if (eU)
-            {
-                leanOld = lean;
-                lean = 0;
-            }
-        }
-        else if(lean == 1)
-        {
-            cntL++;
-
-            if (cntL <= 30)
-            {
-                // ローカルが毎回newで新しくされてるから-1
-                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + 1));
-            }
-            else
-            {
-                cntL = 30;
-                Debug.Log("lean傾け終わり");
-            }
-
-            // 押してないときにlean==0に戻さないといけない
-            if (qU)
-            {
-                leanOld = lean;
-                lean = 0;
-            }
-        }
-
-
         if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
@@ -304,5 +233,20 @@ public class playerController : MonoBehaviour
     public int GetNowLean()
     {
         return lean;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        lean = 1;
+        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
+        lean = 0;
+        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * (leanMap_[other.gameObject.tag].rotate * -1.0f))));
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * (leanMap_[other.gameObject.tag].moveX * -1.0f)), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * (leanMap_[other.gameObject.tag].moveZ * -1.0f)));
     }
 }
