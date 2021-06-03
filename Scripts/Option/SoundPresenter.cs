@@ -35,7 +35,7 @@ public class SoundPresenter : MonoBehaviour
     public void OnChangedSESlider()
     {
         //Sliderの値に応じてSEを変更
-        OptionScript.GetInstance().SEVolume = seSlider.value;
+        OptionScript.GetInstance().SEVolume = seSlider.value/5;
         //volumeTextの値をSliderのvalueに変更
         seVolumeText.text = string.Format("{0:0}", seSlider.value * 100);
     }

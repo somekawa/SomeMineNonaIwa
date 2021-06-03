@@ -238,8 +238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seList:
+  - {fileID: 8300000, guid: 0d3e58bb90924afba39e665277b5f80a, type: 3}
   - {fileID: 8300000, guid: 26f8ad74f16010f43b80a6567d3568b1, type: 3}
   audioSourceBGM: {fileID: 8891123887666671007}
   bgmList:
   - {fileID: 8300000, guid: 67cdfae57f8ff124d9a318ff027a2a5d, type: 3}
-  audioSourceSE: {fileID: 8891123887666670976}
+  audioSourceSE: {fileID: 0}

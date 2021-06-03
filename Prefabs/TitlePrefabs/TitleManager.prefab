@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4784586753020332733}
   - component: {fileID: 4784586753020332734}
   - component: {fileID: 4784586753020332732}
-  - component: {fileID: 4784586753020332707}
   m_Layer: 0
   m_Name: TitleManager
   m_TagString: Untagged
@@ -64,19 +63,3 @@ MonoBehaviour:
   - {fileID: 0}
   noiseSound: {fileID: 0}
   rawImageSN_: {fileID: 0}
---- !u!114 &4784586753020332707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4784586753020332735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37e70a899e92fa641899e480ca2d19b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgmVolumeText: {fileID: 0}
-  bgmSlider: {fileID: 0}
-  seVolumeText: {fileID: 0}
-  seSlider: {fileID: 0}
