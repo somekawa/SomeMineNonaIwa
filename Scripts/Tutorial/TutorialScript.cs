@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class TutorialScript : MonoBehaviour
 {
@@ -61,17 +60,20 @@ public class TutorialScript : MonoBehaviour
 
     private bool[] roundFlag_;      // 終了したラウンドをチェック　終了=true
 
+    private bool doorColFlag_;
+
     void Start()
     {
         getUpFlag_ = false;
         completeFlag_ = false;
         haveFlag_ = false;
         hideCheckFlag_ = false;
+        doorColFlag_ = false;
         missionRound = round.FIRST;
         textString = new string[(int)round.MAX, (int)mission.MAX]{ 
         { "前【Wキー】", "後ろ【Sキー】", "右【Dキー】", "左【Aキー】" },
         { "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "誘導アイテム使用\n【右クリック】", "スロースピード\n【移動+Enterキー】" },
-        { "箱の中に隠れる\n【Fキー】", "メニューの表示\n【Tabキー】", "クイックターン\n【Sキー連続押し】", "ゲームスタート\n【ドアに接触】" } };
+        { "箱の中に隠れる\n【Fキー】", "メニューの表示\n【Tabキー】", "クイックターン\n【Sキー連続押し】", "Next\n【ドアに接触】" } };
 
 
         roundFlag_ = new bool[(int)round.MAX];
@@ -112,7 +114,14 @@ public class TutorialScript : MonoBehaviour
 
     void Update()
     {
-        if(missionRound == round.FIRST)
+        if (missionRound == round.MAX)
+        {
+            // 全てのミッションが終わってるからもう入らないようにする
+            return;
+        }
+
+
+        if (missionRound == round.FIRST)
         {
             FirstMissions();
             Debug.Log("1巡目です");
@@ -181,15 +190,12 @@ public class TutorialScript : MonoBehaviour
                 }
             }
 
-            //if (status_[(int)mission.TWO].activeFlag == true)
-            //{
                 //// アイテムを拾うミッション　どのアイテムでも良い
                 if (getUpFlag_==true)
                 {
                     nouNum_ = (int)mission.TWO;
                     status_[(int)mission.TWO].checkFlag = true;
                 }
-           // }
 
             // 誘導アイテム使用ミッション
             if (trhow.GetTrhowItemFlg() == true)
@@ -239,7 +245,6 @@ public class TutorialScript : MonoBehaviour
                 nouNum_ = (int)mission.ONE;
             }
 
-
             // メニュー画面の表示
             if (Input.GetKeyUp(KeyCode.Tab))
             {
@@ -247,15 +252,24 @@ public class TutorialScript : MonoBehaviour
                 status_[(int)mission.TWO].checkFlag = true;
             }
 
-            // クイックターンができたかどうか
-            if (playerCtl.GetTurnCheckFlag() == true)
+            if (status_[(int)mission.THREE].activeFlag == true)
             {
-                nouNum_ = (int)mission.THREE;
-               status_[(int)mission.THREE].checkFlag = true;
+                // クイックターンができたかどうか
+                if (playerCtl.GetTurnCheckFlag() == true)
+                {
+                    nouNum_ = (int)mission.THREE;
+                    status_[(int)mission.THREE].checkFlag = true;
+                }
             }
-            
-            // 4番目のミッションはドアに接触のためfalseにしておく
-            status_[(int)mission.FOUR].activeFlag = false;
+
+            // ドアに触れたかどうか
+            if (doorColFlag_ == true)
+            {
+                nouNum_ = (int)mission.FOUR;
+                // 4番目のミッションはドアに接触のためfalseにしておく
+                status_[(int)mission.FOUR].checkFlag = true;
+
+            }
         }
 
         RoundCheck();
@@ -273,20 +287,25 @@ public class TutorialScript : MonoBehaviour
                 status_[(int)move_].moveText.text = "箱から出る\n【Fキー】";
                 alphaNum_ = 0.5f;
                 image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 255, alphaNum_);
+                text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, alphaNum_ * 2);
+                // 箱から出たら他と同じ消えていく処理に入る
             }
             else
             {
                 // 他と同じように表示を消してから
                 if (alphaNum_ <= 0.0f)
                 {
+                    // 箱から出るミッションを表示
                     hideCheckFlag_ = true;
                     alphaNum_ = 0.0f;
+                    Debug.Log("隠れるミッションを出るミッションに変更します");
                 }
                 else
                 {
                     alphaNum_ -= 0.005f;
                     image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
-                    text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, 1.0f - alphaNum_);
+                    text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, alphaNum_ * 2);
+                    Debug.Log("隠れるミッションを消します");
                 }
             }
         }
@@ -314,6 +333,7 @@ public class TutorialScript : MonoBehaviour
                 text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0,  alphaNum_*2);
             }
         }
+
     }
 
     private void RoundCheck()
@@ -331,23 +351,34 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
-            // ラウンド内で全てのミッションを終わらせる(false)と次のラウンドに
-            if (status_[(int)mission.ONE].activeFlag == false
-            && status_[(int)mission.TWO].activeFlag == false
-            && status_[(int)mission.THREE].activeFlag == false
-            && status_[(int)mission.FOUR].activeFlag == false)
-            {
-                if (missionRound == round.THIRD)
+            if (missionRound != round.THIRD)
+            {                // ラウンド内で全てのミッションを終わらせる(false)と次のラウンドに
+                if (status_[(int)mission.ONE].activeFlag == false
+                && status_[(int)mission.TWO].activeFlag == false
+                && status_[(int)mission.THREE].activeFlag == false
+                && status_[(int)mission.FOUR].activeFlag == false)
                 {
-                    // 3巡目が最後のためシーン遷移の準備をする
+                    // 最後のラウンドではないため1ラウンドプラスする
+                    missionRound++;
+                    Debug.Log("ミッションのラウンドをプラスします");
+                }
+            }
+            else
+            {
+                if (status_[(int)mission.ONE].activeFlag == false
+                 && status_[(int)mission.TWO].activeFlag == false
+                 && status_[(int)mission.THREE].activeFlag == false)
+                {
                     completeFlag_ = true;
                 }
-                // 最後のラウンドではないため1ラウンドプラスする
-                missionRound++;
+                if (status_[(int)mission.FOUR].activeFlag == false)
+                {
+                   // ドアに触れたらプラスしてUpdateに入らないようにする
+                    missionRound++;
+                }
             }
         }
     }
-
 
     public bool GetCompleteFlag()
     {
@@ -361,6 +392,10 @@ public class TutorialScript : MonoBehaviour
         return roundFlag_[(int)round.SECONDE];
     }
 
+    public void SetDoorColFlag(bool flag)
+    {
+        doorColFlag_ = flag;
+    }
 
     public void SetItemFlag(bool flag)
     {
