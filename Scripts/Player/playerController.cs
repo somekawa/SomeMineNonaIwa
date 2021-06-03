@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class playerController : MonoBehaviour
 {
     private CharacterController controller_;
@@ -20,10 +21,11 @@ public class playerController : MonoBehaviour
     private const float speedMax_ = 3.0f;           // 移動速度の最大値
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
-    private bool turnCheckFlag_ = false;  // チュートリアルでターンができたか確認用 ターンしたらtrue
+    private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
+    private float time_ = 5.0f;
 
     // リーン
-    private int lean = 0;
+    private bool leanFlg_ = false;
     // リーンの計算式に必要な値をまとめた構造体
     struct leanSt
     {
@@ -92,7 +94,10 @@ public class playerController : MonoBehaviour
             slowWalk_ = false;
         }
 
-        CalculateMove();
+        if(!leanFlg_)   // 傾き中は移動を止める
+        {
+            CalculateMove();
+        }
 
 
         //// クリアしたときの処理
@@ -230,9 +235,9 @@ public class playerController : MonoBehaviour
         return 0;
     }
 
-    public int GetNowLean()
+    public bool GetNowLean()
     {
-        return lean;
+        return leanFlg_;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -242,21 +247,60 @@ public class playerController : MonoBehaviour
         {
             return;
         }
-        lean = 1;
-        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
-        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
+
+        //if(lean == 0)
+        //{
+        //    // キー押下でリーン処理へ
+        //    if (Input.GetKey(KeyCode.T))
+        //    {
+        //        lean = 1;
+        //        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
+        //        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
+        //    }
+        //}
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         // マップに含まれるかチェック
         if (!leanMap_.ContainsKey(other.gameObject.tag))
         {
             return;
         }
-        // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
-        lean = 0;
-        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * (leanMap_[other.gameObject.tag].rotate * -1.0f))));
-        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * (leanMap_[other.gameObject.tag].moveX * -1.0f)), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * (leanMap_[other.gameObject.tag].moveZ * -1.0f)));
+
+        if (!leanFlg_)
+        {
+            if (time_ < 0.1f)
+            {
+                time_ += Time.deltaTime;
+                return;
+            }
+
+            // キー押下でリーン処理へ
+            if (Input.GetKey(KeyCode.T))
+            {
+                time_ = 0.0f;
+                leanFlg_ = true;
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
+            }
+        }
+        else if (leanFlg_)
+        {
+            if(time_ < 0.1f)
+            {
+                time_ += Time.deltaTime;
+                return;
+            }
+
+            if(Input.GetKey(KeyCode.T))
+            {
+                time_ = 0.0f;
+                // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
+                leanFlg_ = false;
+                Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * (leanMap_[other.gameObject.tag].rotate * -1.0f))));
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * (leanMap_[other.gameObject.tag].moveX * -1.0f)), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * (leanMap_[other.gameObject.tag].moveZ * -1.0f)));
+            }
+        }
     }
 }

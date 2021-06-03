@@ -41,7 +41,7 @@ public class PlayerCameraControll : MonoBehaviour
             y_Rotation_ = y_Rotation_ * y_sensi;                      // カメラのY座標の回転速度の計算
             playerCamera.transform.Rotate(-y_Rotation_, 0, 0);      　// Y座標の回転は子オブジェクトのカメラに
 
-            if (playerController_.GetNowLean() == 0)
+            if (playerController_.GetNowLean())
             {
                 x_Rotation_ = Input.GetAxis("Mouse X");               // マウスのX座標の取得
                 x_Rotation_ = x_Rotation_ * x_sensi;                  // カメラのX座標の回転速度の計算
