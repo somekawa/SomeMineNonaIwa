@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
+    public GameObject LeanAnnounceText;   // リーン可能範囲内に入ったときにテキストを表示する
+
     private CharacterController controller_;
     private HideControl hideControl_;
 
@@ -25,7 +27,7 @@ public class playerController : MonoBehaviour
     private float time_ = 5.0f;
 
     // リーン
-    private bool leanFlg_ = false;
+    private bool leanFlg_ = false;                  // リーン中かどうかを判定する
     // リーンの計算式に必要な値をまとめた構造体
     struct leanSt
     {
@@ -71,6 +73,8 @@ public class playerController : MonoBehaviour
        leanMap_.Add("ReanX_P", leanSt_[1]);
        leanMap_.Add("ReanZ_P", leanSt_[2]);
        leanMap_.Add("ReanZ_M", leanSt_[3]);
+
+        LeanAnnounceText.SetActive(false);
     }
 
     void Update()
@@ -240,24 +244,9 @@ public class playerController : MonoBehaviour
         return leanFlg_;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit()
     {
-        // マップに含まれるかチェック
-        if (!leanMap_.ContainsKey(other.gameObject.tag))
-        {
-            return;
-        }
-
-        //if(lean == 0)
-        //{
-        //    // キー押下でリーン処理へ
-        //    if (Input.GetKey(KeyCode.T))
-        //    {
-        //        lean = 1;
-        //        Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
-        //        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
-        //    }
-        //}
+        LeanAnnounceText.SetActive(false);
     }
 
     private void OnTriggerStay(Collider other)
@@ -276,6 +265,8 @@ public class playerController : MonoBehaviour
                 return;
             }
 
+            LeanAnnounceText.SetActive(true);
+
             // キー押下でリーン処理へ
             if (Input.GetKey(KeyCode.T))
             {
@@ -293,7 +284,9 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if(Input.GetKey(KeyCode.T))
+            LeanAnnounceText.SetActive(false);
+
+            if (Input.GetKey(KeyCode.T))
             {
                 time_ = 0.0f;
                 // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
