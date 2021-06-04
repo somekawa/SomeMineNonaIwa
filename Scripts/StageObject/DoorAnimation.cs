@@ -5,22 +5,42 @@ using UnityEngine;
 public class DoorAnimation : MonoBehaviour
 {
     public GameObject door;             // 回転するオブジェクト格納用
+    public bool openFlag;               // 開くためのフラグ
+    public bool closeFlag;              // 閉じるためのフラグ
+
     private float minAngle_;            // 回転する前の角度
     private float maxAngle_;            // 回転した後の角度
-    public bool openFlag;               // 開くためのフラグ
+    private float angle_;                // 回転角度格納用変数
 
     // Start is called before the first frame update
     void Start()
     {
         minAngle_ = door.transform.rotation.y;
         maxAngle_ = 90;
-        openFlag = false;
+        openFlag = true;
+        closeFlag = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float angle = Mathf.LerpAngle(minAngle_, maxAngle_, Time.time);
-        door.transform.eulerAngles = new Vector3(0, angle, 0);
+        if (openFlag == true)
+        {
+            angle_ = Mathf.LerpAngle(minAngle_, maxAngle_, Time.time);
+            door.transform.eulerAngles = new Vector3(0, angle_, 0);
+            if(door.transform.eulerAngles== new Vector3(0, maxAngle_, 0))
+            {
+                openFlag = false;
+            }
+        }
+        if(closeFlag==true)
+        {
+            angle_ = Mathf.LerpAngle(maxAngle_, minAngle_, Time.time);
+            door.transform.eulerAngles = new Vector3(0, angle_, 0);
+            if (door.transform.eulerAngles == new Vector3(0, minAngle_, 0))
+            {
+                closeFlag = false;
+            }
+        }
     }
 }
