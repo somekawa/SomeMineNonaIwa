@@ -39,7 +39,6 @@ public class tLightRange : MonoBehaviour
         }
         slenderManCtl_.navMeshAgent_.ResetPath();
         slenderManCtl_.status = SlenderManCtl.Status.NULL;
-        //slenderManCtl_.inSightFlag = true;       
     }
 
     private void OnTriggerStay(Collider other)
@@ -58,6 +57,7 @@ public class tLightRange : MonoBehaviour
         if (rangeTime_ >= rangeMaxTime_)
         {
             //@slenderMan このタイミングでワープお願いします。
+            slenderManCtl_.inSightFlag = true;
 
             if (barrier.GetBarrierItemFlg())
             {
@@ -81,6 +81,7 @@ public class tLightRange : MonoBehaviour
         }
 
         //@slenderMan このタイミングで動きお願いします。
+        slenderManCtl_.status = SlenderManCtl.Status.WALK;
 
         hitFlag_ = false;
         rangeFlag_ = false;
