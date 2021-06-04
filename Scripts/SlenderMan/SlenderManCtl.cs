@@ -7,7 +7,7 @@ using System.Linq;
 public class SlenderManCtl : MonoBehaviour
 {
     // Component取得用変数
-    private NavMeshAgent navMeshAgent_;         // Nav Mesh Agentの格納用
+    public NavMeshAgent navMeshAgent_;         // Nav Mesh Agentの格納用
     private Animator anim_;                     // Animatorの格納用
 
     public GameObject destinationPoints;        // 移動予定地の親オブジェクト格納用
@@ -23,6 +23,14 @@ public class SlenderManCtl : MonoBehaviour
     private float warpCnt_;                     // ワープが発生するまでの時間格納用
     private Vector3 soundWarpPoint;             // 音のした場所近くの座標格納用
 
+    public enum Status
+    {
+        IDLE,
+        WALK,
+        NULL
+    }
+
+    public Status status= Status.NULL;
 
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
@@ -33,6 +41,7 @@ public class SlenderManCtl : MonoBehaviour
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
 
+        navMeshAgent_.autoRepath = false;
         navMeshAgent_.updatePosition = false;
 
         soundPoint = new Vector3(0, 0, 0);
@@ -49,20 +58,33 @@ public class SlenderManCtl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (navMeshAgent_.velocity.magnitude > 0)     // 移動しているかどうかの判定
+        //if (navMeshAgent_.pathStatus != NavMeshPathStatus.PathInvalid)
+        //{
+        //if (navMeshAgent_.velocity.magnitude > 0)     // 移動しているかどうかの判定
+        if (status == Status.WALK)
         {
             anim_.SetBool("moveFlag", true);          // 歩くモーションの開始
             if (listenFlag == true)                   // 音が聞こえた時に呼び出す
             {
                 SetWarpPoint();
             }
+            if (navMeshAgent_.hasPath == false)
+            {
+                status = Status.IDLE;
+            }
         }
-        else
+        else if (status == Status.IDLE)
         {
             anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
             SetTargetPoint();                        // 次の移動先の決定
             listenFlag = false;                      // 音のした場所に着いたらfalseにする
         }
+        else
+        {
+            anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
+            return;
+        }
+        //}
 
         if (listenFlag == false)
         {
@@ -95,7 +117,6 @@ public class SlenderManCtl : MonoBehaviour
         // アニメーションのパラメーターを更新します
         anim_.SetFloat("velx", velocity.x);
         anim_.SetFloat("vely", velocity.y);
-
     }
 
     private void SetTargetPoint()
@@ -106,6 +127,7 @@ public class SlenderManCtl : MonoBehaviour
         {
             navMeshAgent_.SetDestination(soundPoint);
         }
+        status = Status.WALK;
     }
 
     private void SetWarpPoint()
