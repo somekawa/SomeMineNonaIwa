@@ -6,10 +6,11 @@ using TMPro;
 
 public class OptionCanvasScript : MonoBehaviour
 {
-    public Button optionButton;                  // オプション画面に行くためのボタン
-    public Button leaveButton;                   // オプション画面に行くためのボタン
-    public GameObject optionMenu;                // オプションで表示するオブジェクト
-    public TextMeshProUGUI optionText;           // オプション画面と分かるテキスト
+    public Button optionButton;                      // オプション画面に行くためのボタン
+    public Button leaveButton;                       // オプション画面に行くためのボタン
+    public GameObject optionMenu;                    // オプションで表示するオブジェクト
+    public TextMeshProUGUI optionText;               // オプション画面と分かるテキスト
+
     private CameraController cameraController_;
     private bool optionFlag;
 
@@ -49,15 +50,22 @@ public class OptionCanvasScript : MonoBehaviour
         if (cameraController_ == null)
         {
             Active(false);
+            if (optionFlag == false)
+            {
+                Active(false);
+            }
+            else
+            {
+                Active(true);
+            }
+
         }
         else
         {
             if (cameraController_.FullMapFlag() == false)
             {
+                Active(false);
                 optionButton.gameObject.SetActive(false);
-                leaveButton.gameObject.SetActive(false);
-                optionMenu.gameObject.SetActive(false);
-                optionText.gameObject.SetActive(false);
             }
         }
 
@@ -84,7 +92,7 @@ public class OptionCanvasScript : MonoBehaviour
         optionFlag = false;
     }
 
-    void Active(bool activeFlg)
+    void Active(bool activeFlg)     // 表示非表示の切り替え
     {
         optionButton.gameObject.SetActive(!activeFlg);
         leaveButton.gameObject.SetActive(activeFlg);
