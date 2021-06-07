@@ -10,6 +10,8 @@ public class OptionCanvasScript : MonoBehaviour
     public Button leaveButton;                   // オプション画面に行くためのボタン
     public GameObject optionMenu;                // オプションで表示するオブジェクト
     public TextMeshProUGUI optionText;           // オプション画面と分かるテキスト
+    private CameraController cameraController_;
+    private bool optionFlag;
 
     //SecneをまたいでもObjectが破壊されないようにする
     static OptionCanvasScript Instance = null;
@@ -31,38 +33,62 @@ public class OptionCanvasScript : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        optionButton.gameObject.SetActive(true);
-        leaveButton.gameObject.SetActive(false);
-        optionMenu.gameObject.SetActive(false);
-        optionText.gameObject.SetActive(false);
+        Active(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (cameraController_ == null) cameraController_ = CameraController.FindObjectOfType<CameraController>();
+        if (cameraController_ == null)
+        {
+            Active(false);
+        }
+        else
+        {
+            if (cameraController_.FullMapFlag() == false)
+            {
+                optionButton.gameObject.SetActive(false);
+                leaveButton.gameObject.SetActive(false);
+                optionMenu.gameObject.SetActive(false);
+                optionText.gameObject.SetActive(false);
+            }
+        }
+
+        if (cameraController_.FullMapFlag() == true)
+        {
+            if (optionFlag == false)
+            {
+                Active(false);
+            }
+            else
+            {
+                Active(true);
+            }
+        }
     }
-
-
 
     public void HeadOption()
     {
-        optionButton.gameObject.SetActive(false);
-        leaveButton.gameObject.SetActive(true);
-        optionMenu.gameObject.SetActive(true);
-        optionText.gameObject.SetActive(true);
+        optionFlag = true;
     }
 
     public void LeaveOption()
     {
-        optionButton.gameObject.SetActive(true);
-        leaveButton.gameObject.SetActive(false);
-        optionMenu.gameObject.SetActive(false);
-        optionText.gameObject.SetActive(false);
+        optionFlag = false;
+    }
+
+    void Active(bool activeFlg)
+    {
+        optionButton.gameObject.SetActive(!activeFlg);
+        leaveButton.gameObject.SetActive(activeFlg);
+        optionMenu.gameObject.SetActive(activeFlg);
+        optionText.gameObject.SetActive(activeFlg);
     }
 }
