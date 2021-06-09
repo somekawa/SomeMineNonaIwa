@@ -24,10 +24,11 @@ public class playerController : MonoBehaviour
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
-    private float time_ = 5.0f;
-
     // リーン
     private bool leanFlg_ = false;                  // リーン中かどうかを判定する
+    private bool keyFlg1_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用1
+    private bool keyFlg2_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用2
+
     // リーンの計算式に必要な値をまとめた構造体
     public struct leanSt
     {
@@ -38,7 +39,6 @@ public class playerController : MonoBehaviour
 
     IDictionary<string, leanSt> leanMap_;   // ボックスとの接触時に使用される値をまとめている(string->タグ名,leanSt->構造体)
 
-
     //private bool clearFlag=false;
     void Start()
     {
@@ -46,7 +46,7 @@ public class playerController : MonoBehaviour
        hideControl_ = GetComponent<HideControl>();
 
        // 初期化
-       leanSt[] leanst = {
+       leanSt[] test = {
             new leanSt { rotate = 1.0f , moveX = -1.0f, moveZ = 0.0f },// 黄色ボックス
             new leanSt { rotate = -1.0f, moveX = 1.0f , moveZ = 0.0f },// オレンジボックス
             new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = -1.0f},// 赤ボックス
@@ -61,14 +61,14 @@ public class playerController : MonoBehaviour
         leanMap_ = new Dictionary<string, leanSt>
         {
             //マップに値の追加
-            { "LeanX_M", leanst[0] },
-            { "LeanX_P", leanst[1] },
-            { "LeanZ_P", leanst[2] },
-            { "LeanZ_M", leanst[3] },
-            { "LeanZ_P_R", leanst[4] },
-            { "LeanZ_M_R", leanst[5] },
-            { "LeanX_M_R", leanst[6] },
-            { "LeanX_P_R", leanst[7] }
+            { "LeanX_M", test[0] },
+            { "LeanX_P", test[1] },
+            { "LeanZ_P", test[2] },
+            { "LeanZ_M", test[3] },
+            { "LeanZ_P_R", test[4] },
+            { "LeanZ_M_R", test[5] },
+            { "LeanX_M_R", test[6] },
+            { "LeanX_P_R", test[7] }
         };
 
 
@@ -81,6 +81,20 @@ public class playerController : MonoBehaviour
         {
             // 箱に隠れている
             return;
+        }
+
+        // リーン処理(キー押下を離した瞬間に、フラグの状態を更新する)
+        if (Input.GetKeyUp(KeyCode.T))
+        {
+            leanFlg_ = !leanFlg_;
+            if (leanFlg_)
+            {
+                keyFlg1_ = false;
+            }
+            else
+            {
+                keyFlg2_ = false;
+            }
         }
 
         PlRotate();
@@ -255,42 +269,29 @@ public class playerController : MonoBehaviour
             return;
         }
 
-        if (!leanFlg_)
+        // リーン中でないときは、傾けられるというメッセージを表示する
+        LeanAnnounceText.SetActive(!leanFlg_ ? true : false);
+
+        // キー押下中
+        if (Input.GetKey(KeyCode.T))
         {
-            if (time_ < 0.1f)
+            // 長押ししても、同じ処理を1回以上行わないようにしている
+            if (!leanFlg_ && !keyFlg1_) 
             {
-                time_ += Time.deltaTime;
-                return;
-            }
-
-            LeanAnnounceText.SetActive(true);
-
-            // キー押下でリーン処理へ
-            if (Input.GetKey(KeyCode.T))
-            {
-                time_ = 0.0f;
-                leanFlg_ = true;
+                keyFlg1_ = true;
                 Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
                 Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
             }
-        }
-        else if (leanFlg_)
-        {
-            if(time_ < 0.1f)
+            else if(leanFlg_ && !keyFlg2_)
             {
-                time_ += Time.deltaTime;
-                return;
-            }
-
-            LeanAnnounceText.SetActive(false);
-
-            if (Input.GetKey(KeyCode.T))
-            {
-                time_ = 0.0f;
+                keyFlg2_ = true;
                 // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている
-                leanFlg_ = false;
                 Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * (leanMap_[other.gameObject.tag].rotate * -1.0f))));
                 Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * (leanMap_[other.gameObject.tag].moveX * -1.0f)), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * (leanMap_[other.gameObject.tag].moveZ * -1.0f)));
+            }
+            else
+            {
+                // 何も処理を行わない
             }
         }
     }
