@@ -23,16 +23,20 @@ public class TutorialCollision : MonoBehaviour
 
     public HideControl hideCtl;
 
+    public GameObject pMission;
+    public GameObject pCollision;
+    public GameObject stage;
+    public GameObject nextStage;
+
+
     private GameObject[] item_;
     private bool[] destroyCheckFlag_;
-    private bool keyGetFlag_;
     private bool nextMissionFlag_;
 
     // Start is called before the first frame update
     void Start()
     {
-        keyGetFlag_ = false;
-        nextMissionFlag_ = false; //true;//  true:次のミッションに移動　false:まだだめ
+        nextMissionFlag_ = false; // true;// true:次のミッションに移動　false:まだだめ
         checkItem_ = item.MAX;
         destroyCheckFlag_ = new bool[(int)item.MAX];
         // 配列を作るときはまず大きさを決める
@@ -55,8 +59,22 @@ public class TutorialCollision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(nextMissionFlag_==true)
+        {
+            // 基本ミッションが終わったらこのスクリプトを消す
+            // Destroy(GetComponent<TutorialCollision>());
+            // 基本行動ミッションが終わったら入らないようにする
+            // ステージを実践ミッション用に入れ替える
+            stage.SetActive(false);
+            nextStage.SetActive(true);// ステージを先に表示する
+            pMission.SetActive(true);
+            pCollision.SetActive(true);
+            Destroy(this.gameObject);
+            return;
+        }
+
         // 2巡目のミッションに入ったら
-        if (tutorialMain.GetMissionFlag() == true)
+        if (tutorialMain.GetMissionRound()==1)
         {
             // アイテムが削除されていなければ表示
             if (item_[(int)item.BATTERY] != null)
@@ -72,6 +90,8 @@ public class TutorialCollision : MonoBehaviour
                 tutorialMain.SetItemFlag(true);// アイテムを拾った(true)を渡す
             }
         }
+
+        // 2巡目が終わったら隠れる用のボックスを表示させる
 
         if (hideCtl.GetHideFlg() == true)
         {
@@ -96,7 +116,7 @@ public class TutorialCollision : MonoBehaviour
     {
         if (other.gameObject.tag == "Untagged")
         {
-            tutorialMain.SetItemFlag(false);
+           // tutorialMain.SetItemFlag(false);
             return;
         }
 
@@ -146,7 +166,7 @@ public class TutorialCollision : MonoBehaviour
             tutorialMain.SetDoorColFlag(true);
             nextMissionFlag_ = true;
             Debug.Log("ドアに接触");
-            SceneManager.LoadScene("MainScene");
+          //  SceneManager.LoadScene("MainScene");
         }
 
     }
