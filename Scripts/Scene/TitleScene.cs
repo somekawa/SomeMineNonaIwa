@@ -9,6 +9,8 @@ public class TitleScene : MonoBehaviour
     public Canvas titleCanvas;
     public Canvas optionCanvas;
 
+    public SoundScript buttonSE;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,13 +28,15 @@ public class TitleScene : MonoBehaviour
         //}
     }
 
-        public void TransitionGame()
+    public void TransitionGame()
     {
+        buttonSE.GetComponent<SoundScript>().PlaySound(2);
         SceneManager.LoadScene("MainScene");
     }
 
     public void TransitionTutorial()
     {
+        buttonSE.GetComponent<SoundScript>().PlaySound(2);
         SceneManager.LoadScene("TutorialScene");
     }
 
