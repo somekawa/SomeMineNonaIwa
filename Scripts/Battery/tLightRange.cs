@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class tLightRange : MonoBehaviour
 {
     public Barrier barrier;
-    public CameraShake cameraShake_;
+    public CameraAction cameraShake_;
 
     private GameObject slenderMan_;
     private SlenderManCtl slenderManCtl_;
@@ -14,7 +14,7 @@ public class tLightRange : MonoBehaviour
 
     private bool rangeFlag_     = false;    // 範囲内か
     private float rangeTime_    = 0.0f;     // 範囲内に入ってからの時間
-    private float rangeMaxTime_ = 0.5f;     // 範囲内に入ってからの猶予時間
+    private float rangeMaxTime_ = 1.0f;     // 範囲内に入ってからの猶予時間
 
     void Start()
     {
@@ -52,12 +52,13 @@ public class tLightRange : MonoBehaviour
         Debug.Log("範囲内時間：" + rangeTime_);
 
         // 画面揺れ処理追加予定
-        cameraShake_.Shake(other.gameObject);
+        cameraShake_.SanitCameraAction(other.gameObject);
 
         if (rangeTime_ >= rangeMaxTime_)
         {
             //@slenderMan このタイミングでワープお願いします。
             slenderManCtl_.inSightFlag = true;
+            slenderManCtl_.status = SlenderManCtl.Status.IDLE;
 
             if (barrier.GetBarrierItemFlg())
             {
