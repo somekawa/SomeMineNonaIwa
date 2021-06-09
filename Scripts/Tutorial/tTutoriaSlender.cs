@@ -29,8 +29,8 @@ public class tTutoriaSlender : MonoBehaviour
     void Start()
     {
         targetPos = new Vector3[2];
-        targetPos[0] = new Vector3(-8, 0, -7);
-        targetPos[0] = new Vector3(-8, 0, 7);
+        //targetPos[0] = new Vector3(-8, 0, -7);
+        //targetPos[0] = new Vector3(-8, 0, 7);
 
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
@@ -88,12 +88,13 @@ public class tTutoriaSlender : MonoBehaviour
 
     private void SetTargetPoint()
     {
-        targetRange_ = Random.Range(1, targetObjects_.Length);    //targetPos[2];                              // 決まった移動先の乱数を格納
-        navMeshAgent_.SetDestination(targetObjects_[targetRange_].transform.position);          // 移動先の設定
-        if (listenFlag == true)
-        {
-            navMeshAgent_.SetDestination(soundPoint);
-        }
+       // targetRange_ = //targetObject;//Random.Range(1, targetObjects_.Length);    //targetPos[2];                              // 決まった移動先の乱数を格納
+       // navMeshAgent_.SetDestination(targetObjects_[targetRange_].transform.position);          // 移動先の設定
+        navMeshAgent_.SetDestination(targetObjects_[1].transform.position);          // 移動先の設定
+        //if (listenFlag == true)
+        //{
+        //    navMeshAgent_.SetDestination(soundPoint);
+        //}
     }
 
     private void SetWarpPoint()
