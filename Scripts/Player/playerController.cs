@@ -29,13 +29,12 @@ public class playerController : MonoBehaviour
     // リーン
     private bool leanFlg_ = false;                  // リーン中かどうかを判定する
     // リーンの計算式に必要な値をまとめた構造体
-    struct leanSt
+    public struct leanSt
     {
         public float rotate;    // 回転角度
         public float moveX;     // 移動X軸
         public float moveZ;     // 移動Z軸
     }
-    private leanSt[] leanSt_;
 
     IDictionary<string, leanSt> leanMap_;   // ボックスとの接触時に使用される値をまとめている(string->タグ名,leanSt->構造体)
 
@@ -47,69 +46,29 @@ public class playerController : MonoBehaviour
        hideControl_ = GetComponent<HideControl>();
 
        // 初期化
-       leanSt_ = new leanSt[8];
-
-       // 黄色ボックス
-       leanSt_[0] = new leanSt()
-       {
-           rotate = 1.0f,moveX = -1.0f,moveZ = 0.0f
-       };
-
-       // オレンジボックス
-       leanSt_[1] = new leanSt()
-       {
-           rotate = -1.0f,moveX = 1.0f,moveZ = 0.0f
-       };
-
-       // 赤ボックス
-       leanSt_[2] = new leanSt()
-       {
-           rotate = -1.0f,moveX = 0.0f,moveZ = -1.0f
-       };
-
-       // 青ボックス
-       leanSt_[3] = new leanSt()
-       {
-           rotate = 1.0f,moveX = 0.0f,moveZ = 1.0f
-       };
-
-       // 反転
-       // ピンクボックス(赤の逆)
-       leanSt_[4] = new leanSt()
-       {
-           rotate = -1.0f,moveX = 0.0f,moveZ = 1.0f
-       };
-
-       // 緑ボックス(青の逆)
-       leanSt_[5] = new leanSt()
-       {
-           rotate = 1.0f,moveX = 0.0f,moveZ = -1.0f
-       };
-
-       // 紫ボックス(黄の逆)
-       leanSt_[6] = new leanSt()
-       {
-           rotate = 1.0f,moveX = 1.0f,moveZ = 0.0f
-       };
-
-       // 水色ボックス(オレンジの逆)
-       leanSt_[7] = new leanSt()
-       {
-           rotate = -1.0f,moveX = -1.0f,moveZ = 0.0f
-       };
+       leanSt[] leanst = {
+            new leanSt { rotate = 1.0f , moveX = -1.0f, moveZ = 0.0f },// 黄色ボックス
+            new leanSt { rotate = -1.0f, moveX = 1.0f , moveZ = 0.0f },// オレンジボックス
+            new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = -1.0f},// 赤ボックス
+            new leanSt { rotate = 1.0f , moveX = 0.0f , moveZ = 1.0f },// 青ボックス
+            new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = 1.0f },// ピンクボックス(赤の逆)
+            new leanSt { rotate = 1.0f , moveX = 0.0f , moveZ = -1.0f},// 緑ボックス(青の逆)
+            new leanSt { rotate = 1.0f , moveX = 1.0f , moveZ = 0.0f },// 紫ボックス(黄の逆)
+            new leanSt { rotate = -1.0f, moveX = -1.0f, moveZ = 0.0f } // 水色ボックス(オレンジの逆)
+        };
 
         //マップの定義
         leanMap_ = new Dictionary<string, leanSt>
         {
             //マップに値の追加
-            { "LeanX_M", leanSt_[0] },
-            { "LeanX_P", leanSt_[1] },
-            { "LeanZ_P", leanSt_[2] },
-            { "LeanZ_M", leanSt_[3] },
-            { "LeanZ_P_R", leanSt_[4] },
-            { "LeanZ_M_R", leanSt_[5] },
-            { "LeanX_M_R", leanSt_[6] },
-            { "LeanX_P_R", leanSt_[7] }
+            { "LeanX_M", leanst[0] },
+            { "LeanX_P", leanst[1] },
+            { "LeanZ_P", leanst[2] },
+            { "LeanZ_M", leanst[3] },
+            { "LeanZ_P_R", leanst[4] },
+            { "LeanZ_M_R", leanst[5] },
+            { "LeanX_M_R", leanst[6] },
+            { "LeanX_P_R", leanst[7] }
         };
 
 
