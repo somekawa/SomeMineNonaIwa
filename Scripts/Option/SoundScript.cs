@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OptionScript : MonoBehaviour
+public class SoundScript : MonoBehaviour
 {
 
-    [SerializeField] AudioClip[] seList;//BGMを読み込む
-    [SerializeField] AudioSource audioSourceBGM;//BGMの音の大きさを調節するために読み込む
+    public AudioClip[] bgmList;//BGMを読み込む
+    public AudioSource audioSourceBGM;//BGMの音の大きさを調節するために読み込む
 
-    [SerializeField] AudioClip[] bgmList;//SEを読み込む
-    [SerializeField] AudioSource audioSourceSE;//SEの音の大きさを調節するために読み込む
+    public AudioClip[] seList;//SEを読み込む
+    public AudioSource audioSourceSE;//SEの音の大きさを調節するために読み込む
 
     //BGMのボリューム調節する関数を作成
     public float BGMVolume
@@ -28,13 +28,13 @@ public class OptionScript : MonoBehaviour
     }
 
     //SecneをまたいでもObjectが破壊されないようにする
-    static OptionScript Instance = null;
+    static SoundScript Instance = null;
 
-    public static OptionScript GetInstance()
+    public static SoundScript GetInstance()
     {
         if (Instance == null)
         {
-            Instance = FindObjectOfType<OptionScript>();
+            Instance = FindObjectOfType<SoundScript>();
         }
         return Instance;
     }

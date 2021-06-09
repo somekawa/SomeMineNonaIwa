@@ -10,6 +10,7 @@ public class OptionCanvasScript : MonoBehaviour
     public Button leaveButton;                       // オプション画面に行くためのボタン
     public GameObject optionMenu;                    // オプションで表示するオブジェクト
     public TextMeshProUGUI optionText;               // オプション画面と分かるテキスト
+    public Canvas titleCanvas;
 
     private CameraController cameraController_;
     private bool optionFlag;
@@ -47,16 +48,18 @@ public class OptionCanvasScript : MonoBehaviour
     void Update()
     {
         if (cameraController_ == null) cameraController_ = CameraController.FindObjectOfType<CameraController>();
-        if (cameraController_ == null)
+        if (cameraController_ == null&&titleCanvas!=null)
         {
             Active(false);
             if (optionFlag == false)
             {
                 Active(false);
+                titleCanvas.gameObject.SetActive(true);
             }
             else
             {
                 Active(true);
+                titleCanvas.gameObject.SetActive(false);
             }
 
         }
@@ -66,20 +69,21 @@ public class OptionCanvasScript : MonoBehaviour
             {
                 Active(false);
                 optionButton.gameObject.SetActive(false);
-            }
-        }
 
-        if (cameraController_.FullMapFlag() == true)
-        {
-            if (optionFlag == false)
-            {
-                Active(false);
             }
             else
             {
-                Active(true);
+                if (optionFlag == false)
+                {
+                    Active(false);
+                }
+                else
+                {
+                    Active(true);
+                }
             }
         }
+
     }
 
     public void HeadOption()
