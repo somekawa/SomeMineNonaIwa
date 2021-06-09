@@ -47,32 +47,71 @@ public class playerController : MonoBehaviour
        hideControl_ = GetComponent<HideControl>();
 
        // 初期化
-       leanSt_ = new leanSt[4];
+       leanSt_ = new leanSt[8];
+
+       // 黄色ボックス
        leanSt_[0] = new leanSt()
        {
            rotate = 1.0f,moveX = -1.0f,moveZ = 0.0f
        };
+
+       // オレンジボックス
        leanSt_[1] = new leanSt()
        {
            rotate = -1.0f,moveX = 1.0f,moveZ = 0.0f
        };
+
+       // 赤ボックス
        leanSt_[2] = new leanSt()
        {
            rotate = -1.0f,moveX = 0.0f,moveZ = -1.0f
        };
+
+       // 青ボックス
        leanSt_[3] = new leanSt()
        {
            rotate = 1.0f,moveX = 0.0f,moveZ = 1.0f
        };
 
-       //マップの定義
-       leanMap_ = new Dictionary<string, leanSt>();
+       // 反転
+       // ピンクボックス(赤の逆)
+       leanSt_[4] = new leanSt()
+       {
+           rotate = -1.0f,moveX = 0.0f,moveZ = 1.0f
+       };
 
-       //マップに値の追加
-       leanMap_.Add("ReanX_M", leanSt_[0]);
-       leanMap_.Add("ReanX_P", leanSt_[1]);
-       leanMap_.Add("ReanZ_P", leanSt_[2]);
-       leanMap_.Add("ReanZ_M", leanSt_[3]);
+       // 緑ボックス(青の逆)
+       leanSt_[5] = new leanSt()
+       {
+           rotate = 1.0f,moveX = 0.0f,moveZ = -1.0f
+       };
+
+       // 紫ボックス(黄の逆)
+       leanSt_[6] = new leanSt()
+       {
+           rotate = 1.0f,moveX = 1.0f,moveZ = 0.0f
+       };
+
+       // 水色ボックス(オレンジの逆)
+       leanSt_[7] = new leanSt()
+       {
+           rotate = -1.0f,moveX = -1.0f,moveZ = 0.0f
+       };
+
+        //マップの定義
+        leanMap_ = new Dictionary<string, leanSt>
+        {
+            //マップに値の追加
+            { "LeanX_M", leanSt_[0] },
+            { "LeanX_P", leanSt_[1] },
+            { "LeanZ_P", leanSt_[2] },
+            { "LeanZ_M", leanSt_[3] },
+            { "LeanZ_P_R", leanSt_[4] },
+            { "LeanZ_M_R", leanSt_[5] },
+            { "LeanX_M_R", leanSt_[6] },
+            { "LeanX_P_R", leanSt_[7] }
+        };
+
 
         LeanAnnounceText.SetActive(false);
     }
