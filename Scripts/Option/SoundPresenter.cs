@@ -23,12 +23,16 @@ public class SoundPresenter : MonoBehaviour
         //BGMを再生
         SoundScript.GetInstance().PlayBGM(0);
     }
-
+    
     void Update()
     {
         if (player_ == null)
         {
             player_ = GameObject.Find("Player");
+            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[0])
+            {
+                SoundScript.GetInstance().PlayBGM(0);
+            }
         }
         else 
         {
@@ -38,7 +42,7 @@ public class SoundPresenter : MonoBehaviour
             }
         }
     }
-
+    
     //BGMMenuViewのSliderを動かしたときに呼び出す関数を作成
     public void OnChangedBGMSlider()
     {
@@ -52,7 +56,7 @@ public class SoundPresenter : MonoBehaviour
     public void OnChangedSESlider()
     {
         //Sliderの値に応じてSEを変更
-        SoundScript.GetInstance().SEVolume = seSlider.value/5;
+        SoundScript.GetInstance().SEVolume = seSlider.value;
         //volumeTextの値をSliderのvalueに変更
         seVolumeText.text = string.Format("{0:0}", seSlider.value * 100);
     }
@@ -61,6 +65,6 @@ public class SoundPresenter : MonoBehaviour
     public void OnPushButton()
     {
         //SEを再生
-        SoundScript.GetInstance().PlaySound(0);
+        SoundScript.GetInstance().PlaySound(2);
     }
 }
