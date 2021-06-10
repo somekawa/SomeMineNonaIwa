@@ -32,7 +32,7 @@ public class PlayerCameraControll : MonoBehaviour
 
     private void cameracon()
     {
-        if (pause.SetPauseFlag() == false || cameraController_.FullMapFlag() == false || ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
+        if (pause.GetPauseFlag() == false || cameraController_.FullMapFlag() == false || ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
         {
             //Cursor.visible = false;
             //Cursor.lockState = CursorLockMode.Locked;

@@ -43,7 +43,7 @@ public class tLightScript : MonoBehaviour
 
     void Update()
     {
-        if (pause.SetPauseFlag() == true)
+        if (pause.GetPauseFlag() == true)
         {
             return;            // pause中は何の処理もできないようにする
         }

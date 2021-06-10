@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))            // キーが押されたとき
+        if (Input.GetKeyUp(KeyCode.Tab))            // キーが押されたとき
         {
             if (fullMap.gameObject.active == false)
             {

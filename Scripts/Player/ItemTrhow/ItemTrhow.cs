@@ -28,7 +28,7 @@ public class ItemTrhow : MonoBehaviour
 
     void Update()
     {
-        if (pause.SetPauseFlag() == true)
+        if (pause.GetPauseFlag() == true)
         {
             // pause中は何の処理もできないようにする
             return;

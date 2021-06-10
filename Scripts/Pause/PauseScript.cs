@@ -27,7 +27,7 @@ public class PauseScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             //　ポーズUIのアクティブ状態切り替え
             pauseUI.SetActive(!pauseUI.activeSelf);
@@ -76,9 +76,10 @@ public class PauseScript : MonoBehaviour
         }
     }
 
-    public bool SetPauseFlag()
+    public bool GetPauseFlag()
     {
         // マウス処理はpause中でも入ってしまうためフラグで管理
         return pauseFlag_;
     }
+
 }

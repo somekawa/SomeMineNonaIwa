@@ -21,7 +21,7 @@ public class LookX : MonoBehaviour
 
     void Update()
     {
-        if (pause.SetPauseFlag() == true|| cameraController_.FullMapFlag() == true)
+        if (pause.GetPauseFlag() == true|| cameraController_.FullMapFlag() == true)
         {
             // pause中はカメラが動かないようにする
             return;
