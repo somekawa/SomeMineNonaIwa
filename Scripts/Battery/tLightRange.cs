@@ -8,6 +8,7 @@ public class tLightRange : MonoBehaviour
     public Barrier barrier;
     public CameraAction cameraShake_;
 
+    private playerController playerController_;
     private GameObject slenderMan_;
     private SlenderManCtl slenderManCtl_;
     private bool hitFlag_       = false;
@@ -18,7 +19,8 @@ public class tLightRange : MonoBehaviour
 
     void Start()
     {
-        slenderMan_=GameObject.Find("Slender");
+        playerController_ = transform.root.gameObject.GetComponent<playerController>();
+        slenderMan_ =GameObject.Find("Slender");
         slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
     }
 
@@ -37,8 +39,13 @@ public class tLightRange : MonoBehaviour
             rangeFlag_ = true;
             rangeTime_ = 0.0f;
         }
-        slenderManCtl_.navMeshAgent_.ResetPath();
-        slenderManCtl_.status = SlenderManCtl.Status.NULL;
+
+        if (!playerController_.GetNowLean())
+        {
+            // カメラが傾いていない場合のみ
+            slenderManCtl_.navMeshAgent_.ResetPath();
+            slenderManCtl_.status = SlenderManCtl.Status.NULL;
+        }
     }
 
     private void OnTriggerStay(Collider other)
