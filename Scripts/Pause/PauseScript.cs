@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseScript : MonoBehaviour
@@ -80,6 +81,11 @@ public class PauseScript : MonoBehaviour
     {
         // マウス処理はpause中でも入ってしまうためフラグで管理
         return pauseFlag_;
+    }
+
+    public void TransitionTitle()
+    {
+        SceneManager.LoadScene("TitleSample");
     }
 
 }
