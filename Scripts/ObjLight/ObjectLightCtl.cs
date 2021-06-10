@@ -12,7 +12,7 @@ public class ObjectLightCtl : MonoBehaviour
     private GameObject cameraControll_;
     private CameraController cameraController_;
     private GameObject objectLight_;     // 発光するための子オブジェクト格納用
-
+    private bool lightFlag;
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +31,21 @@ public class ObjectLightCtl : MonoBehaviour
             cameraController_.FullMapFlag() == true)
         {
             objectLight_.SetActive(false);
+            if (this.gameObject.tag == "Battery" ||
+                this.gameObject.tag == "BarrierItem" ||
+                this.gameObject.tag == "InductionItem" ||
+                this.gameObject.tag == "EscapeItem")
+            {
+                if (lightFlag == true)
+                {
+                    objectLight_.SetActive(true);
+                }
+            }
         }
         else
         {
             objectLight_.SetActive(true);
+            lightFlag = true;
         }
     }
 }
