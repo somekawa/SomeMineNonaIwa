@@ -11,6 +11,7 @@ public class OptionCanvasScript : MonoBehaviour
     public GameObject optionMenu;                    // オプションで表示するオブジェクト
     public TextMeshProUGUI optionText;               // オプション画面と分かるテキスト
     public Canvas titleCanvas;
+    public Image backImage;                          // オプション画面の背景画像
 
     private CameraController cameraController_;
     private bool optionFlag;
@@ -102,5 +103,6 @@ public class OptionCanvasScript : MonoBehaviour
         leaveButton.gameObject.SetActive(activeFlg);
         optionMenu.gameObject.SetActive(activeFlg);
         optionText.gameObject.SetActive(activeFlg);
+        backImage.gameObject.SetActive(activeFlg);
     }
 }
