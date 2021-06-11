@@ -16,27 +16,29 @@ public class TutorialCollision : MonoBehaviour
     }
     private item checkItem_;
 
-    // チュートリアル用当たり判定
-    public TutorialScript tutorialMain;
+    /*プレイヤー関連*/
+    public GameObject player;
 
-    public PlayerCollision playerCol;
+    private PlayerCollision playerCol_;
 
-    public HideControl hideCtl;
+    private HideControl hideCtl_;
 
-    public GameObject pMission;
-    public GameObject pCollision;
-    public GameObject stage;
-    public GameObject nextStage;
-
+    public TutorialScript tutorialMain;    // チュートリアル用当たり判定
+    public GameObject stage;        // 現在のステージのオブジェクトを非アクティブに
+    public GameObject pMission;     // practicMissionのオブジェクトをアクティブに
+    public GameObject pCollision;   // practiCollisionのオブジェクトをアクティブに
+    public GameObject nextStage;    // 次のステージのオブジェクトをアクティブに
 
     private GameObject[] item_;
-    private bool[] destroyCheckFlag_;
-    private bool nextMissionFlag_;
+    private bool[] destroyCheckFlag_;// アイテムが破壊（取得）できたかのフラグ
+    private bool nextMissionFlag_;// practicステージに移って良いかのフラグ
 
-    // Start is called before the first frame update
     void Start()
     {
-        nextMissionFlag_ = false; // true;// true:次のミッションに移動　false:まだだめ
+        playerCol_ = player.GetComponentInChildren<PlayerCollision>();
+        hideCtl_ = player.GetComponent<HideControl>();
+
+        nextMissionFlag_ = false; //  true;//true:次のミッションに移動　false:まだだめ
         checkItem_ = item.MAX;
         destroyCheckFlag_ = new bool[(int)item.MAX];
         // 配列を作るときはまず大きさを決める
@@ -61,9 +63,7 @@ public class TutorialCollision : MonoBehaviour
     {
         if(nextMissionFlag_==true)
         {
-            // 基本ミッションが終わったらこのスクリプトを消す
-            // Destroy(GetComponent<TutorialCollision>());
-            // 基本行動ミッションが終わったら入らないようにする
+            // 基本行動ミッションが終わったらオブジェクトを破壊
             // ステージを実践ミッション用に入れ替える
             stage.SetActive(false);
             nextStage.SetActive(true);// ステージを先に表示する
@@ -74,7 +74,7 @@ public class TutorialCollision : MonoBehaviour
         }
 
         // 2巡目のミッションに入ったら
-        if (tutorialMain.GetMissionRound()==1)
+        if (tutorialMain.GetMissionRound()== (int)TutorialScript.round.SECONDE)
         {
             // アイテムが削除されていなければ表示
             if (item_[(int)item.BATTERY] != null)
@@ -83,7 +83,7 @@ public class TutorialCollision : MonoBehaviour
             }
         }
 
-        if (playerCol.GetBatteryFlag() == true)
+        if (playerCol_.GetBatteryFlag() == true)
         {
             if (destroyCheckFlag_[(int)item.BATTERY] == true)
             {
@@ -91,18 +91,19 @@ public class TutorialCollision : MonoBehaviour
             }
         }
 
-        // 2巡目が終わったら隠れる用のボックスを表示させる
-
-        if (hideCtl.GetHideFlg() == true)
+        // 隠れたら鍵を表示する
+        if (hideCtl_.GetHideFlg() == true)
         {
             if (item_[(int)item.BATTERY] = null)
             {
                 return;
             }
             // ビン取得ではなく隠れる処理をしてから鍵を表示する
-                item_[(int)item.ESCAPE].SetActive(true);
-            
+            item_[(int)item.ESCAPE].SetActive(true);
+
         }
+
+        // 鍵の取得を確認したらドアを表示する
         if (destroyCheckFlag_[(int)item.ESCAPE] == true)
         {
             if (tutorialMain.GetCompleteFlag() == true)
@@ -166,9 +167,7 @@ public class TutorialCollision : MonoBehaviour
             tutorialMain.SetDoorColFlag(true);
             nextMissionFlag_ = true;
             Debug.Log("ドアに接触");
-          //  SceneManager.LoadScene("MainScene");
         }
-
     }
 
     private void CheckItem(item items_, Collider other)
