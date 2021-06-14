@@ -86,6 +86,7 @@ public class PauseScript : MonoBehaviour
     public void TransitionTitle()
     {
         SceneManager.LoadScene("TitleSample");
+        Time.timeScale = 1f;
     }
 
 }
