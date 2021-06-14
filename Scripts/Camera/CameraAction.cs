@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class CameraAction : MonoBehaviour
 {
+    private float time_ = 0.0f;
+
     private Vector2 pos_;
     private Vector3 localPos_;
     private Quaternion rot_;
-    private bool facingFlag_ = false;
+    private bool facingFlag_      = false;
     private bool cameraResetFlag_ = false;
-    private float time_ = 0.0f;
-    private float speed_ = 0.1f;
+    private float facingTime_     = 0.0f;
+    private float speed_          = 0.1f;
+
+    private Camera camera_;
+    private float fieldOfView_;
+    private float fieldOfViewMin_;
+
     // Start is called before the first frame update
     void Start()
     {
         localPos_ = transform.localPosition;
+
+        camera_ = GetComponent<Camera>();
+        fieldOfView_ = camera_.fieldOfView;
+        fieldOfViewMin_ = fieldOfView_ / 2.0f;
     }
 
     // Update is called once per frame
@@ -26,8 +37,9 @@ public class CameraAction : MonoBehaviour
         }
 
         // カメラを元の方向に戻す
-        time_ += (speed_ * 5.0f) * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot_, time_);
+        facingTime_ += (speed_ * 5.0f) * Time.deltaTime;
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot_, facingTime_);
+        
         if (transform.rotation == rot_) 
         {
             cameraResetFlag_ = false;
@@ -36,6 +48,10 @@ public class CameraAction : MonoBehaviour
 
     public void SanitCameraAction(GameObject gameobj)
     {
+        time_ += Time.deltaTime;
+        // ズームカメラ
+        ZoomCamera();
+
         // カメラを敵のほうに向ける
         FacingCamera(gameobj);
 
@@ -43,21 +59,27 @@ public class CameraAction : MonoBehaviour
         Shake();
     }
 
+    private void ZoomCamera()
+    {       
+        float view = fieldOfView_ - (((fieldOfView_ - fieldOfViewMin_) / 1.0f) * time_);
+        camera_.fieldOfView = Mathf.Clamp(view, fieldOfViewMin_, fieldOfView_);
+    }
+
     private void FacingCamera(GameObject gameobj)
     {
         if(!facingFlag_)
         {
             // カメラの方向を保存
-            time_ = 0.0f;
+            facingTime_ = 0.0f;
             rot_ = transform.rotation;
             facingFlag_ = true;
         }
 
-        time_ += speed_ * Time.deltaTime;
+        facingTime_ = speed_ * time_;
         // 敵の座標
         Vector3 enmyPos = gameobj.transform.position;
         enmyPos.y += 2.5f;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((enmyPos - transform.position).normalized), time_);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((enmyPos - transform.position).normalized), facingTime_);
     }
 
     private void Shake()
@@ -74,12 +96,16 @@ public class CameraAction : MonoBehaviour
 
     public void OffShake()
     {
+        time_ = 0.0f;
+
         transform.localPosition = localPos_;
         pos_.x = 0.0f;
         pos_.y = 0.0f;
 
         facingFlag_ = false;
         cameraResetFlag_ = true;
-        time_ = 0.0f;
+        facingTime_ = 0.0f;
+
+        camera_.fieldOfView = fieldOfView_;
     }
 }
