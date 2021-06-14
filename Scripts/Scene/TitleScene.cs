@@ -7,15 +7,12 @@ using UnityEngine.UI;
 public class TitleScene : MonoBehaviour
 {
     public Canvas titleCanvas;
-    public Canvas optionCanvas;
-
     public SoundScript buttonSE;
 
     // Start is called before the first frame update
     void Start()
     {
-        titleCanvas.gameObject.SetActive(true);
-        optionCanvas.gameObject.SetActive(false);
+        //titleCanvas.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -43,11 +40,9 @@ public class TitleScene : MonoBehaviour
     public void ReturnOption()
     {
         titleCanvas.gameObject.SetActive(true);
-        optionCanvas.gameObject.SetActive(false);
     }
     public void HeadOption()
     {
         titleCanvas.gameObject.SetActive(false);
-        optionCanvas.gameObject.SetActive(true);
     }
 }
