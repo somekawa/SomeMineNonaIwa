@@ -15,6 +15,7 @@ public class PauseScript : MonoBehaviour
 
     private float oldSeconds_;    // 前のUpdateの時の秒数
     public Text timerText;        // タイマー表示用テキスト
+    public GameScene gameManager;
     private bool pauseFlag_;      // true=pause中　false=ゲーム中
 
     void Start()
@@ -28,23 +29,39 @@ public class PauseScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    //　ポーズUIのアクティブ状態切り替え
+        //    pauseUI.SetActive(!pauseUI.activeSelf);
+        //    //　ポーズUIが表示されてる時は停止
+        //    if (pauseUI.activeSelf)
+        //    {
+        //        Time.timeScale = 0f;
+        //        pauseFlag_ = true;
+        //        //　ポーズUIが表示されてなければ通常通り進行
+        //    }
+        //    else
+        //    {
+        //        Time.timeScale = 1f;
+        //        pauseFlag_ = false;
+        //    }
+        //    Debug.Log("pauseUIアクティブ"+pauseUI.activeSelf+"(：ゲーム中true 停止中false)");
+        //}
+
+        if(gameManager.GetPauseFlag()==true)
         {
             //　ポーズUIのアクティブ状態切り替え
-            pauseUI.SetActive(!pauseUI.activeSelf);
-            //　ポーズUIが表示されてる時は停止
-            if (pauseUI.activeSelf)
-            {
-                Time.timeScale = 0f;
-                pauseFlag_ = true;
-                //　ポーズUIが表示されてなければ通常通り進行
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                pauseFlag_ = false;
-            }
-            Debug.Log("pauseUIアクティブ"+pauseUI.activeSelf+"(：ゲーム中true 停止中false)");
+            pauseUI.SetActive(true);
+            Time.timeScale = 0f;
+            pauseFlag_ = true;
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+        }
+        else
+        {
+            pauseUI.SetActive(false);
+            Time.timeScale = 1f;
+            pauseFlag_ = false;
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
         }
 
         if (pauseFlag_ == true)
@@ -88,5 +105,4 @@ public class PauseScript : MonoBehaviour
         SceneManager.LoadScene("TitleSample");
         Time.timeScale = 1f;
     }
-
 }

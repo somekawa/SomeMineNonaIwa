@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour
 {
     public GameObject LeanAnnounceText;   // リーン可能範囲内に入ったときにテキストを表示する
-    public PauseScript pouseFlg;
+    public GameScene gameManager;
 
     private CharacterController controller_;
     private HideControl hideControl_;
@@ -99,7 +99,7 @@ public class playerController : MonoBehaviour
         }
 
         PlRotate();
-        if(!pouseFlg.GetPauseFlag())
+        if(!gameManager.GetPauseFlag())
         {
             QuickTurn();
         }
