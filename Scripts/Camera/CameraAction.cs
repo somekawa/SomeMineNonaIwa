@@ -5,18 +5,22 @@ using UnityEngine;
 public class CameraAction : MonoBehaviour
 {
     private float time_ = 0.0f;
+    private bool actionFlag_ = false;
 
     private Vector2 pos_;
     private Vector3 localPos_;
     private Quaternion rot_;
-    private bool facingFlag_      = false;
+
     private bool cameraResetFlag_ = false;
-    private float facingTime_     = 0.0f;
-    private float speed_          = 0.1f;
+    private float facingTime_ = 0.0f;
+    private float speed_ = 0.1f;
 
     private Camera camera_;
     private float fieldOfView_;
     private float fieldOfViewMin_;
+
+    // サウンド
+    private AudioSource audioSource_;
 
     // Start is called before the first frame update
     void Start()
@@ -26,12 +30,14 @@ public class CameraAction : MonoBehaviour
         camera_ = GetComponent<Camera>();
         fieldOfView_ = camera_.fieldOfView;
         fieldOfViewMin_ = fieldOfView_ / 2.0f;
+
+        audioSource_ = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!cameraResetFlag_) 
+        if (!cameraResetFlag_)
         {
             return;
         }
@@ -39,8 +45,8 @@ public class CameraAction : MonoBehaviour
         // カメラを元の方向に戻す
         facingTime_ += (speed_ * 5.0f) * Time.deltaTime;
         transform.rotation = Quaternion.Slerp(transform.rotation, rot_, facingTime_);
-        
-        if (transform.rotation == rot_) 
+
+        if (transform.rotation == rot_)
         {
             cameraResetFlag_ = false;
         }
@@ -48,6 +54,16 @@ public class CameraAction : MonoBehaviour
 
     public void SanitCameraAction(GameObject gameobj)
     {
+        if (!actionFlag_)
+        {
+            // カメラの方向を保存
+            facingTime_ = 0.0f;
+            rot_ = transform.rotation;
+            actionFlag_ = true;
+
+            audioSource_.Play();
+        }
+
         time_ += Time.deltaTime;
         // ズームカメラ
         ZoomCamera();
@@ -60,21 +76,13 @@ public class CameraAction : MonoBehaviour
     }
 
     private void ZoomCamera()
-    {       
+    {
         float view = fieldOfView_ - (((fieldOfView_ - fieldOfViewMin_) / 1.0f) * time_);
         camera_.fieldOfView = Mathf.Clamp(view, fieldOfViewMin_, fieldOfView_);
     }
 
     private void FacingCamera(GameObject gameobj)
     {
-        if(!facingFlag_)
-        {
-            // カメラの方向を保存
-            facingTime_ = 0.0f;
-            rot_ = transform.rotation;
-            facingFlag_ = true;
-        }
-
         facingTime_ = speed_ * time_;
         // 敵の座標
         Vector3 enmyPos = gameobj.transform.position;
@@ -97,15 +105,20 @@ public class CameraAction : MonoBehaviour
     public void OffShake()
     {
         time_ = 0.0f;
+        actionFlag_ = false;
 
         transform.localPosition = localPos_;
         pos_.x = 0.0f;
         pos_.y = 0.0f;
 
-        facingFlag_ = false;
         cameraResetFlag_ = true;
         facingTime_ = 0.0f;
 
         camera_.fieldOfView = fieldOfView_;
+    }
+
+    public bool CameraLong()
+    {
+        return audioSource_.isPlaying;
     }
 }
