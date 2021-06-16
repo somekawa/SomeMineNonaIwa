@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SoundScript : MonoBehaviour
 {
-
     public AudioClip[] bgmList;//BGMを読み込む
     public AudioSource audioSourceBGM;//BGMの音の大きさを調節するために読み込む
 
@@ -59,6 +58,7 @@ public class SoundScript : MonoBehaviour
     //SEを再生する関数を作成
     public void PlaySound(int index)
     {
-        audioSourceSE.PlayOneShot(seList[index]);
+        audioSourceSE.clip = seList[index];
+        audioSourceSE.Play();
     }
 }
