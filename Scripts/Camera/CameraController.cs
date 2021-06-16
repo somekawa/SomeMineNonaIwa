@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
 {
     public Image fullMap;        // 全体マップを映すカメラの格納用
     public Image miniMap;        // ミニマップ画像の格納用
+    public GameScene gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -17,16 +18,13 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Tab))            // キーが押されたとき
+        if (gameManager.GetPauseFlag()==true)            // キーが押されたとき
         {
-            if (fullMap.gameObject.active == false)
-            {
-                Active(true, 0.0f, false);
-            }
-            else
-            {
-                Active(false, 1.0f, true);
-            }
+            Active(true, 0.0f, false);
+        }
+        else
+        {
+            Active(false, 1.0f, true);
         }
     }
 
