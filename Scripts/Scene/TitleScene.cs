@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class TitleScene : MonoBehaviour
 {
     public Canvas titleCanvas;
-    public SoundScript buttonSE;
 
     // Start is called before the first frame update
     void Start()
@@ -27,13 +26,13 @@ public class TitleScene : MonoBehaviour
 
     public void TransitionGame()
     {
-        buttonSE.GetComponent<SoundScript>().PlaySound(2);
+        SoundScript.GetInstance().PlaySound(2);
         SceneManager.LoadScene("MainScene");
     }
 
     public void TransitionTutorial()
     {
-        buttonSE.GetComponent<SoundScript>().PlaySound(2);
+        SoundScript.GetInstance().PlaySound(2);
         SceneManager.LoadScene("TutorialScene");
     }
 
