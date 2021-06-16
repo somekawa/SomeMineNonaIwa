@@ -21,7 +21,7 @@ public class SlenderManCtl : MonoBehaviour
     private int targetRange_;                   // 移動予定地の乱数格納用
     private int warpRange_;                     // ワープ予定地の乱数格納用
     private float warpCnt_;                     // ワープが発生するまでの時間格納用
-    private Vector3 soundWarpPoint;             // 音のした場所近くの座標格納用
+    private Vector3 soundWarpPoint_;             // 音のした場所近くの座標格納用
 
     public enum Status
     {
@@ -29,7 +29,7 @@ public class SlenderManCtl : MonoBehaviour
         WALK,
         NULL
     }
-
+   
     public Status status= Status.NULL;
 
     Vector2 smoothDeltaPosition = Vector2.zero;
@@ -45,7 +45,7 @@ public class SlenderManCtl : MonoBehaviour
         navMeshAgent_.updatePosition = false;
 
         soundPoint = new Vector3(0, 0, 0);
-        soundWarpPoint = new Vector3(0, 0, 0);
+        soundWarpPoint_ = new Vector3(0, 0, 0);
 
         targetObjects_ = destinationPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
         warpPoints_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
@@ -138,7 +138,7 @@ public class SlenderManCtl : MonoBehaviour
         if (listenFlag == true)
         {
             DistanceCalculation();
-            navMeshAgent_.Warp(soundWarpPoint);
+            navMeshAgent_.Warp(soundWarpPoint_);
         }
         SetTargetPoint();
     }
@@ -153,7 +153,7 @@ public class SlenderManCtl : MonoBehaviour
             if (maxDistance > distance)                                                      // maxDistanceより値が小さくなった場合
             {
                 maxDistance = distance;                                                      // maxDistanceの再設定
-                soundWarpPoint = warpPoints_[i].transform.position;                          // その時のワープポイントの座標を格納する
+                soundWarpPoint_ = warpPoints_[i].transform.position;                          // その時のワープポイントの座標を格納する
             }
         }
     }
@@ -167,5 +167,4 @@ public class SlenderManCtl : MonoBehaviour
         // position (位置) を agent (エージェント) の位置に更新します
         transform.position = navMeshAgent_.nextPosition;
     }
-
 }
