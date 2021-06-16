@@ -1995,7 +1995,7 @@ PrefabInstance:
     - target: {fileID: 8194093631582979291, guid: 14f844536eb990e42abe03c915964c76,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14f844536eb990e42abe03c915964c76, type: 3}
@@ -7526,6 +7526,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7580360381002307223, guid: 41508460f297f744c82174abdefff895,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7580360381002307226, guid: 41508460f297f744c82174abdefff895,
         type: 3}
       propertyPath: m_Name
@@ -8087,6 +8092,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2368224741688429162, guid: 9637d5150ac93834bba9ad2cb1369f05,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2368224741688429165, guid: 9637d5150ac93834bba9ad2cb1369f05,
         type: 3}
       propertyPath: m_Name
@@ -8260,5 +8270,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 545081421176097462, guid: c3783e8876998b5468afb5578e90e102,
+        type: 3}
+      propertyPath: seList.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 545081421176097462, guid: c3783e8876998b5468afb5578e90e102,
+        type: 3}
+      propertyPath: seList.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1dc14681df93052499cf37d9ac9b4a62, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3783e8876998b5468afb5578e90e102, type: 3}
