@@ -15,7 +15,6 @@ public class tLightRange : MonoBehaviour
 
     private bool rangeFlag_     = false;    // 範囲内か
     private float rangeTime_    = 0.0f;     // 範囲内に入ってからの時間
-    private float rangeMaxTime_ = 1.0f;     // 範囲内に入ってからの猶予時間
 
     void Start()
     {
@@ -61,7 +60,7 @@ public class tLightRange : MonoBehaviour
         // 画面揺れ処理追加予定
         cameraShake_.SanitCameraAction(other.gameObject);
 
-        if (rangeTime_ >= rangeMaxTime_)
+        if (!cameraShake_.CameraLong())
         {
             //@slenderMan このタイミングでワープお願いします。
             slenderManCtl_.inSightFlag = true;
