@@ -7,11 +7,12 @@ using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour
 {
     public GameObject LeanAnnounceText;   // リーン可能範囲内に入ったときにテキストを表示する
+    public PauseScript pouseFlg;
 
     private CharacterController controller_;
     private HideControl hideControl_;
 
-    private float speed_ = 3.0f;          // デフォルトの移動速度
+    private float speed_ = 4.0f;          // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
     private bool walkFlg_  = false;       // 移動中はtrue
     private bool slowWalk_ = false;       // 移動速度が遅くなる場合はtrue
@@ -20,7 +21,7 @@ public class playerController : MonoBehaviour
     private Vector3 oldRotation_;         // 1フレーム前のプレイヤー回転度
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
-    private const float speedMax_ = 3.0f;           // 移動速度の最大値
+    private const float speedMax_ = 4.0f;           // 移動速度の最大値
     private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
@@ -98,7 +99,10 @@ public class playerController : MonoBehaviour
         }
 
         PlRotate();
-        QuickTurn();
+        if(!pouseFlg.GetPauseFlag())
+        {
+            QuickTurn();
+        }
         if (Input.GetKey(KeyCode.Return))
         {
             //エンターキー入力
