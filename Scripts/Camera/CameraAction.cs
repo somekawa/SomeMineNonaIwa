@@ -9,7 +9,6 @@ public class CameraAction : MonoBehaviour
 
     private Vector2 pos_;
     private Vector3 localPos_;
-    private Quaternion rot_;
 
     private bool cameraResetFlag_ = false;
     private float facingTime_ = 0.0f;
@@ -18,6 +17,8 @@ public class CameraAction : MonoBehaviour
     private Camera camera_;
     private float fieldOfView_;
     private float fieldOfViewMin_;
+
+    private GameObject playerObj_;
 
     // サウンド
     private AudioSource audioSource_;
@@ -30,6 +31,8 @@ public class CameraAction : MonoBehaviour
         camera_ = GetComponent<Camera>();
         fieldOfView_ = camera_.fieldOfView;
         fieldOfViewMin_ = fieldOfView_ / 2.0f;
+
+        playerObj_ = transform.root.gameObject;
 
         audioSource_ = GetComponent<AudioSource>();
     }
@@ -44,10 +47,12 @@ public class CameraAction : MonoBehaviour
 
         // カメラを元の方向に戻す
         facingTime_ += (speed_ * 5.0f) * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot_, facingTime_);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(playerObj_.transform.localEulerAngles), facingTime_);
 
-        if (transform.rotation == rot_)
+        if (transform.localEulerAngles ==Vector3.zero)
         {
+            transform.localEulerAngles = Vector3.zero;
+
             cameraResetFlag_ = false;
         }
     }
@@ -58,7 +63,6 @@ public class CameraAction : MonoBehaviour
         {
             // カメラの方向を保存
             facingTime_ = 0.0f;
-            rot_ = transform.rotation;
             actionFlag_ = true;
 
             audioSource_.Play();
