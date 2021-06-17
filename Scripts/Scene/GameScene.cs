@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameScene : MonoBehaviour
 {
+    public tBatteryScript batteryScript;
+    public Text batteryText;
+
     private bool pauseFlag;
 
     private int minute;           // 何分か
@@ -36,7 +39,7 @@ public class GameScene : MonoBehaviour
                 pauseFlag = false;
             }
         }
-
+        batteryText.text = "電池残量" + batteryScript.ReturnBatteryRest()+"%";
 
         // チュートリアルからメインに移った時だけはいる
         if (resetFlag_==false&& SceneManager.GetActiveScene().name == "MainScene")

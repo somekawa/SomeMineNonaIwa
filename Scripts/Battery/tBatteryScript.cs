@@ -225,4 +225,11 @@ public class tBatteryScript : MonoBehaviour
             Debug.Log("両方の電池を充電しました");
         }
     }
+
+    public float ReturnBatteryRest()
+    {
+        float batteryLevel_ = 0;
+        batteryLevel_ = ((status_[(int)type.LEFT].batteryImage.fillAmount + status_[(int)type.RIGHT].batteryImage.fillAmount) / 2) * 100;
+        return batteryLevel_;
+    }
 }
