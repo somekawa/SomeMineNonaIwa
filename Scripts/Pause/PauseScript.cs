@@ -8,22 +8,35 @@ public class PauseScript : MonoBehaviour
 {
     [SerializeField]
     private GameObject pauseUI;   //　ポーズした時に表示するUI
-    [SerializeField]
-    private int minute;           // 何分か
-    [SerializeField]
-    private float seconds;        // 何秒か
+    //[SerializeField]
+    //private int minute;           // 何分か
+    //[SerializeField]
+    //private float realTimeSeconds;// Time.realtimeSinceStartupを代入
 
-    private float oldSeconds_;    // 前のUpdateの時の秒数
-    public Text timerText;        // タイマー表示用テキスト
+
+    //// メニュー表示時に時間を止める場合の変数
+    //private float seconds;        // 何秒か
+    //private float oldSeconds_;    // 前のUpdateの時の秒数
+
+    //public Text timerText;        // タイマー表示用テキスト
     public GameScene gameManager;
     private bool pauseFlag_;      // true=pause中　false=ゲーム中
 
+    //// メニュー表示時でも時間経過させるための変数
+    //// realTimeSeconds
+    //private float numSixty_;
+    //private float secondsMinus_;
+
+    //public Text test;
     void Start()
     {
         pauseUI.SetActive(false);
-        minute = 0;
-        seconds = 0.0f;
-        oldSeconds_ = 0.0f;
+        //minute = 0;
+        //numSixty_ = 60.0f;
+        //secondsMinus_ = 0.0f;
+        //realTimeSeconds = 0.0f;
+        //seconds = 0.0f;
+        //oldSeconds_ = 0.0f;
         pauseFlag_ = false;
     }
 
@@ -48,7 +61,7 @@ public class PauseScript : MonoBehaviour
         //    Debug.Log("pauseUIアクティブ"+pauseUI.activeSelf+"(：ゲーム中true 停止中false)");
         //}
 
-        if(gameManager.GetPauseFlag()==true)
+        if (gameManager.GetPauseFlag() == true)
         {
             //　ポーズUIのアクティブ状態切り替え
             pauseUI.SetActive(true);
@@ -61,38 +74,50 @@ public class PauseScript : MonoBehaviour
             pauseUI.SetActive(false);
             Time.timeScale = 1f;
             pauseFlag_ = false;
+            //  TimeCheck();
             Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
         }
 
-        if (pauseFlag_ == true)
-        {
-            Debug.Log("カメラの回転を止めています");
-            return;
-        }
-        else
-        {
-            // ゲーム中しか入らない　プレイタイムを計る
-            TimeCheck();
-        }
-        oldSeconds_ = seconds;
+        //TimeCheck();
+        ////oldSeconds_ = seconds;
+        ////Debug.Log("Time.timeScale" + Time.timeScale);
 
     }
 
-    private void TimeCheck()
-    {
-        // pauseの時以外は時間経過させる
-        seconds += Time.deltaTime;
-        if (seconds >= 60f)
-        {
-            minute++;
-            seconds = seconds - 60;
-        }
-        //　値が変わった時だけテキストUIを更新
-        if ((int)seconds != (int)oldSeconds_)
-        {
-            timerText.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
-        }
-    }
+    //private void TimeCheck()
+    //{
+    //    /* pauseの時以外は時間経過させる*/
+    //    // seconds += Time.deltaTime;
+    //    // Debug.Log("Time.realtimeSinceStartup" + tes);
+    //    // Debug.Log("tes+Time.time" + tes);
+    //    //        if (seconds >= 60f)
+    //    //        {
+    //    //            minute++;
+    //    //            seconds = seconds - 60;
+    //    //        }
+    //    //        //　値が変わった時だけテキストUIを更新
+    //    //        if ((int)seconds != (int)oldSeconds_)
+    //    //        {
+    //    ////            timerText.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
+    //    //        }
+    //    /*ここまで*/
+
+
+    //    ///*メニュー表示中も時間を経過させたい*/
+    //    //realTimeSeconds = Time.realtimeSinceStartup;
+    //    //// 経過時間÷60が分+1より大きかったら分を加算する
+    //    //if (realTimeSeconds / numSixty_ >= minute + 1)
+    //    //{
+    //    //    // minuteの初期値は0のため
+    //    //    minute++;
+    //    //    // tesは毎フレーム更新するため60秒、120秒になった時のマイナス分
+    //    //    secondsMinus_ += 60;
+    //    //}
+
+    //    //timerText.text = minute.ToString("00") + ":" + ((int)realTimeSeconds - secondsMinus_).ToString("00");
+    //    ////Debug.Log("realTimeSeconds"+ realTimeSeconds);
+    //    ///*ここまで*/
+    //}
 
     public bool GetPauseFlag()
     {
