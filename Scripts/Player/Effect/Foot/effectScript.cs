@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-// ゆっくり歩くときはcountMaxを変えたほうがいい
+using UnityEngine.SceneManagement;
 
 public class effectScript : MonoBehaviour
 {
@@ -71,6 +70,7 @@ public class effectScript : MonoBehaviour
             if (tmpPlSc.GetWalkFlg())
             {
                 effect_.GetComponent<ParticleSystem>().Play();
+                SoundScript.GetInstance().PlaySound(4);
             }
 
             count_ = 0;
