@@ -40,7 +40,7 @@ public class SoundPresenter : MonoBehaviour
                 SoundScript.GetInstance().PlayBGM(0);
             }
         }
-        else if (SceneManager.GetActiveScene().name == "MainScene")
+        else if (SceneManager.GetActiveScene().name == "MainScene"|| SceneManager.GetActiveScene().name == "TutorialScene")
         {
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[1])
