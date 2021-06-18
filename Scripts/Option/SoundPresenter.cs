@@ -64,6 +64,7 @@ public class SoundPresenter : MonoBehaviour
                 SoundScript.GetInstance().PlayBGM(3);
             }
         }
+        slenderAudio_.volume = seSlider.value;
     }
     
     //BGMMenuViewのSliderを動かしたときに呼び出す関数を作成
@@ -80,7 +81,6 @@ public class SoundPresenter : MonoBehaviour
     {
         //Sliderの値に応じてSEを変更
         SoundScript.GetInstance().SEVolume = seSlider.value;
-        slenderAudio_.volume = seSlider.value;
         //volumeTextの値をSliderのvalueに変更
         seVolumeText.text = string.Format("{0:0}", seSlider.value * 100);
     }
