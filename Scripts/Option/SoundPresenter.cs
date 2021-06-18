@@ -27,7 +27,7 @@ public class SoundPresenter : MonoBehaviour
     
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "TitleSample" && SceneManager.GetActiveScene().name == "MainScene"&& slenderAudio_==null)
+        if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")&& slenderAudio_==null)
         {
             slenderAudio_ = GameObject.Find("Slender").GetComponent<AudioSource>();
         }
