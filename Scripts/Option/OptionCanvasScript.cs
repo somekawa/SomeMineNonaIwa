@@ -11,11 +11,11 @@ public class OptionCanvasScript : MonoBehaviour
     public Button leaveButton;                       // オプション画面に行くためのボタン
     public GameObject optionMenu;                    // オプションで表示するオブジェクト
     public TextMeshProUGUI optionText;               // オプション画面と分かるテキスト
-    public GameObject titleCanvas;
     public Image backImage;                          // オプション画面の背景画像
 
-    private GameScene gameScene;
-    private bool optionFlag;
+    private GameObject titleCanvas_;
+    private GameScene gameScene_;
+    private bool optionFlag_;
 
     //SecneをまたいでもObjectが破壊されないようにする
     static OptionCanvasScript Instance = null;
@@ -49,38 +49,50 @@ public class OptionCanvasScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameScene == null) gameScene = GameScene.FindObjectOfType<GameScene>();
         if (SceneManager.GetActiveScene().name == "TitleSample")
         {
-            titleCanvas = GameObject.Find("TitleCanvas");
-            Active(false);
-            if (optionFlag == false)
+            if (titleCanvas_ == null)
             {
-                Active(false);
-                titleCanvas.gameObject.SetActive(true);
+                titleCanvas_ = GameObject.Find("TitleCanvas");               // TitleCanvasが読み込んでなければ読み込む
             }
             else
             {
-                Active(true);
-                titleCanvas.gameObject.SetActive(false);
-            }
-        }
-        else if (SceneManager.GetActiveScene().name == "MainGame")
-        {
-            if (gameScene.GetPauseFlag() == false)
-            {
                 Active(false);
-                optionButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                if (optionFlag == false)
+                if (optionFlag_ == false)                                    // オプションを開いていないときの処理
                 {
                     Active(false);
+                    titleCanvas_.gameObject.SetActive(true);
                 }
                 else
                 {
                     Active(true);
+                    titleCanvas_.gameObject.SetActive(false);
+                }
+            }
+        }
+        else if (SceneManager.GetActiveScene().name == "MainGame")
+        {
+            if (gameScene_ == null)
+            {
+                gameScene_ = GameScene.FindObjectOfType<GameScene>();        // GameSceneを読み込んでなければ読み込む
+            }
+            else
+            {
+                if (gameScene_.GetPauseFlag() == false)
+                {
+                    Active(false);
+                    optionButton.gameObject.SetActive(false);               // ポーズ中でなければオプションを開けないようにする
+                }
+                else
+                {
+                    if (optionFlag_ == false)
+                    {
+                        Active(false);
+                    }
+                    else
+                    {
+                        Active(true);
+                    }
                 }
             }
         }
@@ -88,12 +100,12 @@ public class OptionCanvasScript : MonoBehaviour
 
     public void HeadOption()
     {
-        optionFlag = true;
+        optionFlag_ = true;
     }
 
     public void LeaveOption()
     {
-        optionFlag = false;
+        optionFlag_ = false;
     }
 
     void Active(bool activeFlg)     // 表示非表示の切り替え
