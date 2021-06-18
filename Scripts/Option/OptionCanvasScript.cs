@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class OptionCanvasScript : MonoBehaviour
 {
@@ -10,10 +11,10 @@ public class OptionCanvasScript : MonoBehaviour
     public Button leaveButton;                       // オプション画面に行くためのボタン
     public GameObject optionMenu;                    // オプションで表示するオブジェクト
     public TextMeshProUGUI optionText;               // オプション画面と分かるテキスト
-    public Canvas titleCanvas;
+    public GameObject titleCanvas;
     public Image backImage;                          // オプション画面の背景画像
 
-    private CameraController cameraController_;
+    private GameScene gameScene;
     private bool optionFlag;
 
     //SecneをまたいでもObjectが破壊されないようにする
@@ -48,9 +49,10 @@ public class OptionCanvasScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (cameraController_ == null) cameraController_ = CameraController.FindObjectOfType<CameraController>();
-        if (cameraController_ == null&&titleCanvas!=null)
+        if (gameScene == null) gameScene = GameScene.FindObjectOfType<GameScene>();
+        if (SceneManager.GetActiveScene().name == "TitleSample")
         {
+            titleCanvas = GameObject.Find("TitleCanvas");
             Active(false);
             if (optionFlag == false)
             {
@@ -62,15 +64,13 @@ public class OptionCanvasScript : MonoBehaviour
                 Active(true);
                 titleCanvas.gameObject.SetActive(false);
             }
-
         }
-        else
+        else if (SceneManager.GetActiveScene().name == "MainGame")
         {
-            if (cameraController_.FullMapFlag() == false)
+            if (gameScene.GetPauseFlag() == false)
             {
                 Active(false);
                 optionButton.gameObject.SetActive(false);
-
             }
             else
             {
@@ -84,7 +84,6 @@ public class OptionCanvasScript : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void HeadOption()

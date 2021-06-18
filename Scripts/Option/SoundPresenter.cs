@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SoundPresenter : MonoBehaviour
 {
@@ -14,8 +15,6 @@ public class SoundPresenter : MonoBehaviour
     public TextMeshProUGUI seVolumeText;        //SEMenuViewのvolumeTextを取得
     public Slider seSlider;                     //SEMenuViewのsliderを取得
 
-    private GameObject player_;
-    private GameObject pigHead_;
     private AudioSource slenderAudio_;
 
     // Start is called before the first frame update
@@ -28,22 +27,20 @@ public class SoundPresenter : MonoBehaviour
     
     void Update()
     {
-        if (slenderAudio_==null)
+        if (SceneManager.GetActiveScene().name == "TitleSample" && SceneManager.GetActiveScene().name == "MainScene"&& slenderAudio_==null)
         {
             slenderAudio_ = GameObject.Find("Slender").GetComponent<AudioSource>();
         }
 
-        if (player_ == null&& pigHead_==null)
+        if (SceneManager.GetActiveScene().name == "TitleSample")
         {
-            player_ = GameObject.Find("Player");
-            pigHead_= GameObject.Find("PIG_head");
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[0])
             {
                 SoundScript.GetInstance().PlayBGM(0);
             }
         }
-        else if (player_ != null && pigHead_ == null)
+        else if (SceneManager.GetActiveScene().name == "MainScene")
         {
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[1])
@@ -51,7 +48,15 @@ public class SoundPresenter : MonoBehaviour
                 SoundScript.GetInstance().PlayBGM(1);
             }
         }
-        else if (player_ == null && pigHead_ != null)
+        else if (SceneManager.GetActiveScene().name == "ClearScene")
+        {
+            // 特定のBGMじゃなければ設定して再生
+            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[2])
+            {
+                SoundScript.GetInstance().PlayBGM(2);
+            }
+        }
+        else if (SceneManager.GetActiveScene().name == "GameOverScene")
         {
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[3])
