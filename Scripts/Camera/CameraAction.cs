@@ -45,14 +45,11 @@ public class CameraAction : MonoBehaviour
             return;
         }
 
+        time_ += Time.deltaTime;
         // カメラを元の方向に戻す
-        facingTime_ += (speed_ * 5.0f) * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(playerObj_.transform.localEulerAngles), facingTime_);
-
-        if (transform.localEulerAngles ==Vector3.zero)
+        if (ResetCamera(time_))
         {
-            transform.localEulerAngles = Vector3.zero;
-
+            time_ = 0.0f;
             cameraResetFlag_ = false;
         }
     }
@@ -73,7 +70,9 @@ public class CameraAction : MonoBehaviour
         ZoomCamera();
 
         // カメラを敵のほうに向ける
-        FacingCamera(gameobj);
+        Vector3 enmyPos = gameobj.transform.position;
+        enmyPos.y += 2.5f;
+        FacingCamera(enmyPos, time_);
 
         // 画面揺れ
         Shake();
@@ -85,13 +84,24 @@ public class CameraAction : MonoBehaviour
         camera_.fieldOfView = Mathf.Clamp(view, fieldOfViewMin_, fieldOfView_);
     }
 
-    private void FacingCamera(GameObject gameobj)
+    public void FacingCamera(Vector3 enmyPos, float time)
     {
-        facingTime_ = speed_ * time_;
-        // 敵の座標
-        Vector3 enmyPos = gameobj.transform.position;
-        enmyPos.y += 2.5f;
+        facingTime_ = speed_ * time;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((enmyPos - transform.position).normalized), facingTime_);
+    }
+
+    public bool ResetCamera(float time)
+    {
+        facingTime_ = (speed_ * 5.0f) * time;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(playerObj_.transform.localEulerAngles), facingTime_);
+       
+        if (transform.localEulerAngles == Vector3.zero)
+        {
+            // カメラが元に戻った
+            return true;
+        }
+
+        return false;
     }
 
     private void Shake()
@@ -108,6 +118,9 @@ public class CameraAction : MonoBehaviour
 
     public void OffShake()
     {
+        // 音停止
+        audioSource_.Stop();
+
         time_ = 0.0f;
         actionFlag_ = false;
 
