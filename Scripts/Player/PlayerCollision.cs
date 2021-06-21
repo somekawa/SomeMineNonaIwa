@@ -11,7 +11,9 @@ public class PlayerCollision : MonoBehaviour
     private int maxKeyItemNum_ = 8;  // 脱出アイテムの個数　8個まで
 
     // 脱出アイテムと接触したか　true=接触 false=接触してない
-    private bool keyItemColFlag_ = false;  
+    private bool keyItemColFlag_ = false;
+
+    private int chainCnt = 0;
 
     void Start()
     {
@@ -54,7 +56,43 @@ public class PlayerCollision : MonoBehaviour
         {
             return;
         }
-        
+
+        // ドアと接触
+        if (other.gameObject.tag == "Door")
+        {
+            Debug.Log("ドアに接触");
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+                foreach (Transform c in other.gameObject.transform)
+                {
+                    if (c.gameObject.tag == "chain")
+                    {
+                        if (chainCnt < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
+                        {
+                            Destroy(c.gameObject);   // オブジェクトを削除
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (c.gameObject.tag == "padLock")
+                    {
+                        if (chainCnt < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
+                        {
+                            Destroy(c.gameObject);   // オブジェクトを削除
+                            chainCnt++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscapeItem")
         {
