@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
@@ -22,7 +23,7 @@ public class playerController : MonoBehaviour
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
     private const float speedMax_ = 4.0f;           // 移動速度の最大値
-    private const int   countMax_ = 90;             // エフェクト再生時間の最大値
+    private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
     // リーン
@@ -72,7 +73,6 @@ public class playerController : MonoBehaviour
             { "LeanX_P_R", test[7] }
         };
 
-
         LeanAnnounceText.SetActive(false);
     }
 
@@ -118,18 +118,6 @@ public class playerController : MonoBehaviour
         {
             CalculateMove();
         }
-
-
-        //// クリアしたときの処理
-        //// クリア条件：脱出アイテム8つ所持状態で出口に向かう
-        //if (Input.GetKey(KeyCode.C))
-        //{
-        //    clearFlag = true;
-        //}
-        //if (clearFlag == true)
-        //{
-        //    SceneManager.LoadScene("ClearScene");
-        //}
 
     }
 
@@ -274,8 +262,8 @@ public class playerController : MonoBehaviour
         }
 
         // リーン中でないときは、傾けられるというメッセージを表示する
-        LeanAnnounceText.SetActive(!leanFlg_ ? true : false);
-
+        LeanAnnounceText.SetActive(!leanFlg_ ? true : false);// falseなら表示(true)
+        
         // キー押下中
         if (Input.GetKey(KeyCode.T))
         {
@@ -299,4 +287,7 @@ public class playerController : MonoBehaviour
             }
         }
     }
+
+
+
 }
