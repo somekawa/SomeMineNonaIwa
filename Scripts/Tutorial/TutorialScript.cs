@@ -35,9 +35,15 @@ public class TutorialScript : MonoBehaviour
     private ItemTrhow trhow_;
     private bool haveFlag_;     // 瓶を持ったらtrue　持っていないときfalse
 
+    public PauseScript pause;
+
     // チュートリアル用のCollisionを使ってアイテムを拾ったか確認
     private bool getUpFlag_;
 
+    // 音楽関連
+    private AudioSource audioSource_;
+    [SerializeField] private AudioClip roundClearSE_;   // ラウンドクリア時のSE
+    [SerializeField] private AudioClip stageChangeSE_;   // 基本から実践にステージが変わるときのSE
 
 
 
@@ -70,9 +76,7 @@ public class TutorialScript : MonoBehaviour
 
     void Start()
     {
-
-        // debug用
-       // Destroy(this.gameObject);
+        audioSource_ = GetComponent<AudioSource>();
 
         testFlag = true;
         test2 = true;
@@ -133,15 +137,10 @@ public class TutorialScript : MonoBehaviour
 
     void Update()
     {
-        //for (int i = 0; i < (int)mission.MAX; i++)
-        //{    // 各電池の情報を初期化
-
-        //    testFlag &= status_[i].activeFlag;
-        //    Debug.Log("trueのtestFlag:" + testFlag + "       trueのstatus_[i].activeFlag:" + status_[i].activeFlag);
-
-        //}
-
-        //Debug.Log("for文から出たtestFlag:" + testFlag);
+        if (pause.GetPauseFlag() == true)
+        {
+            return;            // pause中は何の処理もできないようにする
+        }
 
 
         if (missionRound == round.FIRST)
@@ -256,19 +255,11 @@ public class TutorialScript : MonoBehaviour
                 }
             }
 
-            //for (int i = 0; i < (int)mission.MAX; i++)
-            //{
-            //    if (status_[nouNum_].activeFlag == true)
-            //    {
-            //        status_[nouNum_].checkFlag = true;
-
-            //    }
-            //}
-
         }
 
         RoundCheck();
     }
+
 
     void ThirdMissions()
     {
@@ -320,10 +311,10 @@ public class TutorialScript : MonoBehaviour
         Debug.Log((int)move_+"目のミッションを達成しました。");
         if (hideCtl_.GetHideFlg() == true)
         {
-           // 隠れたとき用　"隠れる"から"出る"に変更するため
+            // 隠れたとき用　"隠れる"から"出る"に変更するため
             if (hideCheckFlag_ == true)
             {
-               // 表示したい文字を出す
+                // 表示したい文字を出す
                 status_[(int)move_].moveText.text = "箱から出る\n【Fキー】";
                 alphaNum_ = 0.5f;
                 image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 255, alphaNum_);
@@ -376,11 +367,14 @@ public class TutorialScript : MonoBehaviour
                 // 達成された表示ミッションを徐々に消す
                 alphaNum_ -= 0.005f;
                 image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
-                text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0,  alphaNum_*2);
+                text_object[(int)move_].GetComponent<Text>().color = new Color(0, 0, 0, alphaNum_ * 2);
+                if (doorColFlag_ == true)
+                {
+                    // SEの音を鳴らす
+                    audioSource_.PlayOneShot(stageChangeSE_);
+                }
             }
         }
-      //  RoundCheck();
-
     }
 
     private void RoundCheck()
@@ -400,22 +394,19 @@ public class TutorialScript : MonoBehaviour
         {
             if (missionRound != round.THIRD)
             {
-                //for (int i = 0; i < (int)mission.MAX; i++)
-                //{
-                //    testFlag &= status_[i].activeFlag;
-                //}
-                //// Debug.Log(""+testFlag);
-                //if (testFlag == true)
                 //    ラウンド内で全てのミッションを終わらせる(false)と次のラウンドに
                 if (status_[(int)mission.ONE].activeFlag == false
-            && status_[(int)mission.TWO].activeFlag == false
-            && status_[(int)mission.THREE].activeFlag == false
-            && status_[(int)mission.FOUR].activeFlag == false)
+                && status_[(int)mission.TWO].activeFlag == false
+                && status_[(int)mission.THREE].activeFlag == false
+                && status_[(int)mission.FOUR].activeFlag == false)
                 {
                     //  最後のラウンドではないため1ラウンドプラスする
                     missionRound++;
-                        Debug.Log("ミッションのラウンドをプラスします");
-                    }
+                    // SEの音を鳴らす
+                    audioSource_.PlayOneShot(roundClearSE_);
+
+                    Debug.Log("ミッションのラウンドをプラスします");
+                }
             }
             else
             {
@@ -424,11 +415,6 @@ public class TutorialScript : MonoBehaviour
                  && status_[(int)mission.THREE].activeFlag == false)
                 {
                     completeFlag_ = true;
-                }
-                if (status_[(int)mission.FOUR].activeFlag == false)
-                {
-                   // ドアに触れたらプラスしてUpdateに入らないようにする
-                    missionRound++;
                 }
             }
         }

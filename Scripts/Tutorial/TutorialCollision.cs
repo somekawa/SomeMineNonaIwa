@@ -100,7 +100,6 @@ public class TutorialCollision : MonoBehaviour
             }
             // ビン取得ではなく隠れる処理をしてから鍵を表示する
             item_[(int)item.ESCAPE].SetActive(true);
-
         }
 
         // 鍵の取得を確認したらドアを表示する
@@ -111,16 +110,11 @@ public class TutorialCollision : MonoBehaviour
                 item_[(int)item.DOOR].SetActive(true);
             }
         }
+        ItemSttay();
     }
 
-    private void OnTriggerStay(Collider other)
+    private void ItemSttay()
     {
-        if (other.gameObject.tag == "Untagged")
-        {
-           // tutorialMain.SetItemFlag(false);
-            return;
-        }
-
         if (destroyCheckFlag_[(int)item.ESCAPE] == true)
         {
             // 最後のアイテムを取ったら処理に入らないようにする
@@ -128,36 +122,32 @@ public class TutorialCollision : MonoBehaviour
         }
         else
         {
-
-            if (other.gameObject.tag == "Battery")
+            if (playerCol_.GetItemNum() == PlayerCollision.item.BATTERY)
             {
                 // 電池との当たり判定
-                checkItem_ = item.BATTERY;
-                CheckItem(checkItem_, other);
+                CheckItem(item.BATTERY);
                 return;
             }
-            else if (other.gameObject.tag == "BarrierItem")
-            {
-                // 防御アイテム取得処理
-                checkItem_ = item.BARRIER;
-                CheckItem(checkItem_, other);
+            else if (playerCol_.GetItemNum() == PlayerCollision.item.BARRIER)
+            {                // 防御アイテム取得処理
+                CheckItem(item.BARRIER);
                 return;
             }
-            else if (other.gameObject.tag == "InductionItem")
-            {
-                // 誘導アイテム取得処理
-                checkItem_ = item.INDUCTION;
-                CheckItem(checkItem_, other);
+            else if (playerCol_.GetItemNum() == PlayerCollision.item.INDUCTION)
+            {                // 防御アイテム取得処理
+                CheckItem(item.INDUCTION);
                 return;
+
             }
-            else if (other.gameObject.tag == "EscapeItem")
-            {
-                checkItem_ = item.ESCAPE;
-                CheckItem(checkItem_, other);
+            else if (playerCol_.GetItemNum() == PlayerCollision.item.ESCAPE)
+            {                // 防御アイテム取得処理
+                CheckItem(item.ESCAPE);
                 return;
+
             }
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -170,7 +160,7 @@ public class TutorialCollision : MonoBehaviour
         }
     }
 
-    private void CheckItem(item items_, Collider other)
+    private void CheckItem(item items_)
     {
         if (Input.GetKeyUp(KeyCode.E))
         {
