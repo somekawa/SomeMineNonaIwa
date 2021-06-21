@@ -27,6 +27,17 @@ public class tLightRange : MonoBehaviour
     {
     }
 
+    void OnDisable()
+    {
+        // 非アクティブ時、敵が懐中電灯の範囲内だったら正気度低下時の処理を止める
+        if (rangeFlag_)
+        {
+            hitFlag_ = false;
+            rangeFlag_ = false;
+            cameraShake_.OffShake();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag != "Enemy")
