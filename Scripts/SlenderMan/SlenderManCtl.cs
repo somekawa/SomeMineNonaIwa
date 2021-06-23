@@ -32,7 +32,6 @@ public class SlenderManCtl : MonoBehaviour
    
     public Status status= Status.NULL;
 
-    Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
 
     // Start is called before the first frame update
@@ -40,6 +39,9 @@ public class SlenderManCtl : MonoBehaviour
     {
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
+
+        destinationPoints = GameObject.Find("DestinationPoints");
+        warpPoints = GameObject.Find("WarpPoints");
 
         navMeshAgent_.autoRepath = false;
         navMeshAgent_.updatePosition = false;
