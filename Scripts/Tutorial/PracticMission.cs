@@ -34,8 +34,7 @@ public class PracticMission : MonoBehaviour
     // 投げるアイテムを持っている間のフラグ
     private bool haveFlag_;
 
-
-
+    public PauseScript pause;
 
     struct status
     {
@@ -77,6 +76,10 @@ public class PracticMission : MonoBehaviour
 
     void Update()
     {
+        if (pause.GetPauseFlag() == true)
+        {
+            return;            // pause中は何の処理もできないようにする
+        }
         if (startFlag_ == false)
         {
             // テキストは子で付いてるからImageをアクティブにする
