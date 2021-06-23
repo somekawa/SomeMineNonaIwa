@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8061679847183510637
+--- !u!1 &545081421176097457
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8061679847183510633}
-  - component: {fileID: 8061679847183510632}
-  - component: {fileID: 8061679847183510635}
-  - component: {fileID: 8061679847183510634}
+  - component: {fileID: 545081421176097461}
+  - component: {fileID: 545081421176097460}
+  - component: {fileID: 545081421176097463}
+  - component: {fileID: 545081421176097462}
   m_Layer: 0
-  m_Name: SoundList 1
+  m_Name: SoundList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8061679847183510633
+--- !u!4 &545081421176097461
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061679847183510637}
+  m_GameObject: {fileID: 545081421176097457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,13 +33,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8061679847183510632
+--- !u!82 &545081421176097460
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061679847183510637}
+  m_GameObject: {fileID: 545081421176097457}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -129,13 +129,13 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &8061679847183510635
+--- !u!82 &545081421176097463
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061679847183510637}
+  m_GameObject: {fileID: 545081421176097457}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -225,28 +225,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8061679847183510634
+--- !u!114 &545081421176097462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061679847183510637}
+  m_GameObject: {fileID: 545081421176097457}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6500534d545cf34da728b64a202ab7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bgmList:
-  - {fileID: 8300000, guid: 3eb8b473a13b1bb47b5b108f513b437e, type: 3}
+  - {fileID: 8300000, guid: 14d62ffd04f816a498232c89fef72d3e, type: 3}
   - {fileID: 8300000, guid: 67cdfae57f8ff124d9a318ff027a2a5d, type: 3}
-  - {fileID: 8300000, guid: d15022c7a8902e34297267275a7e47a4, type: 3}
-  - {fileID: 8300000, guid: 07a4db74e7844754cb8d612e945371d0, type: 3}
-  audioSourceBGM: {fileID: 8061679847183510632}
+  - {fileID: 8300000, guid: 97423b5ec4925734dbef81e3d214206f, type: 3}
+  - {fileID: 8300000, guid: 9c342ba06aca0154bbe9a80228dbb61b, type: 3}
+  - {fileID: 8300000, guid: 60f178f16853b37458edbb215f221d1f, type: 3}
+  audioSourceBGM: {fileID: 545081421176097460}
   seList:
-  - {fileID: 8300000, guid: 0d3e58bb90924afba39e665277b5f80a, type: 3}
+  - {fileID: 8300000, guid: 3ede72c52784bb342a5af61908d8ec33, type: 3}
   - {fileID: 8300000, guid: 26f8ad74f16010f43b80a6567d3568b1, type: 3}
-  - {fileID: 8300000, guid: 2c321b706636bcb4f831af1f9d2eb2e1, type: 3}
+  - {fileID: 8300000, guid: eb77aa7fb998a2b4d95eae2798daa3ef, type: 3}
   - {fileID: 8300000, guid: 1dc14681df93052499cf37d9ac9b4a62, type: 3}
-  - {fileID: 8300000, guid: 864793e462fce0e41a487a3a39a247ee, type: 3}
-  audioSourceSE: {fileID: 8061679847183510635}
+  audioSourceSE: {fileID: 545081421176097463}
