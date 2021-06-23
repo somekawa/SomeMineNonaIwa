@@ -839,11 +839,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b0a29163872f24d95f5aedfc9fb9bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshAgent_: {fileID: 0}
   destinationPoints: {fileID: 0}
   warpPoints: {fileID: 0}
   soundPoint: {x: 0, y: 0, z: 0}
   listenFlag: 0
-  inSightFlag: 1
+  inSightFlag: 0
+  status: 2
 --- !u!136 &7847503065156188086
 CapsuleCollider:
   m_ObjectHideFlags: 0
