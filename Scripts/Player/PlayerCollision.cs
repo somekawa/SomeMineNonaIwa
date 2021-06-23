@@ -121,16 +121,16 @@ public class PlayerCollision : MonoBehaviour
         // 防御アイテム取得処理
         else if (other.gameObject.tag == "BarrierItem")
         {
-            if(Common(other))
+            if (Common(other))
             {
                 Barrier barrier = transform.parent.gameObject.GetComponent<Barrier>();
-                if (!barrier.GetBarrierItemFlg())
-                {
-                    // 同じオブジェクト内の他のスクリプトを参照する場合
-                    barrier.SetBarrierItemFlg(true);
-                    // Barrierクラスのflagをtrueにしたい
-                    Debug.Log("防御アイテムゲット");
-                }
+                // 同じオブジェクト内の他のスクリプトを参照する場合
+                barrier.SetBarrierItemFlg(true);
+                // Barrierクラスのflagをtrueにしたい
+                Debug.Log("防御アイテムゲット");
+                item_ = item.BARRIER;
+                // SEの音を鳴らす
+                audioSource_.PlayOneShot(itemGetSE_);
             }
             return;
         }
@@ -169,9 +169,18 @@ public class PlayerCollision : MonoBehaviour
     bool Common(Collider other)
     {
         // 共通処理をまとめた関数
+
         // Eキーの押下時にtrueを返す
         if (Input.GetKeyUp(KeyCode.E))
         {
+            if (other.gameObject.tag == "BarrierItem")
+            {
+                if (transform.parent.gameObject.GetComponent<Barrier>().GetBarrierItemFlg())
+                {
+                    return false;
+                }
+            }
+
             Destroy(other.gameObject);   // オブジェクトを削除
             return true;
         }
