@@ -16,7 +16,7 @@ public class DoorAnimation : MonoBehaviour
     void Start()
     {
         minAngle_ = door.transform.rotation.y;
-        maxAngle_ = 90;
+        maxAngle_ = -90;
         openFlag = false;
         closeFlag = false;
     }
@@ -24,26 +24,34 @@ public class DoorAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    openFlag = true;
+        //}
         // 鎖と南京錠の数を調べて、0以下の時に扉がアニメーションするようにフラグを立てる
-        if(transform.Find("Door").childCount <= 0)
+        if (door.transform.childCount <= 0)
         {
             openFlag = true;
         }
 
         if (openFlag == true)
         {
-            angle_ = Mathf.LerpAngle(minAngle_, maxAngle_, Time.time);
-            door.transform.eulerAngles = new Vector3(0, angle_, 0);
-            if(door.transform.eulerAngles == new Vector3(0, maxAngle_, 0))
+            float step = 120f * Time.deltaTime;
+            //指定した方向にゆっくり回転する場合
+            door.transform.rotation = Quaternion.RotateTowards(door.transform.rotation, Quaternion.Euler(0, -90f, 0), step);
+
+            if (door.transform.eulerAngles.y <= maxAngle_)
             {
                 openFlag = false;
             }
         }
         else if(closeFlag == true)
         {
-            angle_ = Mathf.LerpAngle(maxAngle_, minAngle_, Time.time);
-            door.transform.eulerAngles = new Vector3(0, angle_, 0);
-            if (door.transform.eulerAngles == new Vector3(0, minAngle_, 0))
+            float step = 120f * Time.deltaTime;
+            //指定した方向にゆっくり回転する場合
+            door.transform.rotation = Quaternion.RotateTowards(door.transform.rotation, Quaternion.Euler(0, 0, 0), step);
+
+            if (door.transform.eulerAngles.y >= minAngle_)
             {
                 closeFlag = false;
             }
