@@ -10,6 +10,7 @@ public class Recognition : MonoBehaviour
     private CameraAction cameraAction_;     // 正気度低下時のカメラアクション
 
     public GameObject lightRange_;          // 懐中電灯内のあたり判定
+    private tLightRange lightRangeScript_;
 
     private float time_;                    // アクション用タイム
 
@@ -28,6 +29,8 @@ public class Recognition : MonoBehaviour
 
         cameraAction_ = mainCamera_.GetComponent<CameraAction>();
 
+        lightRangeScript_ = lightRange_.GetComponent<tLightRange>();
+
         defaultAngle_ = lightRange_.transform.localEulerAngles;
         defaultPos_ = lightRange_.transform.localPosition;
 
@@ -45,8 +48,9 @@ public class Recognition : MonoBehaviour
         time_ += Time.deltaTime;
         lightRange_.transform.localEulerAngles = defaultAngle_;
         lightRange_.transform.localPosition = defaultPos_;
-        //ReseteLightRange();
-        if (cameraAction_.ResetCamera(time_))
+
+        // 正気度低下した場合はResetCameraは呼ばない
+        if ((lightRangeScript_.GetHitCheck()) ||(cameraAction_.ResetCamera(time_)))
         {
             time_ = 0.0f;
             resetFlag_ = false;
@@ -65,6 +69,7 @@ public class Recognition : MonoBehaviour
     {
         if ((!lightRange_.activeSelf) ||            // ライトは付いているか
             (hideControl_.GetHideFlg()) ||          // 箱に隠れ中か
+            (lightRangeScript_.GetHitCheck())||
             (other.gameObject.tag != "Enemy"))      // 当たったオブジェクトが敵か
         {
             return;
@@ -76,18 +81,22 @@ public class Recognition : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 targetDirection = enemyPos - transform.position;
         targetAngle_ = (Mathf.RoundToInt(Vector3.SignedAngle(forward, targetDirection, Vector3.up) * 0.1f) * 10.0f);
-        Debug.Log("角度"+ targetAngle_);
+        //Debug.Log("角度"+ targetAngle_);
         if (Mathf.Abs(targetAngle_) < 90.0f) 
         {
 
             haniFlag_ = true;
             MoveLightRange();
 
-            if (!cameraAction_.CameraLong())
+            if (!cameraAction_.CameraLong())    // 正気度低下時の処理が動いたらこっちは動かないようにする
             {
 
                 time_ += Time.deltaTime;
                 cameraAction_.FacingCamera(enemyPos, time_);
+            }
+            else
+            {
+                time_ = 0.0f;
             }
         }
         else if(haniFlag_)
@@ -113,7 +122,7 @@ public class Recognition : MonoBehaviour
     {
         float localEulerAngle = Mathf.RoundToInt((lightRange_.transform.localEulerAngles.y - 360.0f) * 0.1f) * 10.0f;
         float angle = targetAngle_ - 90.0f;
-        Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
+        //Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
         if (Mathf.Abs(localEulerAngle - angle) <= 10.0f)  // 10度以下の誤差までは許容範囲にする
         {
             lightRange_.transform.localEulerAngles = new Vector3(defaultAngle_.x, angle, defaultAngle_.z);
