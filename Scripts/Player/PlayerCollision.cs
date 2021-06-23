@@ -5,6 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
+    public enum item
+    {
+        NON,
+        BATTERY,
+        BARRIER,
+        INDUCTION,
+        ESCAPE,
+        MAX
+    }
+    private item item_;
+
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
     // 脱出アイテム関連
     private int keyItemCnt_ = 0;     // 現在所持してる脱出アイテムの数
@@ -14,14 +25,18 @@ public class PlayerCollision : MonoBehaviour
     private bool keyItemColFlag_ = false;
 
     private int chainCnt = 0;
+    // 音楽関連
+    private AudioSource audioSource_;
+    [SerializeField] private AudioClip itemGetSE_;   // アイテム入手時のSE
 
     void Start()
     {
-
+        item_ = item.NON;
     }
 
     void Update()
     {
+        audioSource_ = GetComponent<AudioSource>();
         if (maxKeyItemNum_ <= keyItemCnt_)
         {
             // 所持数が最大個数になったら　もし脱出アイテムがあっても拾えなくする
@@ -105,6 +120,9 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
+                item_ = item.ESCAPE;
+                // SEの音を鳴らす
+                audioSource_.PlayOneShot(itemGetSE_);
             }
             return;
         }
@@ -115,6 +133,9 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
+                item_ = item.BATTERY;
+                // SEの音を鳴らす
+                audioSource_.PlayOneShot(itemGetSE_);
             }
             return;
         }
@@ -144,6 +165,9 @@ public class PlayerCollision : MonoBehaviour
                 {
                     itemTrhow.SetTrhowItemFlg(true);
                     Debug.Log("誘導アイテムゲット");
+                    item_ = item.INDUCTION;
+                    // SEの音を鳴らす
+                    audioSource_.PlayOneShot(itemGetSE_);
                 }
             }
             return;
@@ -164,6 +188,23 @@ public class PlayerCollision : MonoBehaviour
     {
         // Debug.Log("GetBatteryFlag+++++++電池ゲット");
         batteryGetFlag_ = flag;
+    }
+
+    public bool GetKeyFlag()
+    {
+        return keyItemColFlag_;
+    }
+
+    public item GetItemNum()
+    {
+        // どのアイテムを取得したか
+        return item_;
+    }
+
+    public void SetItemNum(item setItem)
+    {
+        // 渡されるものがリセットされないからmessageがおかしくなるため
+        item_ = setItem;
     }
 
     bool Common(Collider other)
