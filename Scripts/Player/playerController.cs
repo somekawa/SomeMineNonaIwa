@@ -23,7 +23,7 @@ public class playerController : MonoBehaviour
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
     private const float speedMax_ = 4.0f;           // 移動速度の最大値
-    private const int   countMax_ = 120;            // エフェクト再生時間の最大値
+    private const float countMax_ = 0.5f;           // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
     // リーン
@@ -227,7 +227,7 @@ public class playerController : MonoBehaviour
         return turnCheckFlag_;
     }
 
-    public int GetCountMax()
+    public float GetCountMax()
     {
         // 移動速度変更フラグを見て、エフェクトの再生時間を調整する
         if (!slowWalk_)

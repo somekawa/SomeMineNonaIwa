@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class effectScript : MonoBehaviour
 {
-    private int count_ = 0;                 // エフェクト発生時間の管理用
+    private float count_ = 0.0f;            // エフェクト発生時間の管理用
     private bool countFlg_  = false;        // カウント最大時にtrue
     private bool effectPlayFlg_ = false;    // エフェクト再生中にtrue
     private float playTime_ = 0.0f;         // エフェクト再生時間の管理用
@@ -38,7 +38,8 @@ public class effectScript : MonoBehaviour
         playerController tmpPlSc = plSc_;
 
         // 指定秒数でフラグを立てる
-        count_++;
+        count_ += Time.deltaTime;
+
         if ((count_ >= tmpPlSc.GetCountMax()) && !countFlg_)
         {
             countFlg_ = true;
