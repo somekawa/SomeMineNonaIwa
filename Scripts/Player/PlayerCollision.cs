@@ -228,4 +228,10 @@ public class PlayerCollision : MonoBehaviour
 
         return false;
     }
+
+    public int GetkeyItemCnt()
+    {
+        return keyItemCnt_;
+    }
+
 }

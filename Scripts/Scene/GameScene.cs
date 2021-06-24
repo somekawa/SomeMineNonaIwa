@@ -7,6 +7,8 @@ public class GameScene : MonoBehaviour
 {
     public tBatteryScript batteryScript;
     public Text batteryText;
+    public Text keyText;
+    public PlayerCollision playerColScript;
 
     private bool pauseFlag;
 
@@ -39,6 +41,7 @@ public class GameScene : MonoBehaviour
             }
         }
         batteryText.text = "電池残量" + batteryScript.ReturnBatteryRest()+"%";
+        keyText.text = "(" + playerColScript.GetkeyItemCnt() + "/ 8)";
 
         // 毎フレーム呼ばれないようにフラグで管理
         if (secondsAddFlag_ == true)
