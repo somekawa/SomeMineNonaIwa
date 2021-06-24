@@ -126,8 +126,8 @@ public class Recognition : MonoBehaviour
     {
         float localEulerAngle = Mathf.RoundToInt((lightRange_.transform.localEulerAngles.y - 360.0f) * 0.1f) * 10.0f;
         float angle = targetAngle_ - 90.0f;
-        //Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
-        if (Mathf.Abs(localEulerAngle - angle) <= 10.0f)  // 10度以下の誤差までは許容範囲にする
+        Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
+        if (Mathf.Abs(localEulerAngle - angle) == 0.0f)
         {
             lightRange_.transform.localEulerAngles = new Vector3(defaultAngle_.x, angle, defaultAngle_.z);
             return;
@@ -135,7 +135,7 @@ public class Recognition : MonoBehaviour
 
         Vector3 point = playerObj_.transform.position;
         float period = 180.0f;
-        if (targetAngle_ < 0.0f)
+        if (localEulerAngle > angle)
         {
             period = -period;
         }

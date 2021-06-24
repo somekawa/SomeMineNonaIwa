@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraAction : MonoBehaviour
 {
-    private float time_ = 0.0f;
+    private float time_      = 0.0f;
     private bool actionFlag_ = false;
 
     private Vector2 pos_;
@@ -61,7 +61,11 @@ public class CameraAction : MonoBehaviour
     {
         cameraControll_.SetOperationFlag(false);
         if (!actionFlag_)
-        {           
+        {
+            // リセット中の場合は中断する
+            cameraResetFlag_ = false;
+            time_ = 0.0f;
+
             // カメラの方向を保存
             facingTime_ = 0.0f;
             actionFlag_ = true;
