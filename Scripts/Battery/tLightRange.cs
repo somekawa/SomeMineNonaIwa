@@ -9,12 +9,10 @@ public class tLightRange : MonoBehaviour
     public CameraShake cameraShake_;
 
     private SlenderManCtl[] slenderManCtl_;
-    private bool hitFlag_       = false;
-
-    private bool rangeFlag_     = false;    // 範囲内か
-    private float rangeTime_    = 0.0f;     // 範囲内に入ってからの時間
+    private bool hitFlag_ = false;
+    private bool rangeFlag_ = false;        // 範囲内か
+    private float rangeTime_ = 0.0f;        // 範囲内に入ってからの時間
     private float rangeMaxTime_ = 0.5f;     // 範囲内に入ってからの猶予時間
-    private int minCnt_;
     private int lengthCnt_;
 
     void Start()
