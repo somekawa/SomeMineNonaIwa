@@ -6,7 +6,9 @@ using UnityEngine.AI;
 public class tLightRange : MonoBehaviour
 {
     public Barrier barrier;
-    public CameraShake cameraShake_;
+    public CameraAction cameraAction_;
+
+    private playerController playerController_;
 
     private SlenderManCtl[] slenderManCtl_;
     private bool hitFlag_ = false;
@@ -17,6 +19,8 @@ public class tLightRange : MonoBehaviour
 
     void Start()
     {
+        playerController_ = transform.root.gameObject.GetComponent<playerController>();
+
         lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender.Length;
         slenderManCtl_ = new SlenderManCtl[lengthCnt_];
 
@@ -35,6 +39,17 @@ public class tLightRange : MonoBehaviour
         }
     }
 
+    void OnDisable()
+    {
+        // 非アクティブ時、敵が懐中電灯の範囲内だったら正気度低下時の処理を止める
+        if (rangeFlag_)
+        {
+            hitFlag_ = false;
+            rangeFlag_ = false;
+            cameraAction_.OffShake();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag != "Enemy")
@@ -48,12 +63,16 @@ public class tLightRange : MonoBehaviour
             rangeTime_ = 0.0f;
         }
 
-        for (int i = 0; i < lengthCnt_; i++)
+        if (!playerController_.GetNowLean())
         {
-            if (slenderManCtl_[i] != null)
+            // カメラが傾いていない場合のみ
+            for (int i = 0; i < lengthCnt_; i++)
             {
-                slenderManCtl_[i].navMeshAgent_.ResetPath();
-                slenderManCtl_[i].status = SlenderManCtl.Status.NULL;
+                if (slenderManCtl_[i] != null)
+                {
+                    slenderManCtl_[i].navMeshAgent_.ResetPath();
+                    slenderManCtl_[i].status = SlenderManCtl.Status.NULL;
+                }
             }
         }
     }
@@ -68,10 +87,9 @@ public class tLightRange : MonoBehaviour
         rangeTime_ += Time.deltaTime;
         Debug.Log("範囲内時間：" + rangeTime_);
 
-        // 画面揺れ処理追加予定
-        cameraShake_.Shake(other.gameObject);
+        cameraAction_.SanitCameraAction(other.gameObject);
 
-        if (rangeTime_ >= rangeMaxTime_)
+        if (!cameraAction_.CameraLong())
         {
             //@slenderMan このタイミングでワープお願いします。
             for (int i = 0; i < lengthCnt_; i++)
@@ -114,7 +132,7 @@ public class tLightRange : MonoBehaviour
 
         hitFlag_ = false;
         rangeFlag_ = false;
-        cameraShake_.OffShake();
+        cameraAction_.OffShake();
         Debug.Log("敵がライトの範囲外にいきました。");
     }
 
