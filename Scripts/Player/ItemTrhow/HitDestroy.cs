@@ -1,105 +1,69 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class HitDestroy : MonoBehaviour
 {
     public string targeTag;
-    //private bool testFlag;
 
-    private GameObject tutorial;
-    private TutorialCollision tCollision;
-
-    private GameObject slenderMan_;
-    private GameObject tutorialSlender;
-    private SlenderManCtl slenderManCtl_;
-    private tTutoriaSlender tSlenderManCtl_;
+    private GameObject[] slenderMan_;
+    private SlenderManCtl[] slenderManCtl_;
+    private float minDistance_;
+    private float nowDistance_;
+    private int minCnt_;
+    private int lengthCnt_;
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "TutorialScene")
+        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender_.Length;
+        slenderMan_ = new GameObject[lengthCnt_];
+        slenderManCtl_ = new SlenderManCtl[lengthCnt_];
+        for (int i = 0; i < lengthCnt_; i++)
         {
-            tutorial = GameObject.Find("Player/TutorialColl");
-            if (tutorial != null)
+            if (SlenderSpawner.GetInstance().spawnSlender_[i] != null)
             {
-                tCollision = tutorial.gameObject.GetComponent<TutorialCollision>();
-                //  testFlag = false;
+                slenderMan_[i] = SlenderSpawner.GetInstance().spawnSlender_[i];
+                slenderManCtl_[i] = slenderMan_[i].gameObject.GetComponent<SlenderManCtl>();
             }
-            else
-            {
-                // tutorialが存在しない＝pracitcに移っている
-                tutorialSlender = GameObject.Find("TutorialSlender");
-                tSlenderManCtl_ = tutorialSlender.gameObject.GetComponent<tTutoriaSlender>();
-
-            }
-
         }
-        else
-        {
-            slenderMan_ = GameObject.Find("Slender");
-            slenderManCtl_ = slenderMan_.gameObject.GetComponent<SlenderManCtl>();
-        }
+        minDistance_ = 0;
+        minCnt_ = 0;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (SceneManager.GetActiveScene().name == "TutorialScene")
+        // このScriptがアタッチされているオブジェクトが、指定したターゲットに接触した時
+        // このオブジェクトが消滅する
+        if (collision.gameObject.tag == targeTag)
         {
-            if (tutorialSlender != null)
+            for (int i = 0; i < lengthCnt_; i++)
             {
-
-                if (collision.gameObject.tag == targeTag)
+                if (slenderMan_[i] != null)
                 {
-                    tSlenderManCtl_.soundPoint.x = this.gameObject.transform.position.x;
-                    tSlenderManCtl_.soundPoint.z = this.gameObject.transform.position.z;
-                    tSlenderManCtl_.listenFlag = true;
-                    Debug.Log("slenderManCtl_.soundPoint.x:" + tSlenderManCtl_.soundPoint.x +
-                    "           slenderManCtl_.soundPoint.z:" + tSlenderManCtl_.soundPoint.z);
-
-                    GameObject obj = (GameObject)Resources.Load("GlassSE");
-                    if (obj == null)
+                    nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[i].transform.position);
+                    if (minDistance_ >= nowDistance_)
                     {
-                        Debug.Log("objがnullです");
+                        minDistance_ = nowDistance_;
+                        minCnt_ = i;
                     }
-
-                    Instantiate(obj);
-                    Destroy(this.gameObject);
                 }
             }
-            else
+
+            if(slenderManCtl_!=null)
             {
-                if (collision.gameObject.tag == targeTag)
-                {
-                    GameObject obj = (GameObject)Resources.Load("GlassSE");
-                    if (obj == null)
-                    {
-                        Debug.Log("objがnullです");
-                    }
-
-                    Instantiate(obj);
-                    Destroy(this.gameObject);
-                }
-
+                slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+                slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+                slenderManCtl_[minCnt_].listenFlag = true;
             }
-        }
-        else
-        {    // このScriptがアタッチされているオブジェクトが、指定したターゲットに接触した時
-           // このオブジェクトが消滅する
-            if (collision.gameObject.tag == targeTag)
+
+            GameObject obj = (GameObject)Resources.Load("GlassSE");
+            if (obj == null)
             {
-                slenderManCtl_.soundPoint.x = this.gameObject.transform.position.x;
-                slenderManCtl_.soundPoint.z = this.gameObject.transform.position.z;
-                slenderManCtl_.listenFlag = true;
-                GameObject obj = (GameObject)Resources.Load("GlassSE");
-                if (obj == null)
-                {
-                    Debug.Log("objがnullです");
-                }
-
-                Instantiate(obj);
-                Destroy(this.gameObject);
+                Debug.Log("objがnullです");
             }
+
+            Instantiate(obj);
+            Destroy(this.gameObject);
         }
     }
 }

@@ -6,35 +6,34 @@ using UnityEngine.AI;
 public class tLightRange : MonoBehaviour
 {
     public Barrier barrier;
-    public CameraAction cameraShake_;
+    public CameraShake cameraShake_;
 
-    private playerController playerController_;
-    private GameObject slenderMan_;
-    private SlenderManCtl slenderManCtl_;
+    private SlenderManCtl[] slenderManCtl_;
     private bool hitFlag_       = false;
 
     private bool rangeFlag_     = false;    // 範囲内か
     private float rangeTime_    = 0.0f;     // 範囲内に入ってからの時間
+    private float rangeMaxTime_ = 0.5f;     // 範囲内に入ってからの猶予時間
+    private int minCnt_;
+    private int lengthCnt_;
 
     void Start()
     {
-        playerController_ = transform.root.gameObject.GetComponent<playerController>();
-        slenderMan_ =GameObject.Find("Slender");
-        slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
+        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender_.Length;
+        slenderManCtl_ = new SlenderManCtl[lengthCnt_];
+
+        //slenderMan_=GameObject.Find("Slender");
+        //slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
     }
 
     void Update()
     {
-    }
-
-    void OnDisable()
-    {
-        // 非アクティブ時、敵が懐中電灯の範囲内だったら正気度低下時の処理を止める
-        if (rangeFlag_)
+        for (int i = 0; i < lengthCnt_; i++)
         {
-            hitFlag_ = false;
-            rangeFlag_ = false;
-            cameraShake_.OffShake();
+            if (slenderManCtl_[i] == null)
+            {
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender_[i].gameObject.GetComponent<SlenderManCtl>();
+            }
         }
     }
 
@@ -44,17 +43,20 @@ public class tLightRange : MonoBehaviour
         {
             return;
         }
+
         if (!rangeFlag_)
         {
             rangeFlag_ = true;
             rangeTime_ = 0.0f;
         }
 
-        if (!playerController_.GetNowLean())
+        for (int i = 0; i < lengthCnt_; i++)
         {
-            // カメラが傾いていない場合のみ
-            slenderManCtl_.navMeshAgent_.ResetPath();
-            slenderManCtl_.status = SlenderManCtl.Status.NULL;
+            if (slenderManCtl_[i] != null)
+            {
+                slenderManCtl_[i].navMeshAgent_.ResetPath();
+                slenderManCtl_[i].status = SlenderManCtl.Status.NULL;
+            }
         }
     }
 
@@ -69,13 +71,18 @@ public class tLightRange : MonoBehaviour
         Debug.Log("範囲内時間：" + rangeTime_);
 
         // 画面揺れ処理追加予定
-        cameraShake_.SanitCameraAction(other.gameObject);
+        cameraShake_.Shake(other.gameObject);
 
-        if (!cameraShake_.CameraLong())
+        if (rangeTime_ >= rangeMaxTime_)
         {
             //@slenderMan このタイミングでワープお願いします。
-            slenderManCtl_.inSightFlag = true;
-            slenderManCtl_.status = SlenderManCtl.Status.IDLE;
+            for (int i = 0; i < lengthCnt_; i++)
+            {
+                if (slenderManCtl_[i] != null)
+                {
+                    slenderManCtl_[i].inSightFlag = true;
+                }
+            }
 
             if (barrier.GetBarrierItemFlg())
             {
@@ -98,8 +105,14 @@ public class tLightRange : MonoBehaviour
             return;
         }
 
-        //@slenderMan このタイミングで動きお願いします。
-        slenderManCtl_.status = SlenderManCtl.Status.WALK;
+        //@slenderMan このタイミングで動きお願いします
+        for (int i = 0; i < lengthCnt_; i++)
+        {
+            if (slenderManCtl_[i] != null)
+            {
+                slenderManCtl_[i].status = SlenderManCtl.Status.WALK;
+            }
+        }
 
         hitFlag_ = false;
         rangeFlag_ = false;
