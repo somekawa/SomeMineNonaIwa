@@ -19,7 +19,7 @@ public class tLightRange : MonoBehaviour
 
     void Start()
     {
-        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender_.Length;
+        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender.Length;
         slenderManCtl_ = new SlenderManCtl[lengthCnt_];
 
         //slenderMan_=GameObject.Find("Slender");
@@ -32,7 +32,7 @@ public class tLightRange : MonoBehaviour
         {
             if (slenderManCtl_[i] == null)
             {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender_[i].gameObject.GetComponent<SlenderManCtl>();
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
             }
         }
     }

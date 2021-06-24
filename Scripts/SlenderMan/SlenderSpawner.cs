@@ -6,15 +6,14 @@ public class SlenderSpawner : MonoBehaviour
 {
     public GameObject slender;
     public bool instantiateFlag;
-
-    private GameObject[] spawnSlender_;
+    public GameObject[] spawnSlender;
 
     // Start is called before the first frame update
     void Start()
     {
         instantiateFlag = false;
-        spawnSlender_= new GameObject[4];
-        spawnSlender_[0] = Instantiate(slender, new Vector3(0.0f, 0.0f, 0.0f), new Quaternion(0f, 180f, 0f, 0f));
+        spawnSlender = new GameObject[4];
+        spawnSlender[0] = Instantiate(slender, new Vector3(0.0f, 0.0f, 0.0f), new Quaternion(0f, 180f, 0f, 0f));
     }
 
     static SlenderSpawner Instance = null;
@@ -33,11 +32,11 @@ public class SlenderSpawner : MonoBehaviour
     {
         if (instantiateFlag==true)
         {
-            for (int i = 0; i < spawnSlender_.Length; i++)
+            for (int i = 0; i < spawnSlender.Length; i++)
             {
-                if (spawnSlender_[i] == null)
+                if (spawnSlender[i] == null)
                 {
-                    spawnSlender_[i] = Instantiate(slender, new Vector3(0.0f, 0.0f, 0.0f), new Quaternion(0f, 180f, 0f, 0f));
+                    spawnSlender[i] = Instantiate(slender, new Vector3(0.0f, 0.0f, 0.0f), new Quaternion(0f, 180f, 0f, 0f));
                     instantiateFlag = false;
                     break;
                 }

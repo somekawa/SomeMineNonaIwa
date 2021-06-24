@@ -15,14 +15,14 @@ public class HitDestroy : MonoBehaviour
 
     void Start()
     {
-        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender_.Length;
+        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender.Length;
         slenderMan_ = new GameObject[lengthCnt_];
         slenderManCtl_ = new SlenderManCtl[lengthCnt_];
         for (int i = 0; i < lengthCnt_; i++)
         {
-            if (SlenderSpawner.GetInstance().spawnSlender_[i] != null)
+            if (SlenderSpawner.GetInstance().spawnSlender[i] != null)
             {
-                slenderMan_[i] = SlenderSpawner.GetInstance().spawnSlender_[i];
+                slenderMan_[i] = SlenderSpawner.GetInstance().spawnSlender[i];
                 slenderManCtl_[i] = slenderMan_[i].gameObject.GetComponent<SlenderManCtl>();
             }
         }
