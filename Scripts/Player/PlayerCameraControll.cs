@@ -15,6 +15,8 @@ public class PlayerCameraControll : MonoBehaviour
     private float y_Rotation_;
     private HideControl hideControl_;
 
+    private bool operationFlag_ = true;             // カメラ操作できるか
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +39,12 @@ public class PlayerCameraControll : MonoBehaviour
             //Cursor.visible = false;
             //Cursor.lockState = CursorLockMode.Locked;
 
+            if(!operationFlag_)
+            {
+                // 別のほうでカメラ操作されている
+                return;
+            }
+
             y_Rotation_ = Input.GetAxis("Mouse Y");                   // マウスのY座標の取得
             y_Rotation_ = y_Rotation_ * y_sensi;                      // カメラのY座標の回転速度の計算
             playerCamera.transform.Rotate(-y_Rotation_, 0, 0);      　// Y座標の回転は子オブジェクトのカメラに
@@ -53,5 +61,10 @@ public class PlayerCameraControll : MonoBehaviour
             Cursor.visible = true;                                    // マウスカーソルの表示
             Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
         }
+    }
+
+    public void SetOperationFlag(bool flag)
+    {
+        operationFlag_ = flag;
     }
 }

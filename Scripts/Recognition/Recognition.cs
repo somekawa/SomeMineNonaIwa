@@ -5,6 +5,7 @@ using UnityEngine;
 public class Recognition : MonoBehaviour
 {
     private GameObject playerObj_;          // プレイヤー情報
+    private PlayerCameraControll cameraControll_;
 
     public GameObject mainCamera_;          // メインカメラ
     private CameraAction cameraAction_;     // 正気度低下時のカメラアクション
@@ -26,6 +27,7 @@ public class Recognition : MonoBehaviour
     void Start()
     {
         playerObj_ = transform.root.gameObject;
+        cameraControll_ = playerObj_.GetComponent<PlayerCameraControll>();
 
         cameraAction_ = mainCamera_.GetComponent<CameraAction>();
 
@@ -52,6 +54,7 @@ public class Recognition : MonoBehaviour
         // 正気度低下した場合はResetCameraは呼ばない
         if ((lightRangeScript_.GetHitCheck()) ||(cameraAction_.ResetCamera(time_)))
         {
+            cameraControll_.SetOperationFlag(true);
             time_ = 0.0f;
             resetFlag_ = false;
         }
@@ -86,6 +89,7 @@ public class Recognition : MonoBehaviour
         {
 
             haniFlag_ = true;
+            cameraControll_.SetOperationFlag(false);
             MoveLightRange();
 
             if (!cameraAction_.CameraLong())    // 正気度低下時の処理が動いたらこっちは動かないようにする

@@ -19,6 +19,7 @@ public class CameraAction : MonoBehaviour
     private float fieldOfViewMin_;
 
     private GameObject playerObj_;
+    private PlayerCameraControll cameraControll_;
 
     // サウンド
     private AudioSource audioSource_;
@@ -33,6 +34,7 @@ public class CameraAction : MonoBehaviour
         fieldOfViewMin_ = fieldOfView_ / 2.0f;
 
         playerObj_ = transform.root.gameObject;
+        cameraControll_ = playerObj_.GetComponent<PlayerCameraControll>();
 
         audioSource_ = GetComponent<AudioSource>();
     }
@@ -49,6 +51,7 @@ public class CameraAction : MonoBehaviour
         // カメラを元の方向に戻す
         if (ResetCamera(time_))
         {
+            cameraControll_.SetOperationFlag(true);
             time_ = 0.0f;
             cameraResetFlag_ = false;
         }
@@ -56,8 +59,9 @@ public class CameraAction : MonoBehaviour
 
     public void SanitCameraAction(GameObject gameobj)
     {
+        cameraControll_.SetOperationFlag(false);
         if (!actionFlag_)
-        {
+        {           
             // カメラの方向を保存
             facingTime_ = 0.0f;
             actionFlag_ = true;
