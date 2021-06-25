@@ -9,7 +9,6 @@ public class ObjectLightCtl : MonoBehaviour
     //public GameObject comingObject;     // 自身との距離を計算するターゲットオブジェクト格納用
     private GameObject comingObject;
 
-    private GameObject cameraControll_;
     private CameraController cameraController_;
     private GameObject objectLight_;     // 発光するための子オブジェクト格納用
     private bool lightFlag;
@@ -18,8 +17,7 @@ public class ObjectLightCtl : MonoBehaviour
     void Start()
     {
         comingObject = GameObject.Find("Player");
-        cameraControll_ = GameObject.Find("CameraControll");
-        cameraController_ = cameraControll_.GetComponent<CameraController>();
+        cameraController_ = CameraController.FindObjectOfType<CameraController>();
         objectLight_ = gameObject.GetComponentInChildren<Light>().gameObject;     // 子オブジェクトのlightを取得
     }
 
