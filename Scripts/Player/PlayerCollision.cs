@@ -144,7 +144,7 @@ public class PlayerCollision : MonoBehaviour
         {
             if (Common(other))
             {
-                Barrier barrier = transform.parent.gameObject.GetComponent<Barrier>();
+                Barrier barrier = Barrier.FindObjectOfType<Barrier>();
                 // 同じオブジェクト内の他のスクリプトを参照する場合
                 barrier.SetBarrierItemFlg(true);
                 // Barrierクラスのflagをtrueにしたい
@@ -158,17 +158,15 @@ public class PlayerCollision : MonoBehaviour
         // 誘導アイテム取得処理
         else if (other.gameObject.tag == "InductionItem")
         {
-            if(Common(other))
+            if (Common(other))
             {
-                ItemTrhow itemTrhow = transform.parent.gameObject.GetComponent<ItemTrhow>();
-                if (!itemTrhow.GetTrhowItemFlg())
-                {
-                    itemTrhow.SetTrhowItemFlg(true);
-                    Debug.Log("誘導アイテムゲット");
-                    item_ = item.INDUCTION;
-                    // SEの音を鳴らす
-                    audioSource_.PlayOneShot(itemGetSE_);
-                }
+                ItemTrhow itemTrhow = ItemTrhow.FindObjectOfType<ItemTrhow>();
+                itemTrhow.SetTrhowItemFlg(true);
+                itemTrhow.SetTrhowItemFlg(true);
+                Debug.Log("誘導アイテムゲット");
+                item_ = item.INDUCTION;
+                // SEの音を鳴らす
+                audioSource_.PlayOneShot(itemGetSE_);
             }
             return;
         }
@@ -216,7 +214,14 @@ public class PlayerCollision : MonoBehaviour
         {
             if (other.gameObject.tag == "BarrierItem")
             {
-                if (transform.parent.gameObject.GetComponent<Barrier>().GetBarrierItemFlg())
+                if (Barrier.FindObjectOfType<Barrier>().GetBarrierItemFlg())
+                {
+                    return false;
+                }
+            }
+            if (other.gameObject.tag == "InductionItem")
+            {
+                if (ItemTrhow.FindObjectOfType<ItemTrhow>().GetTrhowItemFlg())
                 {
                     return false;
                 }
