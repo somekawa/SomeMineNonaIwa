@@ -56,13 +56,16 @@ public class HitDestroy : MonoBehaviour
                 slenderManCtl_[minCnt_].listenFlag = true;
             }
 
-            GameObject obj = (GameObject)Resources.Load("GlassSE");
-            if (obj == null)
-            {
-                Debug.Log("objがnullです");
-            }
+            //GameObject obj = (GameObject)Resources.Load("GlassSE");
+            //if (obj == null)
+            //{
+            //    Debug.Log("objがnullです");
+            //}
 
-            Instantiate(obj);
+            //Instantiate(obj);
+
+            SoundScript.GetInstance().PlaySound(5);
+
             Destroy(this.gameObject);
         }
     }
