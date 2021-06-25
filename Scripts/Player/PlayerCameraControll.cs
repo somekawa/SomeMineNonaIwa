@@ -7,14 +7,13 @@ public class PlayerCameraControll : MonoBehaviour
     public float x_sensi;                          // マウスのX座標の感度格納用
     public float y_sensi;                          // マウスのY座標の感度格納用
     public GameObject playerCamera;                // 動かすカメラ格納用
-    public CameraController cameraController_;
-    public playerController playerController_;
+    public playerController playerController;
     public PauseScript pause;                      // pause中の処理
 
+    private CameraController cameraController_;
     private float x_Rotation_;
     private float y_Rotation_;
     private HideControl hideControl_;
-
     private bool operationFlag_ = true;             // カメラ操作できるか
 
     // Start is called before the first frame update
@@ -22,6 +21,7 @@ public class PlayerCameraControll : MonoBehaviour
     {
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
+        cameraController_ = CameraController.FindObjectOfType<CameraController>();
         hideControl_ = GetComponent<HideControl>();
     }
 
@@ -49,7 +49,7 @@ public class PlayerCameraControll : MonoBehaviour
             y_Rotation_ = y_Rotation_ * y_sensi;                      // カメラのY座標の回転速度の計算
             playerCamera.transform.Rotate(-y_Rotation_, 0, 0);      　// Y座標の回転は子オブジェクトのカメラに
 
-            if (!playerController_.GetNowLean())
+            if (!playerController.GetNowLean())
             {
                 x_Rotation_ = Input.GetAxis("Mouse X");               // マウスのX座標の取得
                 x_Rotation_ = x_Rotation_ * x_sensi;                  // カメラのX座標の回転速度の計算
