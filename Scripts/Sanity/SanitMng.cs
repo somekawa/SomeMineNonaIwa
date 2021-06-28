@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine.UI;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class SanitMng : MonoBehaviour
 {
@@ -230,8 +228,9 @@ public class SanitMng : MonoBehaviour
         deadType_ = deadType;
         sanit_ = 0.0f;
         gameOvreFlag_ = true;
-
-        EditorSceneManager.LoadScene("GameOverScene");
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("GameOverScene");
     }
 
     public float GetDTimeMax()
