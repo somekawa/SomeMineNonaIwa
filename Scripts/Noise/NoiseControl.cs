@@ -18,9 +18,11 @@ public class NoiseControl : MonoBehaviour
     private RawImage rawImageSN_;               // 横ノイズ
     private float startSN_          = 0.0f;     // 横ノイズ開始時間
     public float moveTimeSN_;                   // 稼働時間
+    private bool sNFlag_            = false;
 
-    public bool randomSNFlag_;
+    private Image slenderImage_;
 
+    private bool endless_           = false;    // 時間関係なく流し続ける
     // Start is called before the first frame update
     void Start()
     {
@@ -53,18 +55,28 @@ public class NoiseControl : MonoBehaviour
             }
         }
 
-        //minB_ = maxB_ - 1.0f;
+        slenderImage_ = gameObject.GetComponentInChildren<Image>();
+        slenderImage_.rectTransform.sizeDelta = screenSize;
+        if(slenderImage_.gameObject.activeSelf)
+        {
+            // 初期時は非表示にする
+            slenderImage_.gameObject.SetActive(false);
+        }        //minB_ = maxB_ - 1.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        RandomSN();
 
         // ノイズ
         if (parameter_ <= 1.0f)
         {
-            rawImageN_.material.SetFloat("alpha", parameter_ * maxN_ );
+            float alpha = maxN_;
+            if(!sNFlag_)
+            {
+                alpha = parameter_ * maxN_;
+            }
+            rawImageN_.material.SetFloat("alpha", alpha);
         }
         rawImageN_.material.SetFloat("time", Time.time);
 
@@ -79,10 +91,12 @@ public class NoiseControl : MonoBehaviour
                 startSN_ = Time.time;
             }
             rawImageSN_.material.SetFloat("time", Time.time);
-            if (moveTimeSN_ < Time.time - startSN_) 
+            if ((!endless_) && (moveTimeSN_ < Time.time - startSN_)) 
             {
                 rawImageSN_.material.SetFloat("flag", 0.0f);
+                slenderImage_.gameObject.SetActive(false);
                 startSN_ = 0.0f;
+                sNFlag_ = false;
             }
         }
     }
@@ -125,23 +139,22 @@ public class NoiseControl : MonoBehaviour
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
     }
 
-    private void RandomSN()
+    // 横ノイズを永遠に流す(ゲームオーバー時に使用)
+    public void DiscoveryNoiseEndless(bool slenderFlag)
     {
-        if (!randomSNFlag_)
-        {
-            return;
-        }
-
-        if (Random.value * 100.0f < 0.1f)
-        {
-            DiscoveryNoise();
-        }
+        DiscoveryNoise(slenderFlag);
+        endless_ = true;
     }
-
-    public void DiscoveryNoise()
+    public void DiscoveryNoise(bool slenderFlag)
     {
         rawImageSN_.material.SetFloat("flag", 1.0f);
-        startSN_ = Time.time;
+
+        if (slenderFlag)
+        {
+            // 敵との遭遇の場合に表示する
+            slenderImage_.gameObject.SetActive(true);
+        }        startSN_ = Time.time;
+        sNFlag_ = true;
     }
 
     public float GetMoveTimeSN()

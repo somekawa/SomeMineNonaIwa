@@ -41,6 +41,8 @@ public class SanitMng : MonoBehaviour
 
     public static DeadType deadType_ = DeadType.NON;
 
+    private float rTime_;                           // 再生時間
+    private float rMaxTime_          = 3.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,16 +55,30 @@ public class SanitMng : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (sanit_ <= 0.0f)
-        {  
-            GameOverSetAction(DeadType.SANIT);
-        }
-        else 
+        if (!gameOvreFlag_)
         {
-            // ライト
-            LightCheck();
-            // 敵
-            EnemyCheck();
+            if (sanit_ <= 0.0f)
+            {
+                GameOverSetAction(DeadType.SANIT);
+            }
+            else
+            {
+                // ライト
+                LightCheck();
+                // 敵
+                EnemyCheck();
+            }
+        }
+        else
+        {
+            
+            rTime_ += Time.deltaTime;
+            if (rTime_ >= rMaxTime_) 
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                SceneManager.LoadScene("GameOverScene");
+            }
         }
 
         float parameter = (maxSanit_ - sanit_) * 0.01f;
@@ -145,7 +161,7 @@ public class SanitMng : MonoBehaviour
 
         if (!noisFlag_)
         {
-            noiseControl_.DiscoveryNoise();
+            noiseControl_.DiscoveryNoise(true);
             enemyHitTime_ = Time.time;
             noisFlag_ = true;
         }
@@ -164,7 +180,7 @@ public class SanitMng : MonoBehaviour
 
         if ((!noisFlag_) && (d_nowTime_ <= noiseControl_.GetMoveTimeSN()))
         {
-            noiseControl_.DiscoveryNoise();
+            noiseControl_.DiscoveryNoise(false);
             noisFlag_ = true;
         }
 
@@ -224,13 +240,11 @@ public class SanitMng : MonoBehaviour
             return;
         }
 
-        noiseControl_.DiscoveryNoise();
+        noiseControl_.DiscoveryNoise(true);
+        rTime_ = 0.0f;
         deadType_ = deadType;
         sanit_ = 0.0f;
         gameOvreFlag_ = true;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene("GameOverScene");
     }
 
     public float GetDTimeMax()
