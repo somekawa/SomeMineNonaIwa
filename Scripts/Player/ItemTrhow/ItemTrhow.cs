@@ -42,30 +42,18 @@ public class ItemTrhow : MonoBehaviour
 
         cameraPos_ = Camera.main.transform.position; // カメラの位置
 
-        cursorPos_ = Input.mousePosition;            // 画面上のカーソルの位置
-        cursorPos_.z = CursorPosZ_;                  // z座標に適当な値を入れる
-        cursorPos3d_ = Camera.main.ScreenToWorldPoint(cursorPos_); // 3Dの座標になおす
-
-        // 数字が大きすぎるときは上限決める
-        if (cursorPos3d_.y > MaxCursorPosY_)
-        {
-            cursorPos3d_.y = MaxCursorPosY_;
-        }
-
-        //Debug.Log(cursorPosition3d.y);
-
-        throwDirection_ = cursorPos3d_ - cameraPos_; // 玉を飛ばす方向
-
-        if (Input.GetMouseButtonDown(1))             // マウスの左クリックをしたとき
+        //マウス左クリックで発動
+        if (Input.GetMouseButtonDown(1))
         {
             if (!TrhowItemHaveFlg_)
             {
                 return; // アイテム未所持の場合はreturn
             }
-
             TrhowItemHaveFlg_ = false;
+
             rbball_ = Instantiate(wineBottle, cameraPos_, transform.rotation).GetComponent<Rigidbody>(); // 玉を生成
-            rbball_.AddForce(throwDirection_ * thrust, ForceMode.Impulse);   // カーソルの方向に力を一度加える
+            //前方に向けてthrustだけの力をかける
+            rbball_.AddForce(transform.forward * thrust, ForceMode.Impulse);
         }
     }
 
