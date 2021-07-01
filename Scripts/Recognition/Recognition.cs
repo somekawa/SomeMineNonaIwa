@@ -117,9 +117,12 @@ public class Recognition : MonoBehaviour
         {
             return;
         }
-        time_ = 0.0f;
-        resetFlag_ = true;
-        haniFlag_ = false;
+        if (haniFlag_)
+        {
+            time_ = 0.0f;
+            resetFlag_ = true;
+            haniFlag_ = false;
+        }
     }
 
     private void MoveLightRange()

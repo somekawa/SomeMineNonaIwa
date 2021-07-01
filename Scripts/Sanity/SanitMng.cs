@@ -240,7 +240,7 @@ public class SanitMng : MonoBehaviour
             return;
         }
 
-        noiseControl_.DiscoveryNoise(true);
+        noiseControl_.DiscoveryNoiseEndless(true);
         rTime_ = 0.0f;
         deadType_ = deadType;
         sanit_ = 0.0f;
