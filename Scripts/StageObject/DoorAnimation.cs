@@ -21,7 +21,7 @@ public class DoorAnimation : MonoBehaviour
         openFlag = false;
         closeFlag = false;
         flag = false;
-        angle_ = 0;
+        tmpAngle_ = 0;
     }
 
     // Update is called once per frame
