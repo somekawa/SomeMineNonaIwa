@@ -10,7 +10,7 @@ public class DoorAnimation : MonoBehaviour
 
     private float minAngle_;            // 回転する前の角度
     private float maxAngle_;            // 回転した後の角度
-    public float angle_;               // 回転角度格納用変数
+    private float tmpAngle_;               // 回転角度格納用変数
     private bool flag;
 
     // Start is called before the first frame update
@@ -41,12 +41,12 @@ public class DoorAnimation : MonoBehaviour
         if (openFlag == true)
         {
             float step = -120f * Time.deltaTime;
-            angle_ += step;
+            tmpAngle_ += step;
             //指定した方向にゆっくり回転する場合
             door.transform.rotation = Quaternion.RotateTowards(door.transform.rotation, Quaternion.Euler(0, maxAngle_, 0), step);
             //door.transform.Rotate(0f, step, 0f);
 
-            if (angle_ <= -90f)
+            if (tmpAngle_ <= -90f)
             {
                 openFlag = false;
             }
@@ -54,11 +54,12 @@ public class DoorAnimation : MonoBehaviour
         else if(closeFlag == true)
         {
             float step = 120f * Time.deltaTime;
+            tmpAngle_ += step;
             //指定した方向にゆっくり回転する場合
             door.transform.rotation = Quaternion.RotateTowards(door.transform.rotation, Quaternion.Euler(0, minAngle_, 0), step);
             //door.transform.Rotate(0f, step, 0f);
 
-            if (door.transform.rotation.y >= minAngle_)
+            if (tmpAngle_ >= minAngle_)
             {
                 closeFlag = false;
             }
