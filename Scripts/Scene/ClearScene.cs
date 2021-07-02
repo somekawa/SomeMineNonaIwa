@@ -15,6 +15,9 @@ public class ClearScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = true;                                    // マウスカーソルの表示
+        Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
+
         remainingSanit_ = (int)SanitMng.sanit_;
         sanitText.text =  "のこりSAN ：" +remainingSanit_;        // 正気度を表示
         Debug.Log("残り正気度" + remainingSanit_);

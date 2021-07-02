@@ -29,7 +29,7 @@ public class SoundPresenter : MonoBehaviour
     {
         if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")&& slenderAudio_==null)
         {
-            slenderAudio_ = GameObject.Find("Slender").GetComponent<AudioSource>();
+            slenderAudio_ = GameObject.FindGameObjectWithTag("Enemy").GetComponent<AudioSource>();
         }
 
         if (SceneManager.GetActiveScene().name == "TitleSample")
@@ -72,7 +72,10 @@ public class SoundPresenter : MonoBehaviour
                 SoundScript.GetInstance().PlayBGM(3);
             }
         }
-        slenderAudio_.volume = seSlider.value;
+        if (slenderAudio_ != null)
+        {
+            slenderAudio_.volume = seSlider.value;
+        }
     }
     
     //BGMMenuViewのSliderを動かしたときに呼び出す関数を作成
