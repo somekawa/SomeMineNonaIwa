@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class Recognition : MonoBehaviour
 {
-    private GameObject playerObj_;          // プレイヤー情報
+    private GameObject playerObj_;                  // プレイヤー情報
     private PlayerCameraControll cameraControll_;
 
-    public GameObject mainCamera_;          // メインカメラ
-    private CameraAction cameraAction_;     // 正気度低下時のカメラアクション
+    public GameObject mainCamera_;                  // メインカメラ
+    private CameraAction cameraAction_;             // 正気度低下時のカメラアクション
 
-    public GameObject lightRange_;          // 懐中電灯内のあたり判定
+    public GameObject lightRange_;                  // 懐中電灯内のあたり判定
     private tLightRange lightRangeScript_;
 
-    private float time_;                    // アクション用タイム
+    private float time_;                            // アクション用タイム
 
-    private bool resetFlag_ = false;        // リセット中か
-    private bool haniFlag_ = false;         // 範囲内か
-    private float targetAngle_;             // プレイヤーとターゲットとの角度
-    private Vector3 defaultAngle_;          // 懐中電灯(コリジョン)の元のアングル
-    private Vector3 defaultPos_;            // 懐中電灯(コリジョン)の元の座標
+    private bool resetFlag_          = false;       // リセット中か
+    private float targetAngle_;                     // プレイヤーとターゲットとの角度
+    private Vector3 defaultAngle_;                  // 懐中電灯(コリジョン)の元のアングル
+    private Vector3 defaultPos_;                    // 懐中電灯(コリジョン)の元の座標
 
     private HideControl hideControl_;
+
+    private GameObject targetObj_     = null;
 
     // Start is called before the first frame update
     void Start()
@@ -61,18 +62,18 @@ public class Recognition : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.gameObject.tag != "Enemy") || (resetFlag_))
+        if ((other.gameObject.tag != "Enemy") ||
+            (resetFlag_)) 
         {
             return;
         }
 
-        
     }
         private void OnTriggerStay(Collider other)
     {
         if ((!lightRange_.activeSelf) ||            // ライトは付いているか
             (hideControl_.GetHideFlg()) ||          // 箱に隠れ中か
-            (lightRangeScript_.GetHitCheck())||
+            (lightRangeScript_.GetHitCheck()) ||    // すでに敵が懐中電灯に当たっている
             (other.gameObject.tag != "Enemy"))      // 当たったオブジェクトが敵か
         {
             return;
@@ -87,8 +88,18 @@ public class Recognition : MonoBehaviour
         //Debug.Log("角度"+ targetAngle_);
         if (Mathf.Abs(targetAngle_) < 90.0f) 
         {
+            if (targetObj_ == null) 
+            {
+                // 対象物に設定
+                targetObj_ = other.gameObject;
+            }
 
-            haniFlag_ = true;
+            if (targetObj_ != other.gameObject)
+            {
+                // 対象外
+                return;
+            }
+
             cameraControll_.SetOperationFlag(false);
             MoveLightRange();
 
@@ -103,26 +114,25 @@ public class Recognition : MonoBehaviour
                 time_ = 0.0f;
             }
         }
-        else if(haniFlag_)
+        else if (targetObj_ == other.gameObject)    // 対象物が後ろにまわった場合
         {
             time_ = 0.0f;
             resetFlag_ = true;
-            haniFlag_ = false;
+            targetObj_ = null;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag != "Enemy")
+        if (targetObj_ != other.gameObject)
         {
+            // 対象外
             return;
         }
-        if (haniFlag_)
-        {
-            time_ = 0.0f;
-            resetFlag_ = true;
-            haniFlag_ = false;
-        }
+
+        time_ = 0.0f;
+        resetFlag_ = true;
+        targetObj_ = null;
     }
 
     private void MoveLightRange()
