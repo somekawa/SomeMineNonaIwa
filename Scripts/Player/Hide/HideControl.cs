@@ -90,18 +90,6 @@ public class HideControl : MonoBehaviour
             stayTime_ = Time.time;
             releaseTime_ = 0.0f;
         }
-
-        // 敵との当たり判定
-        if (other.gameObject.tag == "Enemy")
-        {
-            Debug.Log("敵と当たってしまった");
-            GameObject light = GameObject.Find("Spot Light");
-            if (light == null)
-            {
-                GameObject sanitMng = GameObject.Find("SanitMng");
-                sanitMng.GetComponent<SanitMng>().GameOverSetAction(SanitMng.DeadType.HIT);
-            }
-        }
     }
 
     public bool GetHideFlg()
