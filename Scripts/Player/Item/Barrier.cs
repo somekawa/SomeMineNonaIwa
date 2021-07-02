@@ -28,10 +28,14 @@ public class Barrier : MonoBehaviour
             {
                 Debug.Log("防御アイテム使用");
                 BarrierItemHaveFlg_ = false;
+                collider.gameObject.GetComponent<SlenderManCtl>().inSightFlag = true;
             }
             else
             {
                 Debug.Log("即死処理へ");
+                GameObject sanitMng = GameObject.Find("SanitMng");
+                sanitMng.GetComponent<SanitMng>().GameOverSetAction(SanitMng.DeadType.HIT);
+                //@slenderMan ワープ
             }
         }
     }
