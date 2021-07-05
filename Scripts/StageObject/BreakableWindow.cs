@@ -255,6 +255,7 @@ public class BreakableWindow : MonoBehaviour {
         {
             if (col.gameObject.tag == "RecognitionCylinder")
             {
+                gameObject.AddComponent<Rigidbody>();
                 breakWindow();
 
                 // 元のコード
