@@ -7,6 +7,9 @@ public class HideBox : MonoBehaviour
     private Outline outline_;
     private HideControl hideControl_;
 
+    private GameObject mannequin_;
+    public bool mannequinFlag_;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +18,9 @@ public class HideBox : MonoBehaviour
 
         GameObject obj = GameObject.Find("Player").gameObject;
         hideControl_ = obj.GetComponent<HideControl>();
+
+        mannequin_= transform.Find("Mannequin").gameObject;
+        mannequin_.SetActive(mannequinFlag_);
     }
 
     // Update is called once per frame
@@ -24,6 +30,8 @@ public class HideBox : MonoBehaviour
         {
             outline_.enabled = false;
         }
+
+        mannequin_.SetActive(mannequinFlag_);
     }
 
     private void OnTriggerStay(Collider other)
@@ -40,5 +48,16 @@ public class HideBox : MonoBehaviour
         {
             outline_.enabled = false;
         }
+    }
+
+    public void SetMannequin(bool flag)
+    {
+        mannequinFlag_ = flag;
+       
+    }
+
+    public bool SetMannequin()
+    {
+        return mannequinFlag_;
     }
 }
