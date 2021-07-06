@@ -42,6 +42,8 @@ public class SoundPresenter : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "TutorialScene")
         {
+            SoundScript.GetInstance().audioSourceSE.clip = null;
+
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[4])
             {
@@ -50,6 +52,8 @@ public class SoundPresenter : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "MainScene")
         {
+            SoundScript.GetInstance().audioSourceSE.clip = null;
+
             // 特定のBGMじゃなければ設定して再生
             if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[1])
             {
