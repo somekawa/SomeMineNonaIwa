@@ -61,8 +61,11 @@ public class CameraAction : MonoBehaviour
     {
         cameraControll_.SetOperationFlag(false);
         if (!actionFlag_)
-        {           
-            // カメラの方向を保存
+		{
+            // リセット中の場合は中断する
+            cameraResetFlag_ = false;
+            time_ = 0.0f;
+
             facingTime_ = 0.0f;
             actionFlag_ = true;
 
@@ -99,9 +102,14 @@ public class CameraAction : MonoBehaviour
         facingTime_ = (speed_ * 5.0f) * time;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(playerObj_.transform.localEulerAngles), facingTime_);
        
-        if (transform.localEulerAngles == Vector3.zero)
+        var angle = transform.localEulerAngles;
+        angle.x = Mathf.RoundToInt(angle.x);
+        angle.y = Mathf.RoundToInt(angle.y);
+        angle.z = Mathf.RoundToInt(angle.z);
+        if (angle == Vector3.zero)
         {
             // カメラが元に戻った
+			transform.localEulerAngles = Vector3.zero;
             return true;
         }
 

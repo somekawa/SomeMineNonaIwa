@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NoiseControl : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class NoiseControl : MonoBehaviour
     private bool sNFlag_            = false;
 
     private Image slenderImage_;
+    private float startSI_          = 0.0f;     // スレンダーマン表示開始時間
+    private float moveTimeSI_       = 1.0f;
 
     private bool endless_           = false;    // 時間関係なく流し続ける
     // Start is called before the first frame update
@@ -83,8 +86,10 @@ public class NoiseControl : MonoBehaviour
         // 血(0.8以上から出現)
         BloodUpdate();
 
+        SIUpdate();
+
         // 横ノイズ
-        if(rawImageSN_.material.GetFloat("flag")!=0.0f)
+        if (rawImageSN_.material.GetFloat("flag")!=0.0f)
         {
             if(startSN_==0.0f)
             {
@@ -119,24 +124,43 @@ public class NoiseControl : MonoBehaviour
             {
                 startB_ = Time.time;
             }
-            
-            //if (Mathf.Ceil(rawImageB_.material.GetFloat("alpha") * 100.0f) / 100.0f >= minB_) 
-            //{
-            //    // 最小値を設定
-            //    min = minB_;
-            //}    
         }
 
         float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_);
-        //if (alpha <= min)
-        //{
-        //    alpha = min;
-        //}
         rawImageB_.material.SetFloat("alpha", alpha);
 
-
-
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
+    }
+
+    private void SIUpdate()
+    {
+        Color color = slenderImage_.color;
+        if ((SceneManager.GetActiveScene().name != "MainScene") ||
+            (parameter_ < 0.8f) ||
+            ((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))) 
+        {
+            //if (parameter_ < 0.8f)
+            //{
+            //    startSI_ = 0.0f;
+            //}
+            if (!endless_)
+            {
+                slenderImage_.gameObject.SetActive(false);
+            }
+
+            color.a = 1.0f;
+            slenderImage_.color = color;
+            return;
+        }
+
+        if(startSI_ == 0.0f)
+        {
+            startSI_ = Time.time;
+        }
+
+        slenderImage_.gameObject.SetActive(true);
+        color.a = 0.4f;
+        slenderImage_.color = color;
     }
 
     // 横ノイズを永遠に流す(ゲームオーバー時に使用)
@@ -151,9 +175,10 @@ public class NoiseControl : MonoBehaviour
 
         if (slenderFlag)
         {
-            // 敵との遭遇の場合に表示する
+
             slenderImage_.gameObject.SetActive(true);
-        }        startSN_ = Time.time;
+        }        
+        startSN_ = Time.time;
         sNFlag_ = true;
     }
 
