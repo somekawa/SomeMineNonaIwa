@@ -16,6 +16,7 @@ public class OptionCanvasScript : MonoBehaviour
     private GameObject titleCanvas_;
     private GameScene gameScene_;
     private bool optionFlag_;
+    private Vector3 basePos;
 
     //SecneをまたいでもObjectが破壊されないようにする
     static OptionCanvasScript Instance = null;
@@ -37,13 +38,14 @@ public class OptionCanvasScript : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(this.gameObject);
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
         Active(false);
+        titleCanvas_ = GameObject.Find("TitleCanvas");
+        basePos = optionButton.gameObject.transform.position;
     }
 
     // Update is called once per frame
@@ -51,48 +53,41 @@ public class OptionCanvasScript : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "TitleSample")
         {
-            if (titleCanvas_ == null)
+            Active(false);
+            optionButton.gameObject.transform.position = basePos;
+            if (optionFlag_ == false)                                    // オプションを開いていないときの処理
             {
-                titleCanvas_ = GameObject.Find("TitleCanvas");               // TitleCanvasが読み込んでなければ読み込む
+                Active(false);
+                titleCanvas_.gameObject.SetActive(true);
             }
             else
             {
+                Active(true);
+                titleCanvas_.gameObject.SetActive(false);
+            }
+        }
+        else if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            if(gameScene_==null)
+            {
+                gameScene_ = GameScene.FindObjectOfType<GameScene>();
+            }
+
+            if (gameScene_.GetPauseFlag() == false)
+            {
                 Active(false);
-                if (optionFlag_ == false)                                    // オプションを開いていないときの処理
+                optionButton.gameObject.SetActive(false);               // ポーズ中でなければオプションを開けないようにする
+                optionButton.gameObject.transform.position = new Vector3(basePos.x, basePos.y+ 75f, basePos.z);
+            }
+            else
+            {
+                if (optionFlag_ == false)
                 {
                     Active(false);
-                    titleCanvas_.gameObject.SetActive(true);
                 }
                 else
                 {
                     Active(true);
-                    titleCanvas_.gameObject.SetActive(false);
-                }
-            }
-        }
-        else if (SceneManager.GetActiveScene().name == "MainGame")
-        {
-            if (gameScene_ == null)
-            {
-                gameScene_ = GameScene.FindObjectOfType<GameScene>();        // GameSceneを読み込んでなければ読み込む
-            }
-            else
-            {
-                if (gameScene_.GetPauseFlag() == false)
-                {
-                    Active(false);
-                    optionButton.gameObject.SetActive(false);               // ポーズ中でなければオプションを開けないようにする
-                }
-                else
-                {
-                    if (optionFlag_ == false)
-                    {
-                        Active(false);
-                    }
-                    else
-                    {
-                        Active(true);
-                    }
                 }
             }
         }
