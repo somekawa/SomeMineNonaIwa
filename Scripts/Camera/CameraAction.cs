@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraAction : MonoBehaviour
 {
-    private float time_      = 0.0f;
+    private float time_ = 0.0f;
     private bool actionFlag_ = false;
 
     private Vector2 pos_;
@@ -61,15 +61,12 @@ public class CameraAction : MonoBehaviour
     {
         cameraControll_.SetOperationFlag(false);
         if (!actionFlag_)
-        {
-            // リセット中の場合は中断する
-            cameraResetFlag_ = false;
-            time_ = 0.0f;
-
+        {           
+            // カメラの方向を保存
             facingTime_ = 0.0f;
             actionFlag_ = true;
 
-            audioSource_.Play();
+            SoundScript.GetInstance().PlaySound(3);
         }
 
         time_ += Time.deltaTime;
@@ -101,15 +98,10 @@ public class CameraAction : MonoBehaviour
     {
         facingTime_ = (speed_ * 5.0f) * time;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(playerObj_.transform.localEulerAngles), facingTime_);
-
-        var angle = transform.localEulerAngles;
-        angle.x = Mathf.RoundToInt(angle.x);
-        angle.y = Mathf.RoundToInt(angle.y);
-        angle.z = Mathf.RoundToInt(angle.z);
-        if (angle == Vector3.zero)
+       
+        if (transform.localEulerAngles == Vector3.zero)
         {
             // カメラが元に戻った
-            transform.localEulerAngles = Vector3.zero;
             return true;
         }
 
@@ -130,9 +122,6 @@ public class CameraAction : MonoBehaviour
 
     public void OffShake()
     {
-        // 音停止
-        audioSource_.Stop();
-
         time_ = 0.0f;
         actionFlag_ = false;
 
@@ -144,10 +133,14 @@ public class CameraAction : MonoBehaviour
         facingTime_ = 0.0f;
 
         camera_.fieldOfView = fieldOfView_;
+
+        // 音停止
+        SoundScript.GetInstance().audioSourceSE.Stop();
+
     }
 
     public bool CameraLong()
     {
-        return audioSource_.isPlaying;
+        return SoundScript.GetInstance().audioSourceSE.isPlaying;
     }
 }
