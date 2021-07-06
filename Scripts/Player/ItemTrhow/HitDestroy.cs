@@ -11,14 +11,12 @@ public class HitDestroy : MonoBehaviour
     private float minDistance_;
     private float nowDistance_;
     private int minCnt_;
-    private int lengthCnt_;
 
     void Start()
     {
-        lengthCnt_ = SlenderSpawner.GetInstance().spawnSlender.Length;
-        slenderMan_ = new GameObject[lengthCnt_];
-        slenderManCtl_ = new SlenderManCtl[lengthCnt_];
-        for (int i = 0; i < lengthCnt_; i++)
+        slenderMan_ = new GameObject[4];
+        slenderManCtl_ = new SlenderManCtl[4];
+        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
         {
             if (SlenderSpawner.GetInstance().spawnSlender[i] != null)
             {
@@ -36,7 +34,7 @@ public class HitDestroy : MonoBehaviour
         // このオブジェクトが消滅する
         if (collision.gameObject.tag == targeTag)
         {
-            for (int i = 0; i < lengthCnt_; i++)
+            for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
             {
                 if (slenderMan_[i] != null)
                 {
