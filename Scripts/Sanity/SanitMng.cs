@@ -168,7 +168,7 @@ public class SanitMng : MonoBehaviour
 
         if((Time.time - enemyHitTime_)>= 0.0f)
         {
-            sanit_ -= 1.0f;
+            sanit_ -= 0.5f;
             enemyDecrease_ = true;
         }
 
@@ -186,7 +186,12 @@ public class SanitMng : MonoBehaviour
 
         if (d_nowTime_ <= 0.0f)
         {
-            sanit_ -= 0.1f;
+            float sanit = 0.1f;
+            if (sanit_ <= 20.0f) 
+            {
+                sanit = 0.05f;
+            }
+            sanit_ -= sanit;
             d_nowTime_ = 0.0f;
             loghtDecrease_ = true;
         }
