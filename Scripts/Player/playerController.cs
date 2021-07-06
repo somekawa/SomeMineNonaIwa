@@ -103,10 +103,9 @@ public class playerController : MonoBehaviour
         {
             QuickTurn();
         }
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            //エンターキー入力
-            Debug.Log("エンターキー入力");
+            // 左シフト
             slowWalk_ = true;
         }
         else
