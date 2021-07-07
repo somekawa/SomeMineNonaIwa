@@ -22,6 +22,7 @@ public class NoiseControl : MonoBehaviour
     private bool sNFlag_            = false;
 
     private Image slenderImage_;
+    private bool useFlagSI_ = false;
     private float startSI_          = 0.0f;     // スレンダーマン表示開始時間
     private float moveTimeSI_       = 1.0f;
 
@@ -134,22 +135,28 @@ public class NoiseControl : MonoBehaviour
 
     private void SIUpdate()
     {
-        Color color = slenderImage_.color;
-        if ((SceneManager.GetActiveScene().name != "MainScene") ||
-            (parameter_ < 0.8f) ||
-            ((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))) 
+        if ((useFlagSI_) ||                                         // 使用済み
+            (SceneManager.GetActiveScene().name != "MainScene")||   // ゲーム中ではない
+            (parameter_ < 0.8f))                                    // 対応正気度でない
         {
-            //if (parameter_ < 0.8f)
-            //{
-            //    startSI_ = 0.0f;
-            //}
-            if (!endless_)
+            // 正気度が戻った場合はリセットする
+            if (parameter_ < 0.8f)
             {
-                slenderImage_.gameObject.SetActive(false);
+                useFlagSI_ = false;
             }
+
+            return;
+        }
+
+        Color color = slenderImage_.color;
+        if (((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))) 
+        {
+
+            slenderImage_.gameObject.SetActive(false);
 
             color.a = 1.0f;
             slenderImage_.color = color;
+            useFlagSI_ = true;                          // 使用済み
             return;
         }
 
