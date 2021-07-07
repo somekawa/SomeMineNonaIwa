@@ -56,7 +56,7 @@ public class HideBox : MonoBehaviour
        
     }
 
-    public bool SetMannequin()
+    public bool GetMannequin()
     {
         return mannequinFlag_;
     }
