@@ -62,7 +62,7 @@ public class HitDestroy : MonoBehaviour
 
             //Instantiate(obj);
 
-            SoundScript.GetInstance().PlaySound(5);
+            SoundScript.GetInstance().PlaySound(4);
 
             Destroy(this.gameObject);
         }
