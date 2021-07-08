@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// そもそもこのクラスを動的にインスタンスしたほうがいいのでは
+
 [AddComponentMenu("Breakable Windows/Breakable Window")]
 [RequireComponent(typeof(AudioSource))]
 public class BreakableWindow : MonoBehaviour {
 
-    
+    public GameObject player;
+
     [Tooltip("Layer should be TransparentFX or your own layer for breakable windows.")]
     public LayerMask layer;
     [Range(2,25)]
@@ -46,6 +49,9 @@ public class BreakableWindow : MonoBehaviour {
     private bool allreadyCalculated = false;
     private GameObject splinterParent;
     int[] tris;
+
+    private bool onceFlg = false;
+    float forceMultiplication = 1.0f;
 
     void Start()
     {
@@ -127,6 +133,7 @@ public class BreakableWindow : MonoBehaviour {
         m.normals = n;
         m.triangles = t;
 
+        // 2回目以降ここのglasssplinterでエラーでる。正式版も
         GameObject obj = new GameObject();
         obj.transform.position = new Vector3(vertices[tris[0]].x * transform.localScale.x + transform.position.x, vertices[tris[0]].y * transform.localScale.y + transform.position.y, transform.position.z);
         obj.transform.RotateAround(transform.position, transform.up, transform.rotation.eulerAngles.y);
@@ -199,6 +206,8 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (isBroken == false)
         {
+            forceMultiplication = 1.0f; // 値の初期化
+
             if (allreadyCalculated == true)
             {
                 splinterParent.SetActive(true);
@@ -206,6 +215,23 @@ public class BreakableWindow : MonoBehaviour {
                 {
                     for (int i = 0; i < splinters.Count; i++)
                     {
+                        // RigidBodyがnullの時
+                        if(splinters[i].GetComponent<Rigidbody>() == null)
+                        {
+                            if(!onceFlg)    // for文の初回のみで判断する処理
+                            {
+                                // プレイヤーのrotateで力の方向を変更させる
+                                float y = player.gameObject.transform.localEulerAngles.y;
+                                if (y >= 30.0f && y <= 130.0f)
+                                {
+                                    forceMultiplication *= -1.0f;
+                                }
+                                onceFlg = true;
+                            }
+                            splinters[i].AddComponent<Rigidbody>();
+                            Vector3 force = new Vector3(0.0f, 0.0f, 2.0f * forceMultiplication);    // 力を設定
+                            splinters[i].GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                        }
                         splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
                     }
                 }
@@ -255,20 +281,10 @@ public class BreakableWindow : MonoBehaviour {
         {
             if (col.gameObject.tag == "RecognitionCylinder")
             {
-                gameObject.AddComponent<Rigidbody>();
-                breakWindow();
+                //gameObject.AddComponent<Rigidbody>();
+                //rigidbody.isKinematic = false;
 
-                // 元のコード
-                //if (health > 0)
-                //{
-                //    health -= col.impulse.magnitude;
-                //    if (health < 0)
-                //    {
-                //        health = 0;
-                //        breakWindow();
-                //    }
-                //}
-                //else breakWindow();
+                breakWindow();
             }
         }
     }
