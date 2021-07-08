@@ -10,7 +10,6 @@ public class WallObjFall : MonoBehaviour
 
     void Start()
     {
-        
     }
 
     void Update()
@@ -45,7 +44,7 @@ public class WallObjFall : MonoBehaviour
         // 床との接触時に、物が落ちた音を再生
         if(collision.gameObject.name == "floor")
         {
-            SoundScript.GetInstance().PlaySound(6);
+            SoundScript.GetInstance().PlaySound(5);
         }
     }
 }
