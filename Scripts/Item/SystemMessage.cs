@@ -22,6 +22,7 @@ public class SystemMessage : MonoBehaviour
 
     public PlayerCollision collision;// どのアイテムを取得したかの確認
 
+    public Image textBack;
     public Text textMessage;
     private float alpha_;// テキストのアルファ値を変更
     private string[] message_;
@@ -35,6 +36,7 @@ public class SystemMessage : MonoBehaviour
         message_ = new string[(int)action.MAX]{"","ライトの充電をします",  
             "防御アイテムを拾いました" ,"誘導アイテムを拾いました","鍵を入手しました"};
         textMessage.text = message_[(int)action.NON];
+        textBack.enabled = false;
     }
 
     void Update()
@@ -78,12 +80,14 @@ public class SystemMessage : MonoBehaviour
                 collision.SetItemNum(PlayerCollision.item.NON);// ItemNumをリセット
                 activeFlag_ = false;// テキストのアクティブ状態を変更
                 alpha_ = 255.0f;
+                textBack.enabled = false;
             }
             else
             {
-                // 透明度を変更
-                alpha_ -= 5.0f;
+                // 表示中　透明度を下げていく
+                alpha_ -= 2.0f;
                 textMessage.color = new Color(0, 0, 0, alpha_);
+                textBack.enabled = true;
             }
         }
         else
