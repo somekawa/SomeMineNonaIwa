@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// そもそもこのクラスを動的にインスタンスしたほうがいいのでは
-
 [AddComponentMenu("Breakable Windows/Breakable Window")]
 [RequireComponent(typeof(AudioSource))]
 public class BreakableWindow : MonoBehaviour {
@@ -50,8 +48,8 @@ public class BreakableWindow : MonoBehaviour {
     private GameObject splinterParent;
     int[] tris;
 
-    private bool onceFlg = false;
-    float forceMultiplication = 1.0f;
+    private bool soundFlg_ = false;
+    private Vector3 vec_;
 
     private GameObject[] slenderMan_;
     private SlenderManCtl[] slenderManCtl_;
@@ -83,6 +81,13 @@ public class BreakableWindow : MonoBehaviour {
             {
                 slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
             }
+        }
+
+
+        // SEが終了していたらオブジェクトを削除する
+        if (soundFlg_ && !GetComponent<AudioSource>().isPlaying)
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -226,7 +231,34 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (isBroken == false)
         {
-            forceMultiplication = 1.0f; // 値の初期化
+            // 窓ガラスの名前が数字になっているため、string→intに変換をかける
+            switch (int.Parse(this.gameObject.name))
+            {
+                case 0:
+                    vec_ = new Vector3(-2.0f, 0.0f, 0.0f);
+                    break;
+                case 1:
+                    vec_ = new Vector3(-2.0f, 0.0f, 0.0f);
+                    break;
+                case 2:
+                    vec_ = new Vector3(0.0f, 0.0f, -2.0f);
+                    break;
+                case 3:
+                    vec_ = new Vector3(0.0f, 0.0f, -2.0f);
+                    break;
+                case 4:
+                    vec_ = new Vector3(0.0f, 0.0f, 2.0f);
+                    break;
+                case 5:
+                    vec_ = new Vector3(2.0f, 0.0f, 0.0f);
+                    break;
+                case 6:
+                    vec_ = new Vector3(-2.0f, 0.0f, 0.0f);
+                    break;
+                default:
+                    Debug.Log(this.gameObject.name);
+                    break;
+            }
 
             if (allreadyCalculated == true)
             {
@@ -236,25 +268,15 @@ public class BreakableWindow : MonoBehaviour {
                     for (int i = 0; i < splinters.Count; i++)
                     {
                         // RigidBodyがnullの時
-                        if(splinters[i].GetComponent<Rigidbody>() == null)
+                        if (splinters[i].GetComponent<Rigidbody>() == null)
                         {
-                            if(!onceFlg)    // for文の初回のみで判断する処理
-                            {
-                                // プレイヤーのrotateで力の方向を変更させる
-                                float y = player.gameObject.transform.localEulerAngles.y;
-                                if (y >= 30.0f && y <= 130.0f)
-                                {
-                                    forceMultiplication *= -1.0f;
-                                }
-                                onceFlg = true;
-                            }
                             splinters[i].AddComponent<Rigidbody>();
-                            Vector3 force = new Vector3(0.0f, 0.0f, 2.0f * forceMultiplication);    // 力を設定
-                            splinters[i].GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                            splinters[i].GetComponent<Rigidbody>().AddForce(vec_, ForceMode.Impulse);
                         }
                         splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
                     }
                 }
+
                 for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
                 {
                     if (slenderMan_[x] != null)
@@ -292,6 +314,7 @@ public class BreakableWindow : MonoBehaviour {
         {
             GetComponent<AudioSource>().clip = breakingSound;
             GetComponent<AudioSource>().Play();
+            soundFlg_ = true;
         }
 
         return splinters.ToArray();
