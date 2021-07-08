@@ -53,6 +53,12 @@ public class BreakableWindow : MonoBehaviour {
     private bool onceFlg = false;
     float forceMultiplication = 1.0f;
 
+    private GameObject[] slenderMan_;
+    private SlenderManCtl[] slenderManCtl_;
+    private float minDistance_;
+    private float nowDistance_;
+    private int minCnt_;
+
     void Start()
     {
         if (preCalculate == true && allreadyCalculated == false)
@@ -64,6 +70,20 @@ public class BreakableWindow : MonoBehaviour {
 
         if (transform.rotation.eulerAngles.x != 0 || transform.rotation.eulerAngles.z != 0)
             Debug.LogWarning("Warning: Window must not be rotated around x and z!");
+
+        slenderMan_ = new GameObject[4];
+        slenderManCtl_ = new SlenderManCtl[4];
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        {
+            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
+            {
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
+            }
+        }
     }
 
     private void bakeVertices(bool trianglesToo = false)
@@ -234,6 +254,24 @@ public class BreakableWindow : MonoBehaviour {
                         }
                         splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
                     }
+                }
+                for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
+                {
+                    if (slenderMan_[x] != null)
+                    {
+                        nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
+                        if (minDistance_ >= nowDistance_)
+                        {
+                            minDistance_ = nowDistance_;
+                            minCnt_ = x;
+                        }
+                    }
+                }
+                if (slenderManCtl_ != null)
+                {
+                    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+                    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+                    slenderManCtl_[minCnt_].listenFlag = true;
                 }
             }
             else
