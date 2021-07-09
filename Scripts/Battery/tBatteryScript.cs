@@ -67,7 +67,7 @@ public class tBatteryScript : MonoBehaviour
             "右電池" + status_[(int)type.RIGHT].batteryImage);
 
         countdown_ = 1.0f;
-        erasePoint_ = 0.05f;
+        erasePoint_ = 0.03f;
         overBattery_ = 0.0f;
         chargingNum_ = 0.8f;
 
