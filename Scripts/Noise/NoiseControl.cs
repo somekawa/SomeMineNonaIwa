@@ -27,6 +27,8 @@ public class NoiseControl : MonoBehaviour
     private float moveTimeSI_       = 1.0f;
 
     private bool endless_           = false;    // 時間関係なく流し続ける
+
+    private bool bloodStartFlag_;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +68,8 @@ public class NoiseControl : MonoBehaviour
             // 初期時は非表示にする
             slenderImage_.gameObject.SetActive(false);
         }        //minB_ = maxB_ - 1.0f;
+
+        bloodStartFlag_ = false;
     }
 
     // Update is called once per frame
@@ -123,13 +127,13 @@ public class NoiseControl : MonoBehaviour
         {
             if (startB_ == 0.0f)
             {
+                bloodStartFlag_ = true;
                 startB_ = Time.time;
             }
         }
 
         float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_);
         rawImageB_.material.SetFloat("alpha", alpha);
-
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
     }
 
@@ -198,4 +202,11 @@ public class NoiseControl : MonoBehaviour
     {
         parameter_ = parameter;
     }
+
+    public bool GetBRawImage()
+    {
+       return bloodStartFlag_;      
+        
+    }
+
 }

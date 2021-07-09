@@ -13,7 +13,9 @@ public class ItemUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        barrierUI.SetActive(false);
+        bottoleUI.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -27,6 +29,7 @@ public class ItemUI : MonoBehaviour
         {
             barrierUI.SetActive(false);
         }
+
         if (itemTrhow.GetTrhowItemFlg() == true)
         {
             bottoleUI.SetActive(true);
