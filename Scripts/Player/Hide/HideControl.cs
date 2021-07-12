@@ -8,8 +8,10 @@ public class HideControl : MonoBehaviour
 
     private GameObject mainCamera_;             // player側のカメラ
 
+    private GameObject lastInBox_;
     private GameObject boxCamera_;              // 箱の中のカメラ
     private GameObject boxLamp_;                // 箱の中のランプ
+    private HideBox hideBox_;
 
     private float stayTime_;                    // 箱の中に隠れた時間
     private float timeMin_        = 1.0f;       // 箱の中に隠れる最小時間
@@ -38,15 +40,20 @@ public class HideControl : MonoBehaviour
             if (IsBoxCamera())
             {
                 // カメラを箱の中からPlayer側に切り替える
-                boxCamera_.gameObject.SetActive(false);
-                mainCamera_.gameObject.SetActive(true);
+                boxCamera_.SetActive(false);
+                mainCamera_.SetActive(true);
                 boxCamera_ = null;
             }
             if (IsBoxLamp())
             {
                 // ランプを消す
-                boxLamp_.gameObject.SetActive(false);
+                boxLamp_.SetActive(false);
                 boxLamp_ = null;
+            }
+            if (IsHideBox())
+            {
+                hideBox_.SetInFlag(false);
+                hideBox_ = null;
             }
 
             stayTime_ = 0.0f;
@@ -65,25 +72,40 @@ public class HideControl : MonoBehaviour
 
         if (other.gameObject.tag == "HideObj")
         {
-            if (!Input.GetKey(KeyCode.F))
+            if (!Input.GetKey(KeyCode.F)||
+                (other.gameObject.GetComponent<HideBox>().GetMannequin()))
             {
                 return;
             }
 
+            if ((hideBox_) && (lastInBox_ != other.gameObject))
+            {
+                // 前回まで入っていた箱と違っている
+                hideBox_.SetLastInFlag(false);
+            }
+            lastInBox_ = other.gameObject;
+
             // 隠れる処理
-            boxCamera_= other.gameObject.transform.Find("BoxCamera").gameObject;
+            boxCamera_ = lastInBox_.transform.Find("BoxCamera").gameObject;
             if (IsBoxCamera()) 
             {
                 // カメラをPlayer側から箱の中に切り替える
-                mainCamera_.gameObject.SetActive(false);
-                boxCamera_.gameObject.SetActive(true);
+                mainCamera_.SetActive(false);
+                boxCamera_.SetActive(true);
             }
 
-            boxLamp_ = other.gameObject.transform.Find("BoxLight").gameObject;
+            boxLamp_ = lastInBox_.transform.Find("BoxLight").gameObject;
             if(IsBoxLamp())
             {
                 // ランプをつける
-                boxLamp_.gameObject.SetActive(true);
+                boxLamp_.SetActive(true);
+            }               
+
+            hideBox_ = lastInBox_.GetComponent<HideBox>();
+            if (IsHideBox())
+            {
+                hideBox_.SetInFlag(true);
+                hideBox_.SetLastInFlag(true);
             }
 
             hideFlg_ = true;
@@ -95,6 +117,15 @@ public class HideControl : MonoBehaviour
     public bool GetHideFlg()
     {
         return hideFlg_;
+    }
+
+    private bool IsHideBox()
+    {
+        if (hideBox_ != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     private bool IsBoxCamera()

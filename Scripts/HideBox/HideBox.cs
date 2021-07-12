@@ -8,7 +8,12 @@ public class HideBox : MonoBehaviour
     private HideControl hideControl_;
 
     private GameObject mannequin_;
+    private GameObject huta_;
     public bool mannequinFlag_;
+
+    private bool inFlag_ = false;               // 入ってる
+    private bool lastInFlag_ = false;            // 最後に入った箱なのか
+    private float inTime_ = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -21,24 +26,45 @@ public class HideBox : MonoBehaviour
 
         mannequin_= transform.Find("Mannequin").gameObject;
         mannequin_.SetActive(mannequinFlag_);
+
+        huta_ = transform.Find("Crate03b").gameObject;
+        huta_.SetActive(!mannequinFlag_);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(hideControl_.GetHideFlg())
+        if (!hideControl_.GetHideFlg()) 
         {
-            outline_.enabled = false;
+            // 箱に入ってない
+            return;
         }
 
-        mannequin_.SetActive(mannequinFlag_);
+        if (!lastInFlag_) 
+        {
+            // 他の箱に入った
+            inTime_ = 0.0f;
+        }
+
+        if(inFlag_)
+        {
+            inTime_ += Time.deltaTime;
+        }
+
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player") 
+        if (other.gameObject.tag == "Player")
         {
-            outline_.enabled = true;
+            if (hideControl_.GetHideFlg())
+            {
+                outline_.enabled = false;          
+            }
+            else
+            {
+                outline_.enabled = true;
+            }
         }
     }
 
@@ -53,11 +79,28 @@ public class HideBox : MonoBehaviour
     public void SetMannequin(bool flag)
     {
         mannequinFlag_ = flag;
-       
+
+        mannequin_.SetActive(mannequinFlag_);
+        huta_.SetActive(!mannequinFlag_);
     }
 
     public bool GetMannequin()
     {
         return mannequinFlag_;
+    }
+
+    public void SetInFlag(bool flag)
+    {
+        inFlag_ = flag;
+    }
+
+    public void SetLastInFlag(bool flag)
+    {
+        lastInFlag_ = flag;
+    }
+
+   public float GetInTime()
+    {
+        return inTime_;
     }
 }
