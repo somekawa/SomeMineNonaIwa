@@ -189,7 +189,7 @@ public class SanitMng : MonoBehaviour
             float sanit = 0.1f;
             if (sanit_ <= 20.0f) 
             {
-                sanit = 0.05f;
+                sanit = 0.02f;
             }
             sanit_ -= sanit;
             d_nowTime_ = 0.0f;
