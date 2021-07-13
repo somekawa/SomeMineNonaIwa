@@ -52,16 +52,10 @@ public class MannequinMng : MonoBehaviour
             // 隠れてる間はマネキンは移動させない
             for (int i = 0; i < num_; i++)
             {
-                
-                if (boxList_[i].GetComponent<HideBox>().GetInTime() != 0.0f)
+                // 同じ箱に一定時間入った
+                if (boxList_[i].GetComponent<HideBox>().GetInTime() >= coolTime_)
                 {
-                    inBoxName_ = boxList_[i].name;
-
-                    // 同じ箱に一定時間入った
-                    if (boxList_[i].GetComponent<HideBox>().GetInTime() >= coolTime_)
-                    {
-                        redNo_ = i;
-                    }
+                    redNo_ = i;
                     return;
                 }
                 else
@@ -90,12 +84,6 @@ public class MannequinMng : MonoBehaviour
 
     public void SetMannequin()
     {
-        if (debug_)
-        {
-            // デバックがオンの時はランダム配置は行わない
-            return;
-        }
-
         // 全ての箱のマネキンを非表示にする
         foreach (GameObject box in boxList_)
         {
@@ -116,13 +104,14 @@ public class MannequinMng : MonoBehaviour
 
     private void SetingMannquin(int no)
     {
+        if (debug_)
+        {
+            // デバックがオンの時は配置は行わない
+            return;
+        }
+
         boxList_[no].GetComponent<HideBox>().SetMannequin(true);
         mannequinNo_ = no;
         time_ = 0.0f;
-    }
-
-    public string GetInBoxName()
-    {
-        return inBoxName_;
     }
 }

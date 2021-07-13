@@ -34,6 +34,11 @@ public class HideBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mannequinFlag_)
+        {
+            inTime_ = 0.0f;
+        }
+
         if (!hideControl_.GetHideFlg()) 
         {
             // 箱に入ってない
@@ -48,6 +53,7 @@ public class HideBox : MonoBehaviour
 
         if(inFlag_)
         {
+            outline_.enabled = false;
             inTime_ += Time.deltaTime;
         }
 
@@ -55,16 +61,13 @@ public class HideBox : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if ((other.gameObject.tag == "Player") && (!mannequinFlag_)) 
         {
-            if (hideControl_.GetHideFlg())
-            {
-                outline_.enabled = false;          
-            }
-            else
-            {
-                outline_.enabled = true;
-            }
+            outline_.enabled = true;
+        }
+        else
+        {
+            outline_.enabled = false;
         }
     }
 
