@@ -75,6 +75,8 @@ public class SanitMng : MonoBehaviour
             rTime_ += Time.deltaTime;
             if (rTime_ >= rMaxTime_) 
             {
+                SoundScript.GetInstance().audioSourceSE.Stop();
+
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 SceneManager.LoadScene("GameOverScene");
@@ -244,7 +246,7 @@ public class SanitMng : MonoBehaviour
         {
             return;
         }
-
+        SoundScript.GetInstance().PlaySound(7);
         noiseControl_.DiscoveryNoiseEndless(true);
         rTime_ = 0.0f;
         deadType_ = deadType;
