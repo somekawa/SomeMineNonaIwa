@@ -71,15 +71,9 @@ public class TutorialScript : MonoBehaviour
 
     private bool doorColFlag_;
 
-    bool testFlag;
-    bool test2;
-
     void Start()
     {
         audioSource_ = GetComponent<AudioSource>();
-
-        testFlag = true;
-        test2 = true;
 
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
@@ -94,7 +88,7 @@ public class TutorialScript : MonoBehaviour
         missionRound = round.FIRST;
         textString = new string[(int)round.MAX, (int)mission.MAX]{ 
         { "前【Wキー】", "後ろ【Sキー】", "右【Dキー】", "左【Aキー】" },
-        { "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "誘導アイテム使用\n【右クリック】", "スロースピード\n【移動+Enterキー】" },
+        { "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "誘導アイテム使用\n【右クリック】", "スロースピード\n【移動+左Shiftキー】" },
         { "箱の中に隠れる\n【Fキー】", "メニューの表示\n【Tabキー】", "クイックターン\n【Sキー連続押し】", "Next\n【ドアに接触】" } };
 
         roundFlag_ = new bool[(int)round.MAX];
@@ -131,8 +125,8 @@ public class TutorialScript : MonoBehaviour
             status_[i].moveText.text = textString[(int)missionRound, i];
           //  Debug.Log(nouNum_ + "目のミッションをします");
         }
-        Debug.Log(missionRound + "目です。共通部分を初期化します");
-        Debug.Log(nouNum_ + "目のミッションをします");
+        //Debug.Log(missionRound + "目です。共通部分を初期化します");
+        //Debug.Log(nouNum_ + "目のミッションをします");
     }
 
     void Update()
@@ -146,17 +140,17 @@ public class TutorialScript : MonoBehaviour
         if (missionRound == round.FIRST)
         {
             FirstMissions();
-            Debug.Log((int)missionRound+"巡目です");
+          //  Debug.Log((int)missionRound+"巡目です");
         }
         else if(missionRound == round.SECONDE)
         {
             SecondeMissions();
-            Debug.Log((int)missionRound + "巡目です");
+           // Debug.Log((int)missionRound + "巡目です");
         }
         else if (missionRound == round.THIRD)
         {
             ThirdMissions();
-            Debug.Log((int)missionRound + "巡目です");
+           // Debug.Log((int)missionRound + "巡目です");
         }
     }
 
@@ -308,7 +302,7 @@ public class TutorialScript : MonoBehaviour
 
     private void Choice(mission move_)
     {
-        Debug.Log((int)move_+"目のミッションを達成しました。");
+      //  Debug.Log((int)move_+"目のミッションを達成しました。");
         if (hideCtl_.GetHideFlg() == true)
         {
             // 隠れたとき用　"隠れる"から"出る"に変更するため
@@ -344,7 +338,7 @@ public class TutorialScript : MonoBehaviour
         {
             if (alphaNum_ <= 0.0f)
             {
-                Debug.Log("alpha値が最小のため非表示にします。");
+                //Debug.Log("alpha値が最小のため非表示にします。");
                 // アルファ値が0以下になったら非表示に
                 alphaNum_ = 0.0f;
                 image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
@@ -363,7 +357,7 @@ public class TutorialScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("alpha値を減少させます");
+               // Debug.Log("alpha値を減少させます");
                 // 達成された表示ミッションを徐々に消す
                 alphaNum_ -= 0.005f;
                 image_object[(int)move_].GetComponent<Image>().color = new Color(255, 255, 0, alphaNum_);
@@ -405,7 +399,7 @@ public class TutorialScript : MonoBehaviour
                     // SEの音を鳴らす
                     audioSource_.PlayOneShot(roundClearSE_);
 
-                    Debug.Log("ミッションのラウンドをプラスします");
+                  //  Debug.Log("ミッションのラウンドをプラスします");
                 }
             }
             else
