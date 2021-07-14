@@ -18,11 +18,14 @@ public class HideControl : MonoBehaviour
     private float releaseTime_;                 // 箱から出た時間
     private const float coolTime_ = 1.0f;       // 次に箱の中に入れるまでの時間
 
-    // Start is called before the first frame update
+    // リザルト画面に出すための隠れた回数
+    public static int hideNum;
+    
     void Start()
     {
         mainCamera_ = gameObject.transform.Find("Main Camera").gameObject;
         releaseTime_ = Time.time - coolTime_;
+        hideNum = 0;
     }
 
     // Update is called once per frame
@@ -92,6 +95,9 @@ public class HideControl : MonoBehaviour
                 // カメラをPlayer側から箱の中に切り替える
                 mainCamera_.SetActive(false);
                 boxCamera_.SetActive(true);
+
+                hideNum++;
+                Debug.Log("hideNum" + hideNum);
             }
 
             boxLamp_ = lastInBox_.transform.Find("BoxLight").gameObject;

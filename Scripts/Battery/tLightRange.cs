@@ -16,6 +16,9 @@ public class tLightRange : MonoBehaviour
     private float rangeTime_ = 0.0f;        // 範囲内に入ってからの時間
     private float rangeMaxTime_ = 0.5f;     // 範囲内に入ってからの猶予時間
 
+    /*リザルトシーンで使う*/
+    public static int hitNum;// 敵を見た回数
+
     void Start()
     {
         playerController_ = transform.root.gameObject.GetComponent<playerController>();
@@ -24,6 +27,7 @@ public class tLightRange : MonoBehaviour
 
         //slenderMan_=GameObject.Find("Slender");
         //slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
+        hitNum = 0;
     }
 
     void Update()
@@ -132,6 +136,9 @@ public class tLightRange : MonoBehaviour
         rangeFlag_ = false;
         cameraAction_.OffShake();
         Debug.Log("敵がライトの範囲外にいきました。");
+
+        hitNum++;
+        Debug.Log("hitNum" + hitNum);
     }
 
     public bool GetHitCheck()
