@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
+    public Image textBack;
     public GameObject LeanAnnounceText;   // リーン可能範囲内に入ったときにテキストを表示する
     public GameScene gameManager;
 
@@ -23,7 +24,7 @@ public class playerController : MonoBehaviour
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
     private const float speedMax_ = 4.0f;           // 移動速度の最大値
-    private const float countMax_ = 0.5f;           // エフェクト再生時間の最大値
+    private const int   countMax_ = 120;            // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
     // リーン
@@ -73,16 +74,33 @@ public class playerController : MonoBehaviour
             { "LeanX_P_R", test[7] }
         };
 
+
+        textBack.enabled = false;
         LeanAnnounceText.SetActive(false);
-    }
+        LeanAnnounceText.GetComponent<Text>().text = "Tキー：通路を覗き込む";
+   }
 
     void Update()
     {
+        // デバッグ中
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (SceneManager.GetActiveScene().name == "TutorialScene")
+            {
+                SceneManager.LoadScene("MainScene");
+            }
+            else if (SceneManager.GetActiveScene().name == "MainScene")
+            {
+                SceneManager.LoadScene("ClearScene");
+            }
+        }
+
         if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
         {
             // 箱に隠れている
             return;
         }
+
 
         // リーン処理(キー押下を離した瞬間に、フラグの状態を更新する)
         if (Input.GetKeyUp(KeyCode.T))
@@ -105,7 +123,8 @@ public class playerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            // 左シフト
+            //エンターキー入力
+            Debug.Log("エンターキー入力");
             slowWalk_ = true;
         }
         else
@@ -226,7 +245,7 @@ public class playerController : MonoBehaviour
         return turnCheckFlag_;
     }
 
-    public float GetCountMax()
+    public int GetCountMax()
     {
         // 移動速度変更フラグを見て、エフェクトの再生時間を調整する
         if (!slowWalk_)
@@ -249,6 +268,7 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerExit()
     {
+        textBack.enabled = false;
         LeanAnnounceText.SetActive(false);
     }
 
@@ -262,7 +282,8 @@ public class playerController : MonoBehaviour
 
         // リーン中でないときは、傾けられるというメッセージを表示する
         LeanAnnounceText.SetActive(!leanFlg_ ? true : false);// falseなら表示(true)
-        
+        textBack.enabled = true;
+
         // キー押下中
         if (Input.GetKey(KeyCode.T))
         {
