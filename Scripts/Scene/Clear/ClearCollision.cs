@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ClearCollision : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -22,13 +21,12 @@ public class ClearCollision : MonoBehaviour
         if (other.gameObject.tag == "Door")
         {
             Debug.Log("タイトルに戻るドアに接触");
-            //SceneManager.LoadScene("ClearScene");
+            SceneManager.LoadScene("TitleSample");
         }
         else if (other.gameObject.tag == "target")
         {
             Debug.Log("ゲームに戻るドアに接触");
-
+            SceneManager.LoadScene("MainScene");
         }
     }
-
 }

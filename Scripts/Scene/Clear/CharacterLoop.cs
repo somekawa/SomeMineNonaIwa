@@ -12,14 +12,12 @@ public class CharacterLoop : MonoBehaviour
     {
         moveZ_ = 4.5f;
         speed_ = 10.0f;//4.5f;
-
     }
 
     void Update()
     {
-        moveZ_+=speed_ * Time.deltaTime;
+        moveZ_ += speed_ * Time.deltaTime;
         Player.transform.position = new Vector3(15.0f, 1.0f, moveZ_);
-
     }
 
     private void OnTriggerEnter(Collider other)
