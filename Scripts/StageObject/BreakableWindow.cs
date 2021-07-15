@@ -51,6 +51,7 @@ public class BreakableWindow : MonoBehaviour {
     private bool soundFlg_ = false;
     private Vector3 vec_;
 
+    // Sliderのワープ関連変数
     private GameObject[] slenderMan_;
     private SlenderManCtl[] slenderManCtl_;
     private float minDistance_;
@@ -294,6 +295,7 @@ public class BreakableWindow : MonoBehaviour {
                     slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
                     slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
                     slenderManCtl_[minCnt_].listenFlag = true;
+                    slenderManCtl_[minCnt_].warpFlag = true;
                 }
             }
             else
