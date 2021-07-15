@@ -37,6 +37,8 @@ public class HideBox : MonoBehaviour
         if (mannequinFlag_)
         {
             inTime_ = 0.0f;
+            outline_.enabled = false;
+            return;
         }
 
         if (!hideControl_.GetHideFlg()) 
@@ -64,10 +66,6 @@ public class HideBox : MonoBehaviour
         if ((other.gameObject.tag == "Player") && (!mannequinFlag_)) 
         {
             outline_.enabled = true;
-        }
-        else
-        {
-            outline_.enabled = false;
         }
     }
 

@@ -9,18 +9,26 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
+    private HideControl hideControl_;
+
     public string targeTag;
     private bool BarrierItemHaveFlg_ = false;  // アイテム所持時にtrue
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        hideControl_ = gameObject.GetComponent<HideControl>();
     }
 
     // trigger系→Collider collision系→Collision
     private void OnTriggerEnter(Collider collider)
     {
+        if(hideControl_.GetHideFlg())
+        {
+            // 箱に隠れてる
+            return;
+        }
+
         if (collider.gameObject.tag == targeTag)
         {
             Debug.Log("敵と衝突しました");
