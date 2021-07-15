@@ -25,9 +25,6 @@ public class PlayerCollision : MonoBehaviour
     private bool keyItemColFlag_ = false;
 
     private int chainCnt = 0;
-    // 音楽関連
-    private AudioSource audioSource_;
-    [SerializeField] private AudioClip itemGetSE_;   // アイテム入手時のSE
 
     void Start()
     {
@@ -36,7 +33,6 @@ public class PlayerCollision : MonoBehaviour
 
     void Update()
     {
-        audioSource_ = GetComponent<AudioSource>();
         if (maxKeyItemNum_ <= keyItemCnt_)
         {
             // 所持数が最大個数になったら　もし脱出アイテムがあっても拾えなくする
@@ -122,7 +118,7 @@ public class PlayerCollision : MonoBehaviour
                 keyItemColFlag_ = true;
                 item_ = item.ESCAPE;
                 // SEの音を鳴らす
-                audioSource_.PlayOneShot(itemGetSE_);
+                SoundScript.GetInstance().PlaySound(7);
             }
             return;
         }
@@ -135,7 +131,7 @@ public class PlayerCollision : MonoBehaviour
                 batteryGetFlag_ = true;
                 item_ = item.BATTERY;
                 // SEの音を鳴らす
-                audioSource_.PlayOneShot(itemGetSE_);
+                SoundScript.GetInstance().PlaySound(8);
             }
             return;
         }
@@ -151,23 +147,23 @@ public class PlayerCollision : MonoBehaviour
                 Debug.Log("防御アイテムゲット");
                 item_ = item.BARRIER;
                 // SEの音を鳴らす
-                audioSource_.PlayOneShot(itemGetSE_);
+                SoundScript.GetInstance().PlaySound(8);
             }
             return;
         }
         // 誘導アイテム取得処理
         else if (other.gameObject.tag == "InductionItem")
         {
-            if (Common(other))
-            {
-                ItemTrhow itemTrhow = ItemTrhow.FindObjectOfType<ItemTrhow>();
-                itemTrhow.SetTrhowItemFlg(true);
-                itemTrhow.SetTrhowItemFlg(true);
-                Debug.Log("誘導アイテムゲット");
-                item_ = item.INDUCTION;
-                // SEの音を鳴らす
-                audioSource_.PlayOneShot(itemGetSE_);
-            }
+            //if (Common(other))
+            //{
+            //    ItemTrhow itemTrhow = ItemTrhow.FindObjectOfType<ItemTrhow>();
+            //    itemTrhow.SetTrhowItemFlg(true);
+            //    itemTrhow.SetTrhowItemFlg(true);
+            //    Debug.Log("誘導アイテムゲット");
+            //    item_ = item.INDUCTION;
+            //    // SEの音を鳴らす
+            //    audioSource_.PlayOneShot(itemGetSE_);
+            //}
             return;
         }
         else
