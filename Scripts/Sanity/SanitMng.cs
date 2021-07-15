@@ -246,7 +246,7 @@ public class SanitMng : MonoBehaviour
         {
             return;
         }
-        SoundScript.GetInstance().PlaySound(7);
+        SoundScript.GetInstance().PlaySound(6);
         noiseControl_.DiscoveryNoiseEndless(true);
         rTime_ = 0.0f;
         deadType_ = deadType;
