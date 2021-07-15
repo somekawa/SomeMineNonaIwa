@@ -79,6 +79,9 @@ public class PlayerCollision : MonoBehaviour
             Debug.Log("ドアに接触");
             if (Input.GetKeyUp(KeyCode.E))
             {
+                // 鍵を開ける音を鳴らす
+                SoundScript.GetInstance().PlaySound(9);
+
                 foreach (Transform c in other.gameObject.transform)
                 {
                     if (c.gameObject.tag == "chain")
