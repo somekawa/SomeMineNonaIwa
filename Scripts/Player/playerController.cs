@@ -14,17 +14,17 @@ public class playerController : MonoBehaviour
     private CharacterController controller_;
     private HideControl hideControl_;
 
-    private float speed_ = 4.0f;          // デフォルトの移動速度
+    private float speed_   = 4.0f;        // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
     private bool walkFlg_  = false;       // 移動中はtrue
     private bool slowWalk_ = false;       // 移動速度が遅くなる場合はtrue
-    private bool quickTurnFlg_ = false;   // クイックターンを行う際にtrue
+    private bool quickTurnFlg_   = false; // クイックターンを行う際にtrue
     private float quickTurnTime_ = 0.0f;  // クイックターン用のキーが時間中に2度押しされるか計測する
     private Vector3 oldRotation_;         // 1フレーム前のプレイヤー回転度
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
-    private const float speedMax_ = 4.0f;           // 移動速度の最大値
-    private const float   countMax_ = 0.5f;            // エフェクト再生時間の最大値
+    private const float speedMax_    = 4.0f;        // 移動速度の最大値
+    private const float countMax_    = 0.5f;        // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
     // リーン
@@ -43,6 +43,7 @@ public class playerController : MonoBehaviour
     IDictionary<string, leanSt> leanMap_;   // ボックスとの接触時に使用される値をまとめている(string->タグ名,leanSt->構造体)
 
     //private bool clearFlag=false;
+
     void Start()
     {
        controller_ = GetComponent<CharacterController>();
@@ -117,14 +118,17 @@ public class playerController : MonoBehaviour
         }
 
         PlRotate();
+
         if(!gameManager.GetPauseFlag())
         {
             QuickTurn();
         }
+
+        // テスト用
+        //slowWalk_ = Input.GetKey(KeyCode.LeftShift) ? true : false;
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            //エンターキー入力
-            Debug.Log("エンターキー入力");
             slowWalk_ = true;
         }
         else
@@ -178,7 +182,7 @@ public class playerController : MonoBehaviour
                 transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
                 quickTurnFlg_ = false;
                 quickTurnTime_ = 0.0f;
-          // チュートリアル用
+                // チュートリアル用
                 turnCheckFlag_ = true;
             }
         }

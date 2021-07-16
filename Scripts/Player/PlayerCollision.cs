@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
+    // アイテムの種類
     public enum item
     {
         NON,
@@ -17,14 +18,15 @@ public class PlayerCollision : MonoBehaviour
     private item item_;
 
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
-    // 脱出アイテム関連
-    private int keyItemCnt_ = 0;     // 現在所持してる脱出アイテムの数
-    private int maxKeyItemNum_ = 8;  // 脱出アイテムの個数　8個まで
 
-    // 脱出アイテムと接触したか　true=接触 false=接触してない
+    // 脱出アイテム関連
+    private int keyItemCnt_    = 0;       // 現在所持してる脱出アイテムの数
+    private int maxKeyItemNum_ = 8;       // 脱出アイテムの個数(8個)
+
+    // 脱出アイテムと接触したか(true：接触 false：接触してない)
     private bool keyItemColFlag_ = false;
 
-    private int chainCnt = 0;
+    private int chainCnt_ = 0;            // 扉の鎖の本数
 
     void Start()
     {
@@ -42,8 +44,10 @@ public class PlayerCollision : MonoBehaviour
         if (keyItemColFlag_ == true)
         {
             keyItemColFlag_ = false;
-            keyItemCnt_++;      // 脱出アイテム所持数を増やす
+            keyItemCnt_++;              // 脱出アイテム所持数を増やす
             Debug.Log("脱出アイテムゲット" + keyItemCnt_);
+
+            // 鍵を2つ取得する毎にスレンダーマンの数を増やす
             if (keyItemCnt_ % 2 == 0)
             {
                 SlenderSpawner.GetInstance().instantiateFlag = true;
@@ -70,7 +74,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.tag == "Untagged")
         {
-            return;
+            return;     // タグが付いていないものが範囲内にあったら抜ける
         }
 
         // ドアと接触
@@ -84,30 +88,31 @@ public class PlayerCollision : MonoBehaviour
 
                 foreach (Transform c in other.gameObject.transform)
                 {
-                    if (c.gameObject.tag == "chain")
-                    {
-                        if (chainCnt < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
-                        {
-                            Destroy(c.gameObject);   // オブジェクトを削除
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (c.gameObject.tag == "padLock")
-                    {
-                        if (chainCnt < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
-                        {
-                            Destroy(c.gameObject);   // オブジェクトを削除
-                            chainCnt++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
+                    ChainTest("chain");
+                    ChainTest("padLock");
+                    //if (c.gameObject.tag == "chain")
+                    //{
+                    //    if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
+                    //    {
+                    //        Destroy(c.gameObject);   // オブジェクトを削除
+                    //    }
+                    //    else
+                    //    {
+                    //        break;
+                    //    }
+                    //}
+                    //if (c.gameObject.tag == "padLock")
+                    //{
+                    //    if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
+                    //    {
+                    //        Destroy(c.gameObject);   // オブジェクトを削除
+                    //        chainCnt_++;
+                    //    }
+                    //    else
+                    //    {
+                    //        break;
+                    //    }
+                    //}
                 }
             }
         }
@@ -236,6 +241,28 @@ public class PlayerCollision : MonoBehaviour
     public int GetkeyItemCnt()
     {
         return keyItemCnt_;
+    }
+
+    // 扉共通化のテスト関数(テスト中だから消さないで)
+    void ChainTest(string str)
+    {
+        if (c.gameObject.tag != str)
+        {
+            return;
+        }
+
+        if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
+        {
+            Destroy(c.gameObject);   // オブジェクトを削除
+            if(c.gameObject.tag == "padLock")
+            {
+                chainCnt_++;
+            }
+        }
+        else
+        {
+            break;
+        }
     }
 
 }

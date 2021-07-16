@@ -12,7 +12,7 @@ public class HideBox : MonoBehaviour
     public bool mannequinFlag_;
 
     private bool inFlag_ = false;               // 入ってる
-    private bool lastInFlag_ = false;            // 最後に入った箱なのか
+    private bool lastInFlag_ = false;           // 最後に入った箱なのか
     private float inTime_ = 0.0f;
 
     // Start is called before the first frame update

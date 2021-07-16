@@ -5,16 +5,17 @@ using UnityEngine.AI;
 
 public class tLightRange : MonoBehaviour
 {
-    public Barrier barrier;
-    public CameraAction cameraAction_;
+    public Barrier barrier;                     // バリア状態かを取得する際に使用する
+    public CameraAction cameraAction;           // カメラアクションの制御
 
-    private playerController playerController_;
+    private playerController playerController_; // リーン状態の取得
+    private SlenderManCtl[] slenderManCtl_;     // 敵の挙動制御
 
-    private SlenderManCtl[] slenderManCtl_;
-    private bool hitFlag_ = false;
-    private bool rangeFlag_ = false;        // 範囲内か
-    private float rangeTime_ = 0.0f;        // 範囲内に入ってからの時間
-    private float rangeMaxTime_ = 0.5f;     // 範囲内に入ってからの猶予時間
+    private bool hitFlag_   = false;            // 敵と遭遇したか
+
+    private bool rangeFlag_ = false;            // 範囲内か
+    private float rangeTime_    = 0.0f;         // 範囲内に入ってからの時間
+    private float rangeMaxTime_ = 0.5f;         // 範囲内に入ってからの猶予時間
 
     /*リザルトシーンで使う*/
     public static int hitNum;// 敵を見た回数
@@ -22,11 +23,7 @@ public class tLightRange : MonoBehaviour
     void Start()
     {
         playerController_ = transform.root.gameObject.GetComponent<playerController>();
-
         slenderManCtl_ = new SlenderManCtl[4];
-
-        //slenderMan_=GameObject.Find("Slender");
-        //slenderManCtl_ = slenderMan_.GetComponent<SlenderManCtl>();
         hitNum = 0;
     }
 
@@ -48,7 +45,7 @@ public class tLightRange : MonoBehaviour
         {
             hitFlag_ = false;
             rangeFlag_ = false;
-            cameraAction_.OffShake();
+            cameraAction.OffShake();
         }
     }
 
@@ -56,7 +53,7 @@ public class tLightRange : MonoBehaviour
     {
         if (other.gameObject.tag != "Enemy")
         {
-            return;
+            return;         // タグがEnemy以外なら以降の処理を行わない
         }
 
         if (!rangeFlag_)
@@ -83,17 +80,17 @@ public class tLightRange : MonoBehaviour
     {
         if (other.gameObject.tag != "Enemy")
         {
-            return;
+            return;         // タグがEnemy以外なら以降の処理を行わない
         }
 
         rangeTime_ += Time.deltaTime;
         Debug.Log("範囲内時間：" + rangeTime_);
 
-        cameraAction_.SanitCameraAction(other.gameObject);
+        cameraAction.SanitCameraAction(other.gameObject);
 
-        if (!cameraAction_.CameraLong())
+        if (!cameraAction.CameraLong())
         {
-            //@slenderMan このタイミングでワープお願いします。
+            // slenderMan このタイミングでワープ
             for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
             {
                 if (slenderManCtl_[i] != null)
@@ -102,6 +99,7 @@ public class tLightRange : MonoBehaviour
                 }
             }
 
+            // バリアアイテムを取得しているか確認を行う
             if (barrier.GetBarrierItemFlg())
             {
                 hitFlag_ = false;
@@ -120,10 +118,10 @@ public class tLightRange : MonoBehaviour
     {
         if (other.gameObject.tag != "Enemy")
         {
-            return;
+            return;         // タグがEnemy以外なら以降の処理を行わない
         }
 
-        //@slenderMan このタイミングで動きお願いします
+        //slenderMan このタイミングで動き
         for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
         {
             if (slenderManCtl_[i] != null)
@@ -134,7 +132,7 @@ public class tLightRange : MonoBehaviour
 
         hitFlag_ = false;
         rangeFlag_ = false;
-        cameraAction_.OffShake();
+        cameraAction.OffShake();
         Debug.Log("敵がライトの範囲外にいきました。");
 
         hitNum++;
