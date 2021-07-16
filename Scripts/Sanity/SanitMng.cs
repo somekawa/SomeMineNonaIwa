@@ -5,44 +5,46 @@ using UnityEngine.SceneManagement;
 
 public class SanitMng : MonoBehaviour
 {
+    // 死因
     public enum DeadType
     {
         NON,
-        SANIT,
-        HIT,
+        SANIT,      // 正気度が0
+        HIT,        // 敵に当たった
         MAX
     }
 
-    public GameObject spotLight_;                   // ライト
-    public NoiseControl noiseControl_;              // ノイズ
-    public HideControl hideControl_;                // 箱に隠れる処理
-    public tLightRange tLightRange_;                // ライトのあたり判定
+    public GameObject spotLight_;                       // ライト
+    public NoiseControl noiseControl_;                  // ノイズ
+    public HideControl hideControl_;                    // 箱に隠れる処理
+    public tLightRange tLightRange_;                    // ライトのあたり判定
 
-    private float maxSanit_         = 100.0f;       // 最大正気度
-    public static float sanit_       = 0.0f;        // 正気度 
+    private const float maxSanit_    = 100.0f;          // 最大正気度
+    public static float sanit_;                         // 正気度(100から0に減少していく) 
 
-    private bool gameOvreFlag_       = false;       // ゲームオーバーになったか
+    private bool gameOvreFlag_       = false;           // ゲームオーバーになったか
 
-    private bool loghtDecrease_      = false;       // ライトによる正気度減少
-    private bool oldLightFlag_;                     // 前回のライトの状態
-    private float onTime_            = 0.0f;        // 懐中電灯をオンにした時間
-    private float offTime_           = 0.0f;        // 懐中電灯をオフにした時間
-    public float d_timeMax_;                        // 懐中電灯をオフにしてから耐久出来る最大時間
-    private float d_time_;                          // 懐中電灯をオフにしてから耐久出来る実際の時間
-    public float d_recoveryTime_;                   // 耐久時間1秒回復にかかる時間
-    private float d_nowTime_;                       // 耐久出来る残り時間
+    private bool loghtDecrease_      = false;           // ライトによる正気度減少
+    private bool oldLightFlag_;                         // 前回のライトの状態
+    private float onTime_            = 0.0f;            // 懐中電灯をオンにした時間
+    private float offTime_           = 0.0f;            // 懐中電灯をオフにした時間
+    public float d_timeMax_;                            // 懐中電灯をオフにしてから耐久出来る最大時間
+    private float d_time_;                              // 懐中電灯をオフにしてから耐久出来る実際の時間
+    public float d_recoveryTime_;                       // 耐久時間1秒回復にかかる時間
+    private float d_nowTime_;                           // 耐久出来る残り時間
 
-    private bool enemyDecrease_      = false;       // 敵による正気度減少
+    private bool enemyDecrease_      = false;           // 敵による正気度減少
     private float enemyHitTime_;
 
-    private bool recoveryFlag_       = false;       // 回復中
+    private bool recoveryFlag_       = false;           // 回復中
 
-    private bool noisFlag_           = false;       // ノイズが走っているか
+    private bool noisFlag_           = false;           // ノイズが走っているか
 
     public static DeadType deadType_ = DeadType.NON;
 
-    private float rTime_;                           // 再生時間
+    private float rTime_;                               // 再生時間
     private float rMaxTime_          = 3.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,7 +73,7 @@ public class SanitMng : MonoBehaviour
         }
         else
         {
-            
+            // ゲームオーバー演出
             rTime_ += Time.deltaTime;
             if (rTime_ >= rMaxTime_) 
             {
@@ -83,6 +85,7 @@ public class SanitMng : MonoBehaviour
             }
         }
 
+		// ノイズ用に値を変換
         float parameter = (maxSanit_ - sanit_) * 0.01f;
         noiseControl_.SetParameter(parameter);
     }
