@@ -45,7 +45,7 @@ public class tLightRange : MonoBehaviour
         {
             hitFlag_ = false;
             rangeFlag_ = false;
-            cameraAction.OffShake();
+            cameraAction.OffCameraAction();
         }
     }
 
@@ -132,7 +132,7 @@ public class tLightRange : MonoBehaviour
 
         hitFlag_ = false;
         rangeFlag_ = false;
-        cameraAction.OffShake();
+        cameraAction.OffCameraAction();
         Debug.Log("敵がライトの範囲外にいきました。");
 
         hitNum++;
