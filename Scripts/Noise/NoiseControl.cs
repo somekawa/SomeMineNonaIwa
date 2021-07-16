@@ -6,28 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class NoiseControl : MonoBehaviour
 {
-    public float parameter_         = 0.0f;     // パラメーター(0.0f～1.0f)
+    public float parameter          = 0.0f;     // パラメーター(0.0f～1.0f)
 
     // ノイズ
+    public float maxN;                          // ノイズの最大値
     private RawImage rawImageN_;                
-    public float maxN_;                         // ノイズの最大値
 
     // 血
+    public float maxB;                          // 血の最大値
     private RawImage rawImageB_;               
-    public float  maxB_;                        // 血の最大値
     private float minB_             = 0.0f;     // 血の最小値
     private float startB_           = 0.0f;     // 血出現開始時間
     private const float parameterB_ = 0.8f;     // 血出現開始条件(パラメーター)
 
     // 横ノイズ
+    public float moveTimeSN;                    // 稼働時間
     private RawImage rawImageSN_;               
     private float startSN_          = 0.0f;     // 横ノイズ開始時間
-    public float moveTimeSN_;                   // 稼働時間
     private bool sNFlag_            = false;
 
     // スレンダーマン画像
     private Image slenderImage_;
-    private bool useFlagSI_         = false;
+    private bool  useFlagSI_        = false;
     private float startSI_          = 0.0f;     // スレンダーマン表示開始時間
     private float moveTimeSI_       = 1.5f;
 
@@ -39,6 +39,7 @@ public class NoiseControl : MonoBehaviour
     private bool endless_           = false;    // 時間関係なく流し続ける
 
     private bool bloodStartFlag_;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +48,7 @@ public class NoiseControl : MonoBehaviour
         foreach(RawImage rawImage in rawImageList)
         {
             rawImage.rectTransform.sizeDelta = screenSize;
-            if (rawImage.name== "N_RawImage")
+            if (rawImage.name == "N_RawImage")
             {
                 // ノイズ
                 rawImageN_ = rawImage;
@@ -86,12 +87,12 @@ public class NoiseControl : MonoBehaviour
     void Update()
     {
         // ノイズ
-        if (parameter_ <= 1.0f)
+        if (parameter <= 1.0f)
         {
-            float alpha = maxN_;
+            float alpha = maxN;
             if(!sNFlag_)
             {
-                alpha = parameter_ * maxN_;
+                alpha = parameter * maxN;
             }
             rawImageN_.material.SetFloat("alpha", alpha);
         }
@@ -104,14 +105,14 @@ public class NoiseControl : MonoBehaviour
         PulseNoiseUpdate();     
 
         // 横ノイズ
-        if (rawImageSN_.material.GetFloat("flag")!=0.0f)
+        if (rawImageSN_.material.GetFloat("flag") != 0.0f)
         {
             if(startSN_==0.0f)
             {
                 startSN_ = Time.time;
             }
             rawImageSN_.material.SetFloat("time", Time.time);
-            if ((!endless_) && (moveTimeSN_ < Time.time - startSN_)) 
+            if ((!endless_) && (moveTimeSN < Time.time - startSN_)) 
             {
                 rawImageSN_.material.SetFloat("flag", 0.0f);
                 slenderImage_.gameObject.SetActive(false);
@@ -123,7 +124,7 @@ public class NoiseControl : MonoBehaviour
 
     private void BloodUpdate()
     {
-        if (parameter_ < 0.8f)
+        if (parameter < 0.8f)
         {
             if (Mathf.Floor(rawImageB_.material.GetFloat("alpha") * 100.0f) / 100.0f <= 0.0f)
             {
@@ -143,9 +144,10 @@ public class NoiseControl : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            minB_ = (0.4f / 0.2f) * (parameter_ - 0.8f);
+            minB_ = (0.4f / 0.2f) * (parameter - 0.8f);
         }
-        float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB_) + minB_;
+
+        const float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB) + minB_;
 
         rawImageB_.material.SetFloat("alpha", alpha);
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
@@ -156,10 +158,10 @@ public class NoiseControl : MonoBehaviour
         if ((endless_)||                                            // ゲームオーバー時に使用
             (useFlagSI_) ||                                         // 使用済み
             (SceneManager.GetActiveScene().name != "MainScene")||   // ゲーム中ではない
-            (parameter_ < 0.8f))                                    // 対応正気度でない
+            (parameter < 0.8f))                                     // 対応正気度でない
         {
             // 正気度が戻った場合はリセットする
-            if (parameter_ < 0.8f)
+            if (parameter < 0.8f)
             {
                 useFlagSI_ = false;
             }
@@ -168,9 +170,8 @@ public class NoiseControl : MonoBehaviour
         }
 
         Color color = slenderImage_.color;
-        if (((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))) 
+        if ((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))
         {
-
             slenderImage_.gameObject.SetActive(false);
 
             color.a = 1.0f;
@@ -213,8 +214,8 @@ public class NoiseControl : MonoBehaviour
         if (parameterPN_ > 180.0f) 
         {
             parameterPN_ = 0.0f;
-            coolTimePN_ = Random.value;
-            useFlagPN_ = false;
+            coolTimePN_  = Random.value;
+            useFlagPN_   = false;
         }
     }
 
@@ -224,13 +225,13 @@ public class NoiseControl : MonoBehaviour
         DiscoveryNoise(slenderFlag);
         endless_ = true;
     }
+
     public void DiscoveryNoise(bool slenderFlag)
     {
         rawImageSN_.material.SetFloat("flag", 1.0f);
 
         if (slenderFlag)
         {
-
             slenderImage_.gameObject.SetActive(true);
         }        
         startSN_ = Time.time;
@@ -239,18 +240,16 @@ public class NoiseControl : MonoBehaviour
 
     public float GetMoveTimeSN()
     {
-        return moveTimeSN_;
+        return moveTimeSN;
     }
 
     public void SetParameter(float parameter)
     {
-        parameter_ = parameter;
+        this.parameter = parameter;
     }
 
     public bool GetBRawImage()
     {
        return bloodStartFlag_;      
-        
     }
-
 }

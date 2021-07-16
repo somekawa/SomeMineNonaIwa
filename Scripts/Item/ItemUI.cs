@@ -15,12 +15,15 @@ public class ItemUI : MonoBehaviour
     {
         barrierUI.SetActive(false);
         bottoleUI.SetActive(false);
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        // テスト中
+        //barrierUI.SetActive(barrier.GetBarrierItemFlg() == true ? true : false);
+        //bottoleUI.SetActive(itemTrhow.GetTrhowItemFlg() == true ? true : false);
+
         if (barrier.GetBarrierItemFlg() == true)
         {
             barrierUI.SetActive(true);
@@ -29,7 +32,6 @@ public class ItemUI : MonoBehaviour
         {
             barrierUI.SetActive(false);
         }
-
         if (itemTrhow.GetTrhowItemFlg() == true)
         {
             bottoleUI.SetActive(true);
@@ -38,6 +40,5 @@ public class ItemUI : MonoBehaviour
         {
             bottoleUI.SetActive(false);
         }
-
     }
 }

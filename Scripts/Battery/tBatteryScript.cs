@@ -8,22 +8,17 @@ public class tBatteryScript : MonoBehaviour
     public tLightScript lightScript;
     public PlayerCollision playerCollision;
 
-    private bool testFlag = false;
-    //public Canvas rightMap;
-    //public Canvas leftMap;
-
     // lightONの時に消費する量
-    private float erasePoint_;       // 1秒間に減る量（0.05f）
+    public float erasePoint = 0.03f;        // 1秒間に減る量（0.03f）
     // 電池を拾ったときに使う変数
-    private float chargingNum_;      // チャージ量（0.8f）
-    private float overBattery_;      // 右の電池を充電した際に1.0を超えた分を保存する
+    private float chargingNum_ = 0.8f;      // チャージ量（0.8f）
+    private float overBattery_ = 0.0f;      // 右の電池を充電した際に1.0を超えた分を保存する
 
     // 電池が消費する時間を計る
-    private float countdown_;
+    private float countdown_ = 1.0f;
    
     // デバッグ用変数
-    private int count_;      // 1秒カウントダウンするたびにカウントする
-   // public Text timeText;    //時間を表示するText型の変数
+    private int count_;         // 1秒カウントダウンするたびにカウントする
 
     // 電池のタイプ
     public enum type
@@ -66,13 +61,6 @@ public class tBatteryScript : MonoBehaviour
         Debug.Log("左電池" + status_[(int)type.LEFT].batteryImage +
             "右電池" + status_[(int)type.RIGHT].batteryImage);
 
-        countdown_ = 1.0f;
-        erasePoint_ = 0.03f;
-        overBattery_ = 0.0f;
-        chargingNum_ = 0.8f;
-
-        //rightMap.enabled = true;
-        //leftMap.enabled = false;
         // デバッグ用
         count_ = 0;
     }
@@ -80,8 +68,6 @@ public class tBatteryScript : MonoBehaviour
     void Update()
     { 
         countdown_ -= Time.deltaTime;        // カウントダウンする
-        //   timeText.text = countdown_.ToString("f1") + "秒"+"("+ count_.ToString("f1")+")";        // 時間を表示する
-      //  Debug.Log("あと" + countdown_.ToString("f1") + "秒" + "(" + count_.ToString("f1") + "秒目)");                                     
       
         // 両方の充電がないとき
         if (status_[(int)type.RIGHT].batteryImage.fillAmount <= status_[(int)type.RIGHT].min)
@@ -107,14 +93,11 @@ public class tBatteryScript : MonoBehaviour
                 if (status_[(int)type.LEFT].min < status_[(int)type.LEFT].batteryImage.fillAmount)
                 {
                     // カウント0以下＝1秒経過
-                   
                     UsingBattery(type.LEFT);
-                    //Debug.Log("左電池" + status_[(int)type.LEFT].batteryImage.fillAmount);
                 }
                 else                    // gauge1が0になったらgauge2を減らし始める
                 {
                     UsingBattery(type.RIGHT);
-                   // Debug.Log("右電池" + status_[(int)type.RIGHT].batteryImage.fillAmount);
                 }
             }
         }
@@ -125,6 +108,7 @@ public class tBatteryScript : MonoBehaviour
             BatteryCharging();
             playerCollision.SetBatteryFlag(false);
         }
+
         // 各電池の充電量を保存
         status_[(int)type.LEFT].save = status_[(int)type.LEFT].batteryImage.fillAmount;
         status_[(int)type.RIGHT].save = status_[(int)type.RIGHT].batteryImage.fillAmount;
@@ -133,7 +117,7 @@ public class tBatteryScript : MonoBehaviour
     private void UsingBattery(type type_)
     {
         // ライトがついてる間だけ電池残量が減る 1秒間に電池が減る度合い
-        status_[(int)type_].batteryImage.fillAmount -= erasePoint_;
+        status_[(int)type_].batteryImage.fillAmount -= erasePoint;
 
         if (type_ != type.RIGHT)
         {
@@ -150,6 +134,7 @@ public class tBatteryScript : MonoBehaviour
         {
             status_[(int)type_].batteryImage.color = new Color(255, 255, 0, 1.0f);
         }
+
         // 右が呼ばれたら左の値に最小値を代入
         status_[(int)type.LEFT].batteryImage.fillAmount = status_[(int)type.LEFT].min;
     }
@@ -180,7 +165,7 @@ public class tBatteryScript : MonoBehaviour
             }
             else
             {
-                return;
+                return; // 何も処理を行わない
             }
         }
     }
@@ -214,6 +199,7 @@ public class tBatteryScript : MonoBehaviour
             {
                 return;  // RIGHTじゃなかったらこの行以下の処理を行わない
             }
+
             // 1.0を超えた分をoverに保存
             overBattery_ = status_[(int)type.RIGHT].save - status_[(int)type.RIGHT].max;
             // 右電池に最大値を代入
