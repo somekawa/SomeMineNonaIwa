@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 3161013985261571178}
   - component: {fileID: 3161013985264438346}
   - component: {fileID: 3161013985263472266}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Crate03b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +445,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 16183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
