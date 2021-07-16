@@ -6,12 +6,11 @@ public class ObjectLightCtl : MonoBehaviour
 {
     public float displayRange;
 
-    //public GameObject comingObject;     // 自身との距離を計算するターゲットオブジェクト格納用
     private GameObject comingObject;
 
     private CameraController cameraController_;
     private GameObject objectLight_;     // 発光するための子オブジェクト格納用
-    private bool lightFlag;
+    private bool lightFlag_;
 
     // Start is called before the first frame update
     void Start()
@@ -29,12 +28,12 @@ public class ObjectLightCtl : MonoBehaviour
             cameraController_.FullMapFlag() == true)
         {
             objectLight_.SetActive(false);
-            if (this.gameObject.tag == "Battery" ||
-                this.gameObject.tag == "BarrierItem" ||
+            if (this.gameObject.tag == "Battery"       ||
+                this.gameObject.tag == "BarrierItem"   ||
                 this.gameObject.tag == "InductionItem" ||
                 this.gameObject.tag == "EscapeItem")
             {
-                if (lightFlag == true)
+                if (lightFlag_ == true)
                 {
                     objectLight_.SetActive(true);
                 }
@@ -43,7 +42,7 @@ public class ObjectLightCtl : MonoBehaviour
         else
         {
             objectLight_.SetActive(true);
-            lightFlag = true;
+            lightFlag_ = true;
         }
     }
 }

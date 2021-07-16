@@ -16,7 +16,7 @@ public class OptionCanvasScript : MonoBehaviour
     private GameObject titleCanvas_;
     private GameScene gameScene_;
     private bool optionFlag_;
-    private Vector3 basePos;
+    private Vector3 basePos_;
 
     //SecneをまたいでもObjectが破壊されないようにする
     static OptionCanvasScript Instance = null;
@@ -45,7 +45,7 @@ public class OptionCanvasScript : MonoBehaviour
     {
         Active(false);
         titleCanvas_ = GameObject.Find("TitleCanvas");
-        basePos = optionButton.gameObject.transform.position;
+        basePos_ = optionButton.gameObject.transform.position;
     }
 
     // Update is called once per frame
@@ -54,7 +54,7 @@ public class OptionCanvasScript : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TitleSample")
         {
             Active(false);
-            optionButton.gameObject.transform.position = basePos;
+            optionButton.gameObject.transform.position = basePos_;
             if (optionFlag_ == false)                                    // オプションを開いていないときの処理
             {
                 Active(false);
@@ -65,10 +65,16 @@ public class OptionCanvasScript : MonoBehaviour
                 Active(true);
                 titleCanvas_.gameObject.SetActive(false);
             }
+
+            // テストコード
+            //optionButton.gameObject.transform.position = basePos_;
+            //Active(optionFlag_);
+            //titleCanvas_.gameObject.SetActive(!optionFlag_);  // Activeとフラグを反転させる
+
         }
         else if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            if(gameScene_==null)
+            if(gameScene_ == null)
             {
                 gameScene_ = GameScene.FindObjectOfType<GameScene>();
             }
@@ -77,7 +83,7 @@ public class OptionCanvasScript : MonoBehaviour
             {
                 Active(false);
                 optionButton.gameObject.SetActive(false);               // ポーズ中でなければオプションを開けないようにする
-                optionButton.gameObject.transform.position = new Vector3(basePos.x, basePos.y+ 75f, basePos.z);
+                optionButton.gameObject.transform.position = new Vector3(basePos_.x, basePos_.y+ 75f, basePos_.z);
             }
             else
             {
@@ -89,7 +95,14 @@ public class OptionCanvasScript : MonoBehaviour
                 {
                     Active(true);
                 }
+
+                // テストコード
+                //Active(optionFlag_);
             }
+        }
+        else
+        {
+            return;     // 何も処理を行わない
         }
     }
 

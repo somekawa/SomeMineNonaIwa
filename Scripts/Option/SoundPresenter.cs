@@ -7,6 +7,20 @@ using UnityEngine.SceneManagement;
 
 public class SoundPresenter : MonoBehaviour
 {
+    // BGMの順番と、enumの順番をそろえないと面倒になる
+    // Scene毎にenumつくって、enumと名前をmapにしてupdateの簡略化を行ったほうがいい
+    enum SceneName
+    {
+        TITLE,
+        TUTORIAL,
+        MAIN,
+        CLEAR,
+        GAMEOVER,
+        MAX
+    }
+
+    IDictionary<string, SceneName> testMap_;
+
     //BGM
     public TextMeshProUGUI bgmVolumeText;       //BGMMenuViewのvolumeTextを取得
     public Slider bgmSlider;                    //BGMMenuViewのsliderを取得
@@ -22,20 +36,31 @@ public class SoundPresenter : MonoBehaviour
 
     void Start()
     {
-        //BGMを再生
+        // BGMを再生
         SoundScript.GetInstance().PlayBGM(0);
+
+        //マップの定義
+        testMap_ = new Dictionary<string, SceneName>
+        {
+            //マップに値の追加
+            //{ "LeanX_M", test[0] },
+            {"TitleSample",SceneName.TITLE}
+
+        };
+
     }
-    
+
     void Update()
     {
-        if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")&& slenderAudio_==null)
+        if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")
+            && slenderAudio_==null)
         {
             slenderAudio_ = GameObject.FindGameObjectWithTag("Enemy").GetComponent<AudioSource>();
         }
 
         if(SceneManager.GetActiveScene().name == "MainScene" && batteryScript_ == null)
         {
-               batteryScript_ = GameObject.Find("GameMng").GetComponent<AudioSource>();
+            batteryScript_ = GameObject.Find("GameMng").GetComponent<AudioSource>();
         }
 
         if (SceneManager.GetActiveScene().name == "TitleSample")
