@@ -91,15 +91,15 @@ public class SlenderManCtl : MonoBehaviour
         }
         //}
 
-        if (warpFlag == true && status != Status.NULL)                   // 音が聞こえた時に呼び出す
+        if (warpFlag == true && listenFlag == true && status != Status.NULL)                   // 音が聞こえた時に呼び出す
         {
             SetWarpPoint();
         }
 
-        //if (listenFlag == true && warpFlag == false && status != Status.NULL)
-        //{
-        //    SetTargetPoint();
-        //}
+        if (listenFlag == true && warpFlag == false && status != Status.NULL)
+        {
+            SetTargetPoint();
+        }
 
         if (listenFlag == false)
         {
@@ -118,7 +118,6 @@ public class SlenderManCtl : MonoBehaviour
             listenFlag = false;
             inSightFlag = false;
         }
-
 
         Vector3 worldDeltaPosition = navMeshAgent_.nextPosition - transform.position;
 
