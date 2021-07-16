@@ -33,6 +33,7 @@ public class RadioVoice : MonoBehaviour
                 slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
             }
         }
+
         if (!soundFlg_)
         {
             return;

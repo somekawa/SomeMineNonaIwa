@@ -14,7 +14,7 @@ public class SlenderManCtl : MonoBehaviour
     public GameObject warpPoints;               // ワープ予定地の親オブジェクト格納用
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
-    public bool warpFlag = false;
+    public bool warpFlag = false;               // 大きなおとが聞こえてワープするか否かのフラグ(デフォルト：聞こえていない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
 
     private GameObject[] targetObjects_;        // 移動予定地のオブジェクト群
