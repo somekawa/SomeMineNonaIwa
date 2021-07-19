@@ -25,7 +25,7 @@ public class MannequinMng : MonoBehaviour
     {
         // 箱をすべて取得する
         GameObject[] boxList = GameObject.FindGameObjectsWithTag("HideObj");
-        const int num = boxList.Length;
+        int num = boxList.Length;
 
         // HidePositions内に入っているものだけをリストに追加する
         boxList_ = new List<GameObject>();

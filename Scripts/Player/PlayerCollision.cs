@@ -88,8 +88,8 @@ public class PlayerCollision : MonoBehaviour
 
                 foreach (Transform c in other.gameObject.transform)
                 {
-                    ChainTest("chain");
-                    ChainTest("padLock");
+                    ChainTest(c,"chain");
+                    ChainTest(c,"padLock");
                     //if (c.gameObject.tag == "chain")
                     //{
                     //    if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
@@ -244,7 +244,7 @@ public class PlayerCollision : MonoBehaviour
     }
 
     // 扉共通化のテスト関数(テスト中だから消さないで)
-    void ChainTest(string str)
+    void ChainTest(Transform c ,string str)
     {
         if (c.gameObject.tag != str)
         {
@@ -261,7 +261,7 @@ public class PlayerCollision : MonoBehaviour
         }
         else
         {
-            break;
+            return;
         }
     }
 
