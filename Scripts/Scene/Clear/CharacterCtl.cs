@@ -13,7 +13,7 @@ public class CharacterCtl : MonoBehaviour
     public float x_sensi;                          // マウスのX座標の感度格納用
     public float y_sensi;                          // マウスのY座標の感度格納用
     public GameObject playerCamera;                // 動かすカメラ格納用
-    public CameraController cameraController_;
+    public CameraController cameraController;
 
     private float x_Rotation_;
     private float y_Rotation_;
