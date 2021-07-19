@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: 4f8f3e1dcd96456429b09b5a8bd1a213, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -133,6 +134,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: e321d9ca95d8cf542b8c751a9f1ae34a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -203,6 +205,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: b7946e84e27927c4b909745dc76a16bc, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -328,10 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d034b7ad5ac441f40a03b9a75cf9fbd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parameter_: 0
-  maxN_: 0.4
-  maxB_: 0.7
-  moveTimeSN_: 0.5
+  parameter: 0
+  maxN: 0.4
+  maxB: 0.4
+  moveTimeSN: 0.5
 --- !u!1 &8194093631902204040
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +395,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: 2ff3e4bb1c599e6438d8b16f062392e2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
