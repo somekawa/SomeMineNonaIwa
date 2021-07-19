@@ -147,7 +147,7 @@ public class NoiseControl : MonoBehaviour
             minB_ = (0.4f / 0.2f) * (parameter - 0.8f);
         }
 
-        const float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB) + minB_;
+        float alpha = (Mathf.Abs(Mathf.Sin(Time.time - startB_)) * maxB) + minB_;
 
         rawImageB_.material.SetFloat("alpha", alpha);
         Debug.Log(rawImageB_.material.GetFloat("alpha"));
