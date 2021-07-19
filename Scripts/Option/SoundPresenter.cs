@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class SoundPresenter : MonoBehaviour
 {
-    // BGMの順番と、enumの順番をそろえないと面倒になる
-    // Scene毎にenumつくって、enumと名前をmapにしてupdateの簡略化を行ったほうがいい
     enum SceneName
     {
         TITLE,
@@ -19,7 +17,7 @@ public class SoundPresenter : MonoBehaviour
         MAX
     }
 
-    IDictionary<string, SceneName> testMap_;
+    IDictionary<string, SceneName> SoundMap_;
 
     //BGM
     public TextMeshProUGUI bgmVolumeText;       //BGMMenuViewのvolumeTextを取得
@@ -40,12 +38,14 @@ public class SoundPresenter : MonoBehaviour
         SoundScript.GetInstance().PlayBGM(0);
 
         //マップの定義
-        testMap_ = new Dictionary<string, SceneName>
+        SoundMap_ = new Dictionary<string, SceneName>
         {
             //マップに値の追加
-            //{ "LeanX_M", test[0] },
-            {"TitleSample",SceneName.TITLE}
-
+            {"TitleSample",SceneName.TITLE},
+            {"TutorialScene",SceneName.TUTORIAL},
+            {"MainScene",SceneName.MAIN},
+            {"ClearScene",SceneName.CLEAR},
+            {"GameOverScene",SceneName.GAMEOVER}
         };
 
     }
@@ -63,50 +63,65 @@ public class SoundPresenter : MonoBehaviour
             batteryScript_ = GameObject.Find("GameMng").GetComponent<AudioSource>();
         }
 
-        if (SceneManager.GetActiveScene().name == "TitleSample")
+        // テストコード
+        foreach (KeyValuePair<string, SceneName> mm in SoundMap_)
         {
-            // 特定のBGMじゃなければ設定して再生
-            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[0])
+            if (SceneManager.GetActiveScene().name == mm.Key)
             {
-                SoundScript.GetInstance().PlayBGM(0);
+                // 特定のBGMじゃなければ設定して再生
+                if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[(int)mm.Value])
+                {
+                    SoundScript.GetInstance().PlayBGM((int)mm.Value);
+                    break;
+                }
             }
         }
-        else if (SceneManager.GetActiveScene().name == "TutorialScene")
-        {
-            SoundScript.GetInstance().audioSourceSE.clip = null;
 
-            // 特定のBGMじゃなければ設定して再生
-            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[4])
-            {
-                SoundScript.GetInstance().PlayBGM(4);
-            }
-        }
-        else if (SceneManager.GetActiveScene().name == "MainScene")
-        {
-            SoundScript.GetInstance().audioSourceSE.clip = null;
 
-            // 特定のBGMじゃなければ設定して再生
-            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[1])
-            {
-                SoundScript.GetInstance().PlayBGM(1);
-            }
-        }
-        else if (SceneManager.GetActiveScene().name == "ClearScene")
-        {
-            // 特定のBGMじゃなければ設定して再生
-            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[2])
-            {
-                SoundScript.GetInstance().PlayBGM(2);
-            }
-        }
-        else if (SceneManager.GetActiveScene().name == "GameOverScene")
-        {
-            // 特定のBGMじゃなければ設定して再生
-            if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[3])
-            {
-                SoundScript.GetInstance().PlayBGM(3);
-            }
-        }
+        //if (SceneManager.GetActiveScene().name == "TitleSample")
+        //{
+        //    // 特定のBGMじゃなければ設定して再生
+        //    if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[0])
+        //    {
+        //        SoundScript.GetInstance().PlayBGM(0);
+        //    }
+        //}
+        //else if (SceneManager.GetActiveScene().name == "TutorialScene")
+        //{
+        //    SoundScript.GetInstance().audioSourceSE.clip = null;
+
+        //    // 特定のBGMじゃなければ設定して再生
+        //    if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[4])
+        //    {
+        //        SoundScript.GetInstance().PlayBGM(4);
+        //    }
+        //}
+        //else if (SceneManager.GetActiveScene().name == "MainScene")
+        //{
+        //    SoundScript.GetInstance().audioSourceSE.clip = null;
+
+        //    // 特定のBGMじゃなければ設定して再生
+        //    if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[1])
+        //    {
+        //        SoundScript.GetInstance().PlayBGM(1);
+        //    }
+        //}
+        //else if (SceneManager.GetActiveScene().name == "ClearScene")
+        //{
+        //    // 特定のBGMじゃなければ設定して再生
+        //    if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[2])
+        //    {
+        //        SoundScript.GetInstance().PlayBGM(2);
+        //    }
+        //}
+        //else if (SceneManager.GetActiveScene().name == "GameOverScene")
+        //{
+        //    // 特定のBGMじゃなければ設定して再生
+        //    if (SoundScript.GetInstance().audioSourceBGM.clip != SoundScript.GetInstance().bgmList[3])
+        //    {
+        //        SoundScript.GetInstance().PlayBGM(3);
+        //    }
+        //}
 
         if (slenderAudio_ != null)
         {
