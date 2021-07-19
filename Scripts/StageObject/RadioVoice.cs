@@ -52,12 +52,13 @@ public class RadioVoice : MonoBehaviour
                     }
                 }
             }
-                if (slenderManCtl_ != null)
-                {
-                    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
-                    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
-                    slenderManCtl_[minCnt_].listenFlag = true;
-                }
+            if (slenderManCtl_ != null)
+            {
+                slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+                slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+                slenderManCtl_[minCnt_].listenFlag = true;
+                slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
+            }
         }
 
         if (nowVoiceTime >= voiceTimeMax)

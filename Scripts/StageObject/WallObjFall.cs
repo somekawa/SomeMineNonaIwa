@@ -77,9 +77,10 @@ public class WallObjFall : MonoBehaviour
             {
                 slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
                 slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+                slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
                 slenderManCtl_[minCnt_].listenFlag = true;
             }
-            SoundScript.GetInstance().PlaySound(6);
+            SoundScript.GetInstance().PlaySound(5);
         }
     }
 }

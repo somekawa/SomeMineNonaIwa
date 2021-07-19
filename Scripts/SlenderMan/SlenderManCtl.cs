@@ -78,6 +78,7 @@ public class SlenderManCtl : MonoBehaviour
             if (soundPoint != new Vector3(0, 0, 0) && this.gameObject.transform.position == soundPoint && listenFlag == true)
             {
                 listenFlag = false;                      // 音のした場所に着いたらfalseにする
+                navMeshAgent_.stoppingDistance = 0;
             }
             SetTargetPoint();                        // 次の移動先の決定
             if (navMeshAgent_.hasPath == true)
