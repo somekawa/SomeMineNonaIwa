@@ -11,7 +11,7 @@ public class CharacterLoop : MonoBehaviour
     void Start()
     {
         moveZ_ = 4.5f;
-        speed_ = 10.0f;//4.5f;
+        speed_ = 9.0f;//4.5f;
     }
 
     void Update()
@@ -25,7 +25,7 @@ public class CharacterLoop : MonoBehaviour
         // プレイヤーが接触してきたらプレイヤーを初期位置に戻してまた移動させる
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("プレイヤーと接触");
+          //  Debug.Log("プレイヤーと接触");
             // speed_ = 4.5f;
             moveZ_ = 5.5f;
             Player.transform.position = new Vector3(15.0f, 1.0f, moveZ_);
