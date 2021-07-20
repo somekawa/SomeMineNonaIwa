@@ -4,33 +4,28 @@ using UnityEngine;
 
 public class HideBox : MonoBehaviour
 {
-    private GameObject huta_;
+    private GameObject lid_;            // 蓋
 
     private Outline outline_;
-    private HideControl hideControl_;
 
     // マネキン
     private GameObject mannequin_;
     private bool mannequinFlag_;
 
-    private bool inFlag_ = false;               // 入ってる
-    private bool lastInFlag_ = false;           // 最後に入った箱なのか
-    private float inTime_ = 0.0f;
+    private bool hideNowFlag_ = false;  // 入ってる
+    private bool lastInFlag_  = false;  // 最後に入った箱なのか
+    private float inTime_     = 0.0f;   // 連続で入った時間
 
     // Start is called before the first frame update
     void Start()
     {
         outline_ = gameObject.GetComponent<Outline>();
-        outline_.enabled = false;
-
-        GameObject obj = GameObject.Find("Player").gameObject;
-        hideControl_ = obj.GetComponent<HideControl>();
 
         mannequin_= transform.Find("Mannequin").gameObject;
         mannequin_.SetActive(mannequinFlag_);
 
-        huta_ = transform.Find("Crate03b").gameObject;
-        huta_.SetActive(!mannequinFlag_);
+        lid_ = transform.Find("Crate03b").gameObject;
+        lid_.SetActive(!mannequinFlag_);
     }
 
     // Update is called once per frame
@@ -44,40 +39,33 @@ public class HideBox : MonoBehaviour
             return;
         }
 
-        if (!hideControl_.GetHideFlg()) 
+        if (!hideNowFlag_) 
         {
             // 箱に入ってない
+            if (!lastInFlag_)
+            {
+                // 他の箱に入った
+                inTime_ = 0.0f;
+            }
             return;
         }
 
-        if (!lastInFlag_) 
-        {
-            // 他の箱に入った
-            inTime_ = 0.0f;
-        }
-
-        if(inFlag_)
-        {
-            outline_.enabled = false;
-            inTime_ += Time.deltaTime;
-        }
-
+        // 箱に入っている
+        outline_.enabled = false;
+        inTime_ += Time.deltaTime;
     }
 
-    private void OnTriggerStay(Collider other)
+    // 今入れる状況か確認
+    public bool InFlagCheck()
     {
-        if ((other.gameObject.tag == "Player") && (!mannequinFlag_)) 
+        if((mannequinFlag_) ||  // マネキンが入っている
+            (hideNowFlag_)||    // 今入っている
+            (!outline_.enabled)) // プレイヤーが見つけていない
         {
-            //outline_.enabled = true;
+            return false;
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            //utline_.enabled = false;
-        }
+        return true;
     }
 
     public void SetMannequin(bool flag)
@@ -85,17 +73,12 @@ public class HideBox : MonoBehaviour
         mannequinFlag_ = flag;
 
         mannequin_.SetActive(mannequinFlag_);
-        huta_.SetActive(!mannequinFlag_);
-    }
-
-    public bool GetMannequin()
-    {
-        return mannequinFlag_;
+        lid_.SetActive(!mannequinFlag_);
     }
 
     public void SetInFlag(bool flag)
     {
-        inFlag_ = flag;
+        hideNowFlag_ = flag;
     }
 
     public void SetLastInFlag(bool flag)

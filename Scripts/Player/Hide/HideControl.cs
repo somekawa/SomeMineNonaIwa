@@ -8,7 +8,7 @@ public class HideControl : MonoBehaviour
 
     private GameObject mainCamera_;             // player側のカメラ
 
-    private GameObject lastInBox_;
+    private GameObject lastInBoxObj_;
     private GameObject boxCamera_;              // 箱の中のカメラ
     private GameObject boxLamp_;                // 箱の中のランプ
     private HideBox hideBox_;
@@ -37,27 +37,15 @@ public class HideControl : MonoBehaviour
             return;
         }
 
-        if ((Input.GetKey(KeyCode.F)) && (Time.time - stayTime_ >= timeMin_)) 
+        // 箱に隠れる処理
+        if ((Input.GetKey(KeyCode.E)) && (Time.time - stayTime_ >= timeMin_)) 
         {
             // 箱から出る処理
-            if (IsBoxCamera())
-            {
-                // カメラを箱の中からPlayer側に切り替える
-                boxCamera_.SetActive(false);
-                mainCamera_.SetActive(true);
-                boxCamera_ = null;
-            }
-            if (IsBoxLamp())
-            {
-                // ランプを消す
-                boxLamp_.SetActive(false);
-                boxLamp_ = null;
-            }
-            if (IsHideBox())
-            {
-                hideBox_.SetInFlag(false);
-                hideBox_ = null;
-            }
+            ChangeHideAction(false);
+            // 取得していたオブジェクトを削除
+            // hideBox_は次箱に入るときに必要なので残す
+            boxCamera_ = null;
+            boxLamp_ = null;
 
             stayTime_ = 0.0f;
             releaseTime_ = Time.time;
@@ -65,64 +53,62 @@ public class HideControl : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    public void HideBoxAction(GameObject obj)
     {
-        if (hideFlg_ || (Time.time - releaseTime_ <= coolTime_)) 
+        if ((hideFlg_) ||                                   // 今隠れている
+            (!obj.GetComponent<HideBox>().InFlagCheck()) || // 今入れない状態
+            (Time.time - releaseTime_ <= coolTime_)||       // クールタイムが終わっていない
+            (!Input.GetKey(KeyCode.E)))                     // Eキーが押されていない
         {
-            // 箱の中に隠れている、またはクールタイムが終わっていない
             return;
         }
 
-        if (other.gameObject.tag == "HideObj")
+        if ((lastInBoxObj_) && (lastInBoxObj_ != obj))
         {
-            if (!Input.GetKey(KeyCode.F)||
-                (other.gameObject.GetComponent<HideBox>().GetMannequin()))
-            {
-                return;
-            }
-
-            if ((hideBox_) && (lastInBox_ != other.gameObject))
-            {
-                // 前回まで入っていた箱と違っている
-                hideBox_.SetLastInFlag(false);
-            }
-            lastInBox_ = other.gameObject;
-
-            // 隠れる処理
-            boxCamera_ = lastInBox_.transform.Find("BoxCamera").gameObject;
-            if (IsBoxCamera()) 
-            {
-                // カメラをPlayer側から箱の中に切り替える
-                mainCamera_.SetActive(false);
-                boxCamera_.SetActive(true);
-
-                hideNum++;
-                Debug.Log("hideNum" + hideNum);
-            }
-
-            boxLamp_ = lastInBox_.transform.Find("BoxLight").gameObject;
-            if(IsBoxLamp())
-            {
-                // ランプをつける
-                boxLamp_.SetActive(true);
-            }               
-
-            hideBox_ = lastInBox_.GetComponent<HideBox>();
-            if (IsHideBox())
-            {
-                hideBox_.SetInFlag(true);
-                hideBox_.SetLastInFlag(true);
-            }
-
-            hideFlg_ = true;
-            stayTime_ = Time.time;
-            releaseTime_ = 0.0f;
+            // 前回まで入っていた箱と違っている
+            hideBox_.SetLastInFlag(false);
+            hideBox_ = null;
         }
+        lastInBoxObj_ = obj;
+
+        // 入る箱の各オブジェクトを取得
+        boxCamera_ = lastInBoxObj_.transform.Find("BoxCamera").gameObject;
+        boxLamp_ = lastInBoxObj_.transform.Find("BoxLight").gameObject;
+        hideBox_ = lastInBoxObj_.GetComponent<HideBox>();
+
+        // 隠れる処理
+        ChangeHideAction(true);
+        hideBox_.SetLastInFlag(true);
+
+        // 箱に入った回数加算
+        hideNum++;
+        Debug.Log("hideNum" + hideNum);
+
+        hideFlg_ = true;
+        stayTime_ = Time.time;
+        releaseTime_ = 0.0f;
     }
 
-    public bool GetHideFlg()
+    // 状態切り替え
+    // true:箱に入る、false:箱から出る
+    private void ChangeHideAction(bool flag)
     {
-        return hideFlg_;
+        if (IsBoxCamera())
+        {
+            // カメラの切り替え
+            boxCamera_.SetActive(flag);
+            mainCamera_.SetActive(!flag);
+        }
+        if (IsBoxLamp())
+        {
+            // 箱専用ライト
+            boxLamp_.SetActive(flag);
+        }
+        if (IsHideBox())
+        {
+            // 箱に状態を送る
+            hideBox_.SetInFlag(flag);
+        }
     }
 
     private bool IsHideBox()
@@ -150,5 +136,10 @@ public class HideControl : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool GetHideFlg()
+    {
+        return hideFlg_;
     }
 }

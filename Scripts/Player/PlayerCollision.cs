@@ -17,6 +17,8 @@ public class PlayerCollision : MonoBehaviour
     }
     private item item_;
 
+    private HideControl hideControl_;     // 箱に隠れる処理
+
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
 
     // 脱出アイテム関連
@@ -31,6 +33,10 @@ public class PlayerCollision : MonoBehaviour
     void Start()
     {
         item_ = item.NON;
+
+        // PlayerからHideControl取得
+        GameObject playerObj = transform.root.gameObject;
+        hideControl_ = playerObj.GetComponent<HideControl>();
     }
 
     void Update()
@@ -134,6 +140,13 @@ public class PlayerCollision : MonoBehaviour
                 // SEの音を鳴らす
                 SoundScript.GetInstance().PlaySound(8);
             }
+            return;
+        }
+        // 箱に隠れる処理
+        // HideControlにて実装
+        else if (other.gameObject.tag == "HideObj")
+        {
+            hideControl_.HideBoxAction(other.gameObject);
             return;
         }
         else
