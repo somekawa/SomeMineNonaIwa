@@ -14,7 +14,8 @@ public class SlenderManCtl : MonoBehaviour
     public GameObject warpPoints;               // ワープ予定地の親オブジェクト格納用
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
-    public bool warpFlag = false;               // 大きなおとが聞こえてワープするか否かのフラグ(デフォルト：聞こえていない＝false)
+    public bool warpFlag = false;               // 大きな音が聞こえてワープするか否かのフラグ(デフォルト：聞こえていない＝false)
+    public bool ringingFlag = false;               // 音が鳴った場所に向かうか否かのフラグ(デフォルト：向かわない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
 
     private GameObject[] targetObjects_;        // 移動予定地のオブジェクト群
@@ -75,26 +76,39 @@ public class SlenderManCtl : MonoBehaviour
         else if (status == Status.IDLE)
         {
             anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
-            SetTargetPoint();                        // 次の移動先の決定
-            if (navMeshAgent_.hasPath == true)
+            if (ringingFlag == false)
             {
-                status = Status.WALK;
-                listenFlag = false;                      // 音のした場所に着いたらfalseにする
-                navMeshAgent_.stoppingDistance = 0;
+                SetTargetPoint();                        // 次の移動先の決定
+                if (navMeshAgent_.hasPath == true)
+                {
+                    status = Status.WALK;
+                }
             }
         }
         else
         {
             anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
+            if (navMeshAgent_.hasPath == false)
+            {
+                status = Status.IDLE;
+            }
         }
         //}
+
+        if (Vector3.Distance(gameObject.transform.position, soundPoint) <= navMeshAgent_.stoppingDistance && listenFlag == true)
+        {
+            navMeshAgent_.stoppingDistance = 0;
+            navMeshAgent_.ResetPath();
+            status = Status.IDLE;
+            listenFlag = false;                      // 音のした場所に着いたらfalseにする
+        }
 
         if (warpFlag == true && listenFlag == true && status != Status.NULL)                   // 音が聞こえた時に呼び出す
         {
             SetWarpPoint();
         }
 
-        if (listenFlag == true && warpFlag == false && status != Status.NULL)
+        if (warpFlag == false && listenFlag == true && status != Status.NULL)
         {
             SetTargetPoint();
         }
