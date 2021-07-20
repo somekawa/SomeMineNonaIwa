@@ -20,6 +20,9 @@ public class PlayerCameraControll : MonoBehaviour
     {
         cameraController_ = CameraController.FindObjectOfType<CameraController>();
         hideControl_ = GetComponent<HideControl>();
+
+        Cursor.visible = false;                                    // マウスカーソルの非表示
+        Cursor.lockState = CursorLockMode.Locked;                  // マウスカーソルの場所の固定
     }
 
     void Update()
@@ -33,7 +36,10 @@ public class PlayerCameraControll : MonoBehaviour
         if (pause.GetPauseFlag() == false || cameraController_.FullMapFlag() == false ||
            ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
         {
-            if(!operationFlag_)
+            Cursor.visible = false;                                    // マウスカーソルの非表示
+            Cursor.lockState = CursorLockMode.Locked;                  // マウスカーソルの場所の固定
+
+            if (!operationFlag_)
             {
                 // 別のほうでカメラ操作されている
                 return;
