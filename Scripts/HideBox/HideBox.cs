@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class HideBox : MonoBehaviour
 {
+    private GameObject huta_;
+
     private Outline outline_;
     private HideControl hideControl_;
 
+    // マネキン
     private GameObject mannequin_;
-    private GameObject huta_;
-    public bool mannequinFlag_;
+    private bool mannequinFlag_;
 
     private bool inFlag_ = false;               // 入ってる
     private bool lastInFlag_ = false;           // 最後に入った箱なのか
@@ -36,6 +38,7 @@ public class HideBox : MonoBehaviour
     {
         if (mannequinFlag_)
         {
+            // マネキンが中に入っている
             inTime_ = 0.0f;
             outline_.enabled = false;
             return;
@@ -65,7 +68,7 @@ public class HideBox : MonoBehaviour
     {
         if ((other.gameObject.tag == "Player") && (!mannequinFlag_)) 
         {
-            outline_.enabled = true;
+            //outline_.enabled = true;
         }
     }
 
@@ -73,7 +76,7 @@ public class HideBox : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            outline_.enabled = false;
+            //utline_.enabled = false;
         }
     }
 
