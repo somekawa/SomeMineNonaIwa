@@ -7,38 +7,32 @@ public class PlayerCameraControll : MonoBehaviour
     public float x_sensi;                          // マウスのX座標の感度格納用
     public float y_sensi;                          // マウスのY座標の感度格納用
     public GameObject playerCamera;                // 動かすカメラ格納用
-    public playerController playerController;
+    public playerController playerController;      // コントローラー情報の取得
     public PauseScript pause;                      // pause中の処理
 
-    private CameraController cameraController_;
-    private float x_Rotation_;
-    private float y_Rotation_;
-    private HideControl hideControl_;
-    private bool operationFlag_ = true;             // カメラ操作できるか
+    private CameraController cameraController_;    // カメラ情報の取得
+    private float x_Rotation_;                     // カメラの回転(X軸)
+    private float y_Rotation_;                     // カメラの回転(Y軸)
+    private HideControl hideControl_;              // プレイヤーの隠れている状態の取得
+    private bool operationFlag_ = true;            // カメラ操作できるか
 
-    // Start is called before the first frame update
     void Start()
     {
-        //Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
         cameraController_ = CameraController.FindObjectOfType<CameraController>();
         hideControl_ = GetComponent<HideControl>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        cameracon();
+        CameraOn();
     }
 
 
-    private void cameracon()
+    private void CameraOn()
     {
-        if (pause.GetPauseFlag() == false || cameraController_.FullMapFlag() == false || ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
+        if (pause.GetPauseFlag() == false || cameraController_.FullMapFlag() == false ||
+           ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
         {
-            //Cursor.visible = false;
-            //Cursor.lockState = CursorLockMode.Locked;
-
             if(!operationFlag_)
             {
                 // 別のほうでカメラ操作されている

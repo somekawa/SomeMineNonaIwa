@@ -14,16 +14,13 @@ public class GameScene : MonoBehaviour
     private bool pauseFlag_;
 
     // クリアシーンで使うため分と秒はpublicに
-    public static int minute;           // 何分か
-    public static int seconds;         // 何秒か
-    public Text timerText;        // タイマー表示用テキスト
-    private bool secondsAddFlag_; // 秒数が足されたか
+    public static int minute  = 0;          // 何分か
+    public static int seconds = 0;          // 何秒か
+    public Text timerText;                  // タイマー表示用テキスト
+    private bool secondsAddFlag_ = false;   // 秒数が足されたか
 
     void Start()
     {
-        minute = 0;
-        seconds = 0;
-        secondsAddFlag_ = false;
         StartCoroutine("Coroutine");
     }
 
@@ -40,7 +37,7 @@ public class GameScene : MonoBehaviour
         // 時間計測毎フレーム呼ばれないようにフラグで管理
         if (secondsAddFlag_ == true)
         {
-            if (seconds >= 60f)
+            if (seconds >= 60)
             {
                 // count_60以上＝1分
                 minute++;
@@ -50,8 +47,6 @@ public class GameScene : MonoBehaviour
             secondsAddFlag_ = false;
         }
         timerText.text = minute.ToString("00") + ":" + (seconds).ToString("00");
-        // Debug.Log("Coroutine"+ seconds);
-
     }
 
     private void ActiveText()
@@ -81,14 +76,10 @@ public class GameScene : MonoBehaviour
 
     private IEnumerator Coroutine()
     {
-        //処理１
-       // Debug.Log("Start");
-
         //１秒待機
         // WaitForSecondsRealtimeにすることでTimeScaleの影響を受けない
         yield return new WaitForSecondsRealtime(1.0f);
         seconds++;        // 1秒経過したらcount_が+1される
         secondsAddFlag_ = true;
     }
-
 }

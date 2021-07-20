@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TextChange : MonoBehaviour
 {
     public GameObject TextMng;
-    private List<Text> textUIList_ = new List<Text>();       // 書き換え用テキスト
+    private List<Text> textUIList_   = new List<Text>();     // 書き換え用テキスト
     private List<string> textOrigin_ = new List<string>();   // 元テキストの保存
     private string[] strArray_ = { "蟯ｩ蟠", "迹ｳ蟶", "驥惹ｸｭ", "譟灘ｷ" };   // 代入文字
 

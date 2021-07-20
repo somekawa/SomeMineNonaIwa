@@ -8,39 +8,41 @@ public class TitleScene : MonoBehaviour
 {
     public Canvas titleCanvas;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1.0f;
     }
 
-    // Update is called once per frame
     void Update()
     {
     }
 
     public void TransitionGame()
     {
-        SoundScript.GetInstance().audioSourceBGM.clip = null;
-        SoundScript.GetInstance().audioSourceSE.clip = null;
-        SoundScript.GetInstance().PlaySound(2);
-        SceneManager.LoadScene("MainScene");
+        Common("MainScene");
     }
 
     public void TransitionTutorial()
     {
-        SoundScript.GetInstance().audioSourceBGM.clip = null;
-        SoundScript.GetInstance().audioSourceSE.clip = null;
-        SoundScript.GetInstance().PlaySound(2);
-        SceneManager.LoadScene("TutorialScene");
+        Common("TutorialScene");
     }
 
     public void ReturnOption()
     {
         titleCanvas.gameObject.SetActive(true);
     }
+
     public void HeadOption()
     {
         titleCanvas.gameObject.SetActive(false);
+    }
+
+    // シーン遷移の共通処理
+    private void Common(string sceneName)
+    {
+        SoundScript.GetInstance().audioSourceBGM.clip = null;
+        SoundScript.GetInstance().audioSourceSE.clip = null;
+        SoundScript.GetInstance().PlaySound(2);
+        SceneManager.LoadScene(sceneName);
     }
 }

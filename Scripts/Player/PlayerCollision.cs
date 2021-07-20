@@ -88,31 +88,8 @@ public class PlayerCollision : MonoBehaviour
 
                 foreach (Transform c in other.gameObject.transform)
                 {
-                    ChainTest(c,"chain");
-                    ChainTest(c,"padLock");
-                    //if (c.gameObject.tag == "chain")
-                    //{
-                    //    if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
-                    //    {
-                    //        Destroy(c.gameObject);   // オブジェクトを削除
-                    //    }
-                    //    else
-                    //    {
-                    //        break;
-                    //    }
-                    //}
-                    //if (c.gameObject.tag == "padLock")
-                    //{
-                    //    if (chainCnt_ < keyItemCnt_ || (keyItemCnt_ == maxKeyItemNum_))
-                    //    {
-                    //        Destroy(c.gameObject);   // オブジェクトを削除
-                    //        chainCnt_++;
-                    //    }
-                    //    else
-                    //    {
-                    //        break;
-                    //    }
-                    //}
+                    ChainCheck(c,"chain");
+                    ChainCheck(c,"padLock");
                 }
             }
         }
@@ -159,21 +136,6 @@ public class PlayerCollision : MonoBehaviour
             }
             return;
         }
-        // 誘導アイテム取得処理
-        else if (other.gameObject.tag == "InductionItem")
-        {
-            //if (Common(other))
-            //{
-            //    ItemTrhow itemTrhow = ItemTrhow.FindObjectOfType<ItemTrhow>();
-            //    itemTrhow.SetTrhowItemFlg(true);
-            //    itemTrhow.SetTrhowItemFlg(true);
-            //    Debug.Log("誘導アイテムゲット");
-            //    item_ = item.INDUCTION;
-            //    // SEの音を鳴らす
-            //    audioSource_.PlayOneShot(itemGetSE_);
-            //}
-            return;
-        }
         else
         {
             return;
@@ -182,13 +144,11 @@ public class PlayerCollision : MonoBehaviour
 
     public bool GetBatteryFlag()
     {
-        // Debug.Log("SetBatteryFlag+++++++電池ゲット");
         return batteryGetFlag_;
     }
 
     public void SetBatteryFlag(bool flag)
     {
-        // Debug.Log("GetBatteryFlag+++++++電池ゲット");
         batteryGetFlag_ = flag;
     }
 
@@ -209,13 +169,13 @@ public class PlayerCollision : MonoBehaviour
         item_ = setItem;
     }
 
+    // 共通処理をまとめた関数
     bool Common(Collider other)
     {
-        // 共通処理をまとめた関数
-
         // Eキーの押下時にtrueを返す
         if (Input.GetKeyUp(KeyCode.E))
         {
+            // 既にバリアアイテムを所持している場合は、取得できないようにする
             if (other.gameObject.tag == "BarrierItem")
             {
                 if (Barrier.FindObjectOfType<Barrier>().GetBarrierItemFlg())
@@ -223,14 +183,6 @@ public class PlayerCollision : MonoBehaviour
                     return false;
                 }
             }
-            if (other.gameObject.tag == "InductionItem")
-            {
-                if (ItemTrhow.FindObjectOfType<ItemTrhow>().GetTrhowItemFlg())
-                {
-                    return false;
-                }
-            }
-
             Destroy(other.gameObject);   // オブジェクトを削除
             return true;
         }
@@ -243,8 +195,8 @@ public class PlayerCollision : MonoBehaviour
         return keyItemCnt_;
     }
 
-    // 扉共通化のテスト関数(テスト中だから消さないで)
-    void ChainTest(Transform c ,string str)
+    // 扉の共通処理
+    void ChainCheck(Transform c ,string str)
     {
         if (c.gameObject.tag != str)
         {
@@ -264,5 +216,4 @@ public class PlayerCollision : MonoBehaviour
             return;
         }
     }
-
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class effectScript : MonoBehaviour
 {
-    public AudioClip walkSound;
+    public AudioClip walkSound;             // プレイヤーの足音SE
 
     private float count_ = 0.0f;            // エフェクト発生時間の管理用
     private bool countFlg_  = false;        // カウント最大時にtrue
@@ -72,7 +72,6 @@ public class effectScript : MonoBehaviour
             if (tmpPlSc.GetWalkFlg())
             {
                 effect_.GetComponent<ParticleSystem>().Play();
-                //SoundScript.GetInstance().PlaySound(4);
                 GetComponent<AudioSource>().clip = walkSound;
                 GetComponent<AudioSource>().Play();
             }
@@ -87,6 +86,7 @@ public class effectScript : MonoBehaviour
             return; // エフェクト再生中かつ、再生時間が一定値以下の場合はreturn
         }
 
+        // エフェクトの再生を停止する
         if (effect_ != null)
         {
             effect_.GetComponent<ParticleSystem>().Stop();

@@ -50,7 +50,7 @@ public class playerController : MonoBehaviour
        hideControl_ = GetComponent<HideControl>();
 
        // 初期化
-       leanSt[] test = {
+       leanSt[] lean = {
             new leanSt { rotate = 1.0f , moveX = -1.0f, moveZ = 0.0f },// 黄色ボックス
             new leanSt { rotate = -1.0f, moveX = 1.0f , moveZ = 0.0f },// オレンジボックス
             new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = -1.0f},// 赤ボックス
@@ -65,14 +65,14 @@ public class playerController : MonoBehaviour
         leanMap_ = new Dictionary<string, leanSt>
         {
             //マップに値の追加
-            { "LeanX_M", test[0] },
-            { "LeanX_P", test[1] },
-            { "LeanZ_P", test[2] },
-            { "LeanZ_M", test[3] },
-            { "LeanZ_P_R", test[4] },
-            { "LeanZ_M_R", test[5] },
-            { "LeanX_M_R", test[6] },
-            { "LeanX_P_R", test[7] }
+            { "LeanX_M", lean[0] },
+            { "LeanX_P", lean[1] },
+            { "LeanZ_P", lean[2] },
+            { "LeanZ_M", lean[3] },
+            { "LeanZ_P_R", lean[4] },
+            { "LeanZ_M_R", lean[5] },
+            { "LeanX_M_R", lean[6] },
+            { "LeanX_P_R", lean[7] }
         };
 
 
@@ -101,7 +101,6 @@ public class playerController : MonoBehaviour
             // 箱に隠れている
             return;
         }
-
 
         // リーン処理(キー押下を離した瞬間に、フラグの状態を更新する)
         if (Input.GetKeyUp(KeyCode.T))
@@ -311,7 +310,4 @@ public class playerController : MonoBehaviour
             }
         }
     }
-
-
-
 }

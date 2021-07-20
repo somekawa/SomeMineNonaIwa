@@ -5,7 +5,7 @@ using UnityEngine;
 public class Recognition : MonoBehaviour
 {
     private GameObject playerObj_;                  // プレイヤー情報
-    private PlayerCameraControll cameraControll_;
+    private PlayerCameraControll cameraControll_;   // カメラ情報
 
     public GameObject mainCamera_;                  // メインカメラ
     private CameraAction cameraAction_;             // 正気度低下時のカメラアクション
@@ -15,16 +15,15 @@ public class Recognition : MonoBehaviour
 
     private float time_;                            // アクション用タイム
 
-    private bool resetFlag_          = false;       // リセット中か
+    private bool resetFlag_ = false;                // リセット中か
     private float targetAngle_;                     // プレイヤーとターゲットとの角度
     private Vector3 defaultAngle_;                  // 懐中電灯(コリジョン)の元のアングル
     private Vector3 defaultPos_;                    // 懐中電灯(コリジョン)の元の座標
 
     private HideControl hideControl_;
 
-    private GameObject targetObj_     = null;
+    private GameObject targetObj_ = null;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerObj_ = transform.root.gameObject;
@@ -40,7 +39,6 @@ public class Recognition : MonoBehaviour
         hideControl_ = playerObj_.GetComponent<HideControl>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(!resetFlag_)
@@ -60,6 +58,7 @@ public class Recognition : MonoBehaviour
             resetFlag_ = false;
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if ((other.gameObject.tag != "Enemy") ||
@@ -69,7 +68,8 @@ public class Recognition : MonoBehaviour
         }
 
     }
-        private void OnTriggerStay(Collider other)
+
+    private void OnTriggerStay(Collider other)
     {
         if ((!lightRange_.activeSelf) ||            // ライトは付いているか
             (hideControl_.GetHideFlg()) ||          // 箱に隠れ中か
@@ -85,7 +85,7 @@ public class Recognition : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 targetDirection = enemyPos - transform.position;
         targetAngle_ = (Mathf.RoundToInt(Vector3.SignedAngle(forward, targetDirection, Vector3.up) * 0.1f) * 10.0f);
-        //Debug.Log("角度"+ targetAngle_);
+
         if (Mathf.Abs(targetAngle_) < 90.0f) 
         {
             if (targetObj_ == null) 
@@ -105,7 +105,6 @@ public class Recognition : MonoBehaviour
 
             if (!cameraAction_.CameraLong())    // 正気度低下時の処理が動いたらこっちは動かないようにする
             {
-
                 time_ += Time.deltaTime;
                 cameraAction_.FacingCamera(enemyPos, time_);
             }
@@ -119,6 +118,10 @@ public class Recognition : MonoBehaviour
             time_ = 0.0f;
             resetFlag_ = true;
             targetObj_ = null;
+        }
+        else
+        {
+            // 何も処理を行わない
         }
     }
 
