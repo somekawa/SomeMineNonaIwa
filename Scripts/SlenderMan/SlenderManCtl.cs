@@ -113,6 +113,11 @@ public class SlenderManCtl : MonoBehaviour
             SetTargetPoint();
         }
 
+        if (navMeshAgent_.pathStatus == NavMeshPathStatus.PathInvalid)
+        {
+            SetTargetPoint();
+        }
+
         if (listenFlag == false)
         {
             warpCnt_ += Time.deltaTime;

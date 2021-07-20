@@ -9,27 +9,27 @@ public class WallObjFall : MonoBehaviour
     private float maxTime_ = 2.0f;      // オブジェクト消滅までの時間
 
     // Sliderのワープ関連変数
-    private GameObject[] slenderMan_;
-    private SlenderManCtl[] slenderManCtl_;
-    private float minDistance_;
-    private float nowDistance_;
-    private int minCnt_;
+    //private GameObject[] slenderMan_;
+    //private SlenderManCtl[] slenderManCtl_;
+    //private float minDistance_;
+    //private float nowDistance_;
+    //private int minCnt_;
 
     void Start()
     {
-        slenderMan_ = new GameObject[4];
-        slenderManCtl_ = new SlenderManCtl[4];
+        //slenderMan_ = new GameObject[4];
+        //slenderManCtl_ = new SlenderManCtl[4];
     }
 
     void Update()
     {
-        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
-        {
-            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
-            {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
-            }
-        }
+        //for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        //{
+        //    if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
+        //    {
+        //        slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
+        //    }
+        //}
 
         // リジットボディが追加されていない間はreturnする
         if (!rigidBodyFlg)
@@ -61,25 +61,26 @@ public class WallObjFall : MonoBehaviour
         // 床との接触時に、物が落ちた音を再生
         if(collision.gameObject.name == "floor")
         {
-            for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
-            {
-                if (slenderMan_[x] != null)
-                {
-                    nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
-                    if (minDistance_ >= nowDistance_)
-                    {
-                        minDistance_ = nowDistance_;
-                        minCnt_ = x;
-                    }
-                }
-            }
-            if (slenderManCtl_ != null)
-            {
-                slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
-                slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
-                slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
-                slenderManCtl_[minCnt_].listenFlag = true;
-            }
+            SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 2, false, false);
+            //for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
+            //{
+            //    if (slenderMan_[x] != null)
+            //    {
+            //        nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
+            //        if (minDistance_ >= nowDistance_)
+            //        {
+            //            minDistance_ = nowDistance_;
+            //            minCnt_ = x;
+            //        }
+            //    }
+            //}
+            //if (slenderManCtl_ != null)
+            //{
+            //    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+            //    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+            //    slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
+            //    slenderManCtl_[minCnt_].listenFlag = true;
+            //}
             SoundScript.GetInstance().PlaySound(5);
         }
     }

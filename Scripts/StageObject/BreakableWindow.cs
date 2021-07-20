@@ -52,11 +52,11 @@ public class BreakableWindow : MonoBehaviour {
     private Vector3 vec_;
 
     // Sliderのワープ関連変数
-    private GameObject[] slenderMan_;
-    private SlenderManCtl[] slenderManCtl_;
-    private float minDistance_;
-    private float nowDistance_;
-    private int minCnt_;
+    //private GameObject[] slenderMan_;
+    //private SlenderManCtl[] slenderManCtl_;
+    //private float minDistance_;
+    //private float nowDistance_;
+    //private int minCnt_;
 
     void Start()
     {
@@ -70,19 +70,19 @@ public class BreakableWindow : MonoBehaviour {
         if (transform.rotation.eulerAngles.x != 0 || transform.rotation.eulerAngles.z != 0)
             Debug.LogWarning("Warning: Window must not be rotated around x and z!");
 
-        slenderMan_ = new GameObject[4];
-        slenderManCtl_ = new SlenderManCtl[4];
+        //slenderMan_ = new GameObject[4];
+        //slenderManCtl_ = new SlenderManCtl[4];
     }
 
     void Update()
     {
-        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
-        {
-            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
-            {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
-            }
-        }
+        //for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        //{
+        //    if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
+        //    {
+        //        slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
+        //    }
+        //}
 
 
         // SEが終了していたらオブジェクトを削除する
@@ -278,25 +278,26 @@ public class BreakableWindow : MonoBehaviour {
                     }
                 }
 
-                for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
-                {
-                    if (slenderMan_[x] != null)
-                    {
-                        nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
-                        if (minDistance_ >= nowDistance_)
-                        {
-                            minDistance_ = nowDistance_;
-                            minCnt_ = x;
-                        }
-                    }
-                }
-                if (slenderManCtl_ != null)
-                {
-                    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
-                    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
-                    slenderManCtl_[minCnt_].listenFlag = true;
-                    slenderManCtl_[minCnt_].warpFlag = true;
-                }
+                SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 0, false, true);
+                //for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
+                //{
+                //    if (slenderMan_[x] != null)
+                //    {
+                //        nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
+                //        if (minDistance_ >= nowDistance_)
+                //        {
+                //            minDistance_ = nowDistance_;
+                //            minCnt_ = x;
+                //        }
+                //    }
+                //}
+                //if (slenderManCtl_ != null)
+                //{
+                //    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+                //    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+                //    slenderManCtl_[minCnt_].listenFlag = true;
+                //    slenderManCtl_[minCnt_].warpFlag = true;
+                //}
             }
             else
             {

@@ -10,16 +10,16 @@ public class RadioVoice : MonoBehaviour
     private float nowVoiceTime = 0.0f;
 
     // Sliderのワープ関連変数
-    private GameObject[] slenderMan_;
+    //private GameObject[] slenderMan_;
     private SlenderManCtl[] slenderManCtl_;
-    private float minDistance_;
-    private float nowDistance_;
-    private int minCnt_;
+    //private float minDistance_;
+    //private float nowDistance_;
+    //private int minCnt_;
 
     // Start is called before the first frame update
     void Start()
     {
-        slenderMan_ = new GameObject[4];
+        //slenderMan_ = new GameObject[4];
         slenderManCtl_ = new SlenderManCtl[4];
     }
 
@@ -36,29 +36,33 @@ public class RadioVoice : MonoBehaviour
 
         if (!soundFlg_)
         {
+
+            slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
             return;
         }
         else
         {
-            for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
-            {
-                if (slenderMan_[x] != null)
-                {
-                    nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
-                    if (minDistance_ >= nowDistance_)
-                    {
-                        minDistance_ = nowDistance_;
-                        minCnt_ = x;
-                    }
-                }
-            }
-            if (slenderManCtl_ != null)
-            {
-                slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
-                slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
-                slenderManCtl_[minCnt_].listenFlag = true;
-                slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
-            }
+            SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 2, true, false);
+            //for (int x = 0; x < SlenderSpawner.GetInstance().spawnSlender.Length; x++)
+            //{
+            //    if (slenderMan_[x] != null)
+            //    {
+            //        nowDistance_ = Vector3.Distance(gameObject.transform.position, slenderMan_[x].transform.position);
+            //        if (minDistance_ >= nowDistance_)
+            //        {
+            //            minDistance_ = nowDistance_;
+            //            minCnt_ = x;
+            //        }
+            //    }
+            //}
+            //if (slenderManCtl_ != null)
+            //{
+            //    slenderManCtl_[minCnt_].soundPoint.x = this.gameObject.transform.position.x;
+            //    slenderManCtl_[minCnt_].soundPoint.z = this.gameObject.transform.position.z;
+            //    slenderManCtl_[minCnt_].navMeshAgent_.stoppingDistance = 2;
+            //    slenderManCtl_[minCnt_].listenFlag = true;
+            //    slenderManCtl_[minCnt_].ringingFlag = true;
+            //}
         }
 
         if (nowVoiceTime >= voiceTimeMax)
@@ -66,7 +70,7 @@ public class RadioVoice : MonoBehaviour
             GetComponent<AudioSource>().Stop();
             soundFlg_ = false;
             nowVoiceTime = 0.0f;
-            slenderManCtl_[minCnt_].listenFlag = false;
+            //slenderManCtl_[minCnt_].listenFlag = false;
         }
         else
         {
