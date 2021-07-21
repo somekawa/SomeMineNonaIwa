@@ -23,6 +23,9 @@ public class GameOverScene : MonoBehaviour
         {
             text.text = "あなたは謎の死を迎えました";
         }
+
+        Cursor.visible = true;                      // マウスカーソルの表示
+        Cursor.lockState = CursorLockMode.None;     // マウスカーソルの場所の固定解除
     }
 
     // Update is called once per frame
