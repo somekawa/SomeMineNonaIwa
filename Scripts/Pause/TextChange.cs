@@ -33,6 +33,12 @@ public class TextChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 正気度が50を下回るまでは文字化けを発生させないでおく
+        if (SanitMng.sanit_ > 50.0f)
+        {
+            return;
+        }
+
         // 文字化け中の処理
         if (textChangeFlg_)
         {
