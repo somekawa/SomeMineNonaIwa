@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HideControl : MonoBehaviour
 {
+    public GameObject itemHitArea;
+    public GameObject lightRange;
+
     private bool hideFlg_ = false;              // 箱に隠れているか
 
     private GameObject mainCamera_;             // player側のカメラ
@@ -109,6 +112,10 @@ public class HideControl : MonoBehaviour
             // 箱に状態を送る
             hideBox_.SetInFlag(flag);
         }
+
+        // 当たり判定のアクティブ状態を切り替え
+        itemHitArea.SetActive(!flag);   // アイテム取得用
+        lightRange.SetActive(!flag);    // 懐中電灯用
     }
 
     private bool IsHideBox()
