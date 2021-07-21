@@ -9,8 +9,8 @@ public class HideBox : MonoBehaviour
     private Outline outline_;
 
     // マネキン
+    public bool mannequinFlag_;
     private GameObject mannequin_;
-    private bool mannequinFlag_;
 
     private bool hideNowFlag_ = false;  // 入ってる
     private bool lastInFlag_  = false;  // 最後に入った箱なのか
