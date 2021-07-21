@@ -20,24 +20,16 @@ public class PauseScript : MonoBehaviour
     void Update()
     {
         //　ポーズUIのアクティブ状態切り替え
-        ChangePauseActive(gameManager.GetPauseFlag(), 0.0f);
-
-        //　ポーズUIのアクティブ状態切り替え
-        //if (gameManager.GetPauseFlag() == true)
-        //{
-        //    //pauseUI.SetActive(true);
-        //    //Time.timeScale = 0.0f;
-        //    //pauseFlag_ = true;
-        //    Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
-        //}
-        //else
-        //{
-        //    ChangePauseActive(false, 1.0f);
-        //    //pauseUI.SetActive(false);
-        //    //Time.timeScale = 1.0f;
-        //    //pauseFlag_ = false;
-        //    Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
-        //}
+        if (gameManager.GetPauseFlag() == true)
+        {
+            ChangePauseActive(gameManager.GetPauseFlag(), 0.0f);
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+        }
+        else
+        {
+            ChangePauseActive(gameManager.GetPauseFlag(), 1.0f);
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+        }
     }
 
     public bool GetPauseFlag()
