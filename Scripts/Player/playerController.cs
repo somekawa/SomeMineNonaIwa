@@ -123,17 +123,7 @@ public class playerController : MonoBehaviour
             QuickTurn();
         }
 
-        // テスト用
-        //slowWalk_ = Input.GetKey(KeyCode.LeftShift) ? true : false;
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            slowWalk_ = true;
-        }
-        else
-        {
-            slowWalk_ = false;
-        }
+        slowWalk_ = Input.GetKey(KeyCode.LeftShift) ? true : false;
 
         if(!leanFlg_)   // 傾き中は移動を止める
         {

@@ -1,67 +1,189 @@
 fileFormatVersion: 2
 guid: 102db6f850173954d99b778f5a776fc6
 ModelImporter:
-  serializedVersion: 19
-  fileIDToRecycleName:
-    100000: arm_links_gebeugt
-    100002: arm_links_gerade
-    100004: arm_rechts_gebeugt
-    100006: arm_rechts_gerade
-    100008: auge_links
-    100010: auge_rechts
-    100012: bein_links
-    100014: bein_rechts
-    100016: Camera
-    100018: kopf
-    100020: //RootNode
-    100022: torso
-    400000: arm_links_gebeugt
-    400002: arm_links_gerade
-    400004: arm_rechts_gebeugt
-    400006: arm_rechts_gerade
-    400008: auge_links
-    400010: auge_rechts
-    400012: bein_links
-    400014: bein_rechts
-    400016: Camera
-    400018: kopf
-    400020: //RootNode
-    400022: torso
-    2300000: arm_links_gebeugt
-    2300002: arm_links_gerade
-    2300004: arm_rechts_gebeugt
-    2300006: arm_rechts_gerade
-    2300008: auge_links
-    2300010: auge_rechts
-    2300012: bein_links
-    2300014: bein_rechts
-    2300016: kopf
-    2300018: torso
-    3300000: arm_links_gebeugt
-    3300002: arm_links_gerade
-    3300004: arm_rechts_gebeugt
-    3300006: arm_rechts_gerade
-    3300008: auge_links
-    3300010: auge_rechts
-    3300012: bein_links
-    3300014: bein_rechts
-    3300016: kopf
-    3300018: torso
-    4300000: arm_links_gebeugt
-    4300002: auge_rechts
-    4300004: torso
-    4300006: kopf
-    4300008: bein_rechts
-    4300010: bein_links
-    4300012: auge_links
-    4300014: arm_rechts_gerade
-    4300016: arm_links_gerade
-    4300018: arm_rechts_gebeugt
-    9500000: //RootNode
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: arm_links_gebeugt
+  - first:
+      1: 100002
+    second: arm_links_gerade
+  - first:
+      1: 100004
+    second: arm_rechts_gebeugt
+  - first:
+      1: 100006
+    second: arm_rechts_gerade
+  - first:
+      1: 100008
+    second: auge_links
+  - first:
+      1: 100010
+    second: auge_rechts
+  - first:
+      1: 100012
+    second: bein_links
+  - first:
+      1: 100014
+    second: bein_rechts
+  - first:
+      1: 100016
+    second: Camera
+  - first:
+      1: 100018
+    second: kopf
+  - first:
+      1: 100020
+    second: //RootNode
+  - first:
+      1: 100022
+    second: torso
+  - first:
+      4: 400000
+    second: arm_links_gebeugt
+  - first:
+      4: 400002
+    second: arm_links_gerade
+  - first:
+      4: 400004
+    second: arm_rechts_gebeugt
+  - first:
+      4: 400006
+    second: arm_rechts_gerade
+  - first:
+      4: 400008
+    second: auge_links
+  - first:
+      4: 400010
+    second: auge_rechts
+  - first:
+      4: 400012
+    second: bein_links
+  - first:
+      4: 400014
+    second: bein_rechts
+  - first:
+      4: 400016
+    second: Camera
+  - first:
+      4: 400018
+    second: kopf
+  - first:
+      4: 400020
+    second: //RootNode
+  - first:
+      4: 400022
+    second: torso
+  - first:
+      23: 2300000
+    second: arm_links_gebeugt
+  - first:
+      23: 2300002
+    second: arm_links_gerade
+  - first:
+      23: 2300004
+    second: arm_rechts_gebeugt
+  - first:
+      23: 2300006
+    second: arm_rechts_gerade
+  - first:
+      23: 2300008
+    second: auge_links
+  - first:
+      23: 2300010
+    second: auge_rechts
+  - first:
+      23: 2300012
+    second: bein_links
+  - first:
+      23: 2300014
+    second: bein_rechts
+  - first:
+      23: 2300016
+    second: kopf
+  - first:
+      23: 2300018
+    second: torso
+  - first:
+      33: 3300000
+    second: arm_links_gebeugt
+  - first:
+      33: 3300002
+    second: arm_links_gerade
+  - first:
+      33: 3300004
+    second: arm_rechts_gebeugt
+  - first:
+      33: 3300006
+    second: arm_rechts_gerade
+  - first:
+      33: 3300008
+    second: auge_links
+  - first:
+      33: 3300010
+    second: auge_rechts
+  - first:
+      33: 3300012
+    second: bein_links
+  - first:
+      33: 3300014
+    second: bein_rechts
+  - first:
+      33: 3300016
+    second: kopf
+  - first:
+      33: 3300018
+    second: torso
+  - first:
+      43: 4300000
+    second: arm_links_gebeugt
+  - first:
+      43: 4300002
+    second: auge_rechts
+  - first:
+      43: 4300004
+    second: torso
+  - first:
+      43: 4300006
+    second: kopf
+  - first:
+      43: 4300008
+    second: bein_rechts
+  - first:
+      43: 4300010
+    second: bein_links
+  - first:
+      43: 4300012
+    second: auge_links
+  - first:
+      43: 4300014
+    second: arm_rechts_gerade
+  - first:
+      43: 4300016
+    second: arm_links_gerade
+  - first:
+      43: 4300018
+    second: arm_rechts_gebeugt
+  - first:
+      95: 9500000
+    second: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: augen
+    second: {fileID: 2100000, guid: 43d8c462569a5f44d9a86eb28515fe77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: main
+    second: {fileID: 2100000, guid: 8c0827aabe1b5c749b9c59b3f0482248, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 2
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -74,26 +196,39 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 0.01
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -103,10 +238,14 @@ ModelImporter:
     normalSmoothAngle: 85
     normalImportMode: 1
     tangentImportMode: 4
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 0
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -116,14 +255,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 0.01
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
