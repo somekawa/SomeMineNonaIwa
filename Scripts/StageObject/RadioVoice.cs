@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class RadioVoice : MonoBehaviour
 {
     public AudioClip VoiceSound;
+    private AudioSource source_;
+
     private bool soundFlg_ = false;
     private float voiceTimeMax = 20.0f;
     private float nowVoiceTime = 0.0f;
+
+    private float radioOnOffTime_ = 0.0f;
 
     // Sliderのワープ関連変数
     //private GameObject[] slenderMan_;
@@ -16,16 +22,22 @@ public class RadioVoice : MonoBehaviour
     //private float nowDistance_;
     //private int minCnt_;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // AudioSourceの情報を最初に取得しておく
+        source_ = GetComponent<AudioSource>();
         //slenderMan_ = new GameObject[4];
         slenderManCtl_ = new SlenderManCtl[4];
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (radioOnOffTime_ > 0.0f)
+        {
+            // ラジオ操作を受け付けない
+            radioOnOffTime_ -= Time.deltaTime;
+        }
+
         for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
         {
             if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
@@ -36,7 +48,6 @@ public class RadioVoice : MonoBehaviour
 
         if (!soundFlg_)
         {
-
             slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
             return;
         }
@@ -67,9 +78,7 @@ public class RadioVoice : MonoBehaviour
 
         if (nowVoiceTime >= voiceTimeMax)
         {
-            GetComponent<AudioSource>().Stop();
-            soundFlg_ = false;
-            nowVoiceTime = 0.0f;
+            CommonSoundStop();
             //slenderManCtl_[minCnt_].listenFlag = false;
         }
         else
@@ -80,14 +89,39 @@ public class RadioVoice : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (radioOnOffTime_ > 0.0f)
+        {
+            return;
+        }
+
         if (other.gameObject.tag == "ItemHitArea" && Input.GetKeyUp(KeyCode.E))
         {
-            if (VoiceSound != null)
+            if (!soundFlg_)   // SEのON
             {
-                GetComponent<AudioSource>().clip = VoiceSound;
-                GetComponent<AudioSource>().Play();
-                soundFlg_ = true;
+                if (VoiceSound != null)
+                {
+                    source_.clip = VoiceSound;
+                    source_.Play();
+                    soundFlg_ = true;
+                    //Debug.Log("SEのON");
+                    radioOnOffTime_ = 1.0f;
+                    return;
+                }
+            }
+            else              // SEのOFF
+            {
+                CommonSoundStop();
+                //Debug.Log("SEのOFF");
+                radioOnOffTime_ = 1.0f;
             }
         }
+    }
+
+    // 音再生の共通ストップ処理
+    void CommonSoundStop()
+    {
+        source_.Stop();
+        soundFlg_ = false;
+        nowVoiceTime = 0.0f;
     }
 }
