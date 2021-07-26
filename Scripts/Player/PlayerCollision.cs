@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// アイテムを2つ同時に取得できなくする
+
 public class PlayerCollision : MonoBehaviour
 {
     // アイテムの種類
@@ -29,6 +31,11 @@ public class PlayerCollision : MonoBehaviour
     private bool keyItemColFlag_ = false;
 
     private int chainCnt_ = 0;            // 扉の鎖の本数
+
+    private bool  itemGetFlg_  = true;    // true：取得できる,false：取得できない
+    private float itemGetTime_ = 0.0f;    // アイテムが取得できるようになるまでの時間
+    private float itemGetTimeMax_ = 1.0f; // アイテムが取得できるようになるまでの時間の最大値
+
 
     void Start()
     {
@@ -60,6 +67,20 @@ public class PlayerCollision : MonoBehaviour
             }
         }
 
+        // アイテムが取得可能時間ではないとき
+        if(!itemGetFlg_)
+        {
+            if (itemGetTime_ < itemGetTimeMax_)
+            {
+                itemGetTime_ += Time.deltaTime;
+            }
+            else
+            {
+                // 取得できる状態に切り替える
+                itemGetFlg_ = true;
+                Debug.Log("アイテムの取得可能時間になりました");
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -185,9 +206,12 @@ public class PlayerCollision : MonoBehaviour
     // 共通処理をまとめた関数
     bool Common(Collider other)
     {
-        // Eキーの押下時にtrueを返す
-        if (Input.GetKeyUp(KeyCode.E))
+        // Eキーの押下時 && 取得可能かのフラグを確認(全ての取得条件を満たしているときにtrueを返す)
+        if (Input.GetKeyUp(KeyCode.E) && itemGetFlg_)
         {
+            // 取得できるとき
+            itemGetFlg_ = false;
+
             // 既にバリアアイテムを所持している場合は、取得できないようにする
             if (other.gameObject.tag == "BarrierItem")
             {
