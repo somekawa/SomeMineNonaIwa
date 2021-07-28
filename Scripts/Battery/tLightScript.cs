@@ -5,7 +5,6 @@ using UnityEngine;
 public class tLightScript : MonoBehaviour
 {
     // enumはc++でいうenum class
-    // ライトの状態管理
     public enum light_Status
     {
         ON,             // ライトがついている時
@@ -20,39 +19,45 @@ public class tLightScript : MonoBehaviour
 
     // 懐中電灯関連
     public GameObject spotLight;    // spotlightを参照するため
-    private bool accidentFlag_;     // 充電が0になったとき(true：0になった　false：0ではない)
+    private bool accidentFlag_;// 充電が0になったとき　true=0になった　false=0ではない
+    private GameScene gameScene_;
 
     // 音楽関連
     private AudioSource audioSource_;
     [SerializeField] private AudioClip normalSE_;   // 充電があるときに懐中電灯SE
     [SerializeField] private AudioClip accidentSE_; // 充電がないときの懐中電灯SE
    // 電池切れの時1度だけ鳴らすSE　true=なる　false=鳴らさない
-    private bool seAccidentFlag_ = false;
-    // true：隠れている(音が出ない)　false：隠れる、出る時　ライトの音が出る
-    private bool hideSEFlag_ = false;  
+    private bool seAccidentFlag_;
+    // true=隠れている(音が出ない)　false=隠れる、出る時　ライトの音が出る
+    private bool hideSEFlag_;  
 
     void Start()
     {
-        // ゲーム開始時にライトはついている
         lightStatus = light_Status.ON;
+        gameScene_ = FindObjectOfType<GameScene>();
+
         audioSource_ = GetComponent<AudioSource>();
+        // ゲーム開始時にライトはついている
+        accidentFlag_ = false;
+        seAccidentFlag_ = false;
+        hideSEFlag_=false;
     }
 
     void Update()
     {
-        if (pause.GetPauseFlag() == true)
+        if (gameScene_.GetPauseFlag() == true)
         {
             return;            // pause中は何の処理もできないようにする
         }
 
-        // ライトオンオフ(隠れている時は音はならない)
+        // ライトオンオフ            // 隠れている時は音はならない
         if (Input.GetMouseButtonDown(0) && hideControl.GetHideFlg() == false) 
         {
-            // 電池があるとき通常のSE
+            //// 電池があるとき通常のSE
             if (accidentFlag_ == true)
             {
                 // 電池がないとき
-                audioSource_.PlayOneShot(accidentSE_);
+                SE(accidentSE_);//AccidentSE();
                 lightStatus = light_Status.ACCIDENT;
                 Debug.Log("電池残量0：クリック時SE");
             }
@@ -72,7 +77,7 @@ public class tLightScript : MonoBehaviour
                 {
                     return;
                 }
-                audioSource_.PlayOneShot(normalSE_);// 電池があるとき通常のSE
+                SE(normalSE_);//NomarlSE(); // 電池があるとき通常のSE
             }
             Debug.Log(lightStatus);
         }
@@ -97,7 +102,7 @@ public class tLightScript : MonoBehaviour
             if (seAccidentFlag_ == false)
             {
                 seAccidentFlag_ = true;
-                audioSource_.PlayOneShot(accidentSE_);
+                SE(accidentSE_);//AccidentSE();
                 Debug.Log("電池残量0：強制OFFのSE");
             }
         }
@@ -105,7 +110,7 @@ public class tLightScript : MonoBehaviour
         // 充電が0で電池を拾った場合
         if (lightStatus == light_Status.ACCIDENT && accidentFlag_ == false)
         {
-            audioSource_.PlayOneShot(normalSE_);
+            SE(normalSE_);// NomarlSE();
             NowLightStatus(light_Status.ON, true);
             Debug.Log("充電が0からかいふくしました");
 
@@ -125,7 +130,7 @@ public class tLightScript : MonoBehaviour
             if (hideSEFlag_ == false)
             {
                 hideSEFlag_ = true;
-                audioSource_.PlayOneShot(normalSE_);
+                SE(normalSE_);
             }
         }
         else
@@ -137,7 +142,7 @@ public class tLightScript : MonoBehaviour
                 // Fキー押下を自動的にオンしているようにみせる
                 NowLightStatus(light_Status.ON, true);
                 hideSEFlag_ = false;
-                audioSource_.PlayOneShot(normalSE_);
+                SE(normalSE_);
             }
         }
     }
@@ -151,7 +156,7 @@ public class tLightScript : MonoBehaviour
 
     public void GetAccidentFlag(bool flag)
     {
-        // BatteryScriptで使用
+        // Batteryがあるかのチェック　BatteryScriptで使用
         accidentFlag_ = flag;
     }
 
@@ -160,4 +165,12 @@ public class tLightScript : MonoBehaviour
         // Batteryがあるかのチェック　BatteryScriptで使用
         return accidentFlag_;
     }
+
+    public void SE(AudioClip audio)
+    {
+        // SEの音を鳴らす　鳴らしたい音がaudioにはいる
+        audioSource_.PlayOneShot(audio);
+    }
+
+
 }
