@@ -16,6 +16,8 @@ public class PlayerCameraControll : MonoBehaviour
     private HideControl hideControl_;              // プレイヤーの隠れている状態の取得
     private bool operationFlag_ = true;            // カメラ操作できるか
 
+    private float startAnimTime_ = 0.0f;
+
     void Start()
     {
         cameraController_ = CameraController.FindObjectOfType<CameraController>();
@@ -27,6 +29,13 @@ public class PlayerCameraControll : MonoBehaviour
 
     void Update()
     {
+        // スタート時のアニメーション中はカメラ操作ができないようにする
+        if(startAnimTime_ < 7.0f)
+        {
+            startAnimTime_ += Time.deltaTime;
+            return;
+        }
+
         CameraOn();
     }
 

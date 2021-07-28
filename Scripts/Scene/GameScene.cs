@@ -19,6 +19,8 @@ public class GameScene : MonoBehaviour
     public Text timerText;                  // タイマー表示用テキスト
     private bool secondsAddFlag_ = false;   // 秒数が足されたか
 
+    private float startAnimTime_ = 0.0f;
+
     void Start()
     {
         StartCoroutine("Coroutine");
@@ -26,8 +28,14 @@ public class GameScene : MonoBehaviour
 
     void Update()
     {
+        // スタート時のアニメーション中はTABキー操作ができないようにする
+        if (startAnimTime_ < 7.0f)
+        {
+            startAnimTime_ += Time.deltaTime;
+        }
+
         // ポーズ（メニュー）を開く処理
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 7.0f)
         {
             pauseFlag_ = !pauseFlag_;
         }

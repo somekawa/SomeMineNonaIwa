@@ -32,6 +32,8 @@ public class playerController : MonoBehaviour
     private bool keyFlg1_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用1
     private bool keyFlg2_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用2
 
+    private float startAnimTime_ = 0.0f;
+
     // リーンの計算式に必要な値をまとめた構造体
     public struct leanSt
     {
@@ -83,6 +85,13 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
+        // スタート時のアニメーション中はキャラクター操作ができないようにする
+        if (startAnimTime_ < 7.0f)
+        {
+            startAnimTime_ += Time.deltaTime;
+            return;
+        }
+
         // デバッグ中
         if (Input.GetKeyUp(KeyCode.Space))
         {
