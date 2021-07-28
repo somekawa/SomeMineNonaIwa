@@ -10,20 +10,22 @@ public class SlenderManCtl : MonoBehaviour
     public NavMeshAgent navMeshAgent_;          // Nav Mesh Agentの格納用
     private Animator anim_;                     // Animatorの格納用
 
-    public GameObject destinationPoints;        // 移動予定地の親オブジェクト格納用
-    public GameObject warpPoints;               // ワープ予定地の親オブジェクト格納用
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
     public bool warpFlag = false;               // 大きな音が聞こえてワープするか否かのフラグ(デフォルト：聞こえていない＝false)
-    public bool ringingFlag = false;               // 音が鳴った場所に向かうか否かのフラグ(デフォルト：向かわない＝false)
+    public bool ringingFlag = false;            // 音が鳴った場所に向かうか否かのフラグ(デフォルト：向かわない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
+    public bool searchFlag = false;             // 範囲内で音が鳴った場所を探すか否かのフラグ(デフォルト：探さない＝false)
 
+    private GameObject destinationPoint_;       // 移動予定地の親オブジェクト格納用
+    private GameObject warpPoint_;              // ワープ予定地の親オブジェクト格納用
     private GameObject[] targetObjects_;        // 移動予定地のオブジェクト群
     private GameObject[] warpPoints_;           // ワープ先のオブジェクト群
+    private GameObject searchArea_;             // 音の鳴った場所を探すための範囲格納用
+    private Vector3 soundWarpPoint_;            // 音のした場所近くの座標格納用
     private int targetRange_;                   // 移動予定地の乱数格納用
     private int warpRange_;                     // ワープ予定地の乱数格納用
     private float warpCnt_;                     // ワープが発生するまでの時間格納用
-    private Vector3 soundWarpPoint_;            // 音のした場所近くの座標格納用
 
     public enum Status
     {
@@ -42,17 +44,20 @@ public class SlenderManCtl : MonoBehaviour
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
 
-        destinationPoints = GameObject.Find("DestinationPoints");
-        warpPoints = GameObject.Find("WarpPoints");
+        destinationPoint_ = GameObject.Find("DestinationPoints");
+        warpPoint_ = GameObject.Find("WarpPoints");
+        searchArea_ = transform.Find("SearchPlayer").gameObject;
 
         navMeshAgent_.autoRepath = false;
         navMeshAgent_.updatePosition = false;
 
+        searchArea_.SetActive(false);
+
         soundPoint = new Vector3(0, 0, 0);
         soundWarpPoint_ = new Vector3(0, 0, 0);
 
-        targetObjects_ = destinationPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
-        warpPoints_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        targetObjects_ = destinationPoint_.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        warpPoints_ = warpPoint_.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
 
         this.gameObject.transform.position = warpPoints_[Random.Range(1, warpPoints_.Length)].transform.position;
 
@@ -67,7 +72,7 @@ public class SlenderManCtl : MonoBehaviour
         //if (navMeshAgent_.velocity.magnitude > 0)     // 移動しているかどうかの判定
         if (status == Status.WALK)
         {
-            anim_.SetBool("moveFlag", true);          // 歩くモーションの開始
+            anim_.SetBool("moveFlag", true);            // 歩くモーションの開始
             if (navMeshAgent_.hasPath == false)
             {
                 status = Status.IDLE;
@@ -75,19 +80,20 @@ public class SlenderManCtl : MonoBehaviour
         }
         else if (status == Status.IDLE)
         {
-            anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
+            anim_.SetBool("moveFlag", false);           // 歩くモーションの停止
             if (ringingFlag == false)
             {
-                SetTargetPoint();                        // 次の移動先の決定
+                SetTargetPoint();                       // 次の移動先の決定
                 if (navMeshAgent_.hasPath == true)
                 {
                     status = Status.WALK;
                 }
+                searchFlag = false;
             }
         }
         else
         {
-            anim_.SetBool("moveFlag", false);        // 歩くモーションの停止
+            anim_.SetBool("moveFlag", false);           // 歩くモーションの停止
             if (navMeshAgent_.hasPath == false)
             {
                 status = Status.IDLE;
@@ -100,7 +106,7 @@ public class SlenderManCtl : MonoBehaviour
             navMeshAgent_.stoppingDistance = 0;
             navMeshAgent_.ResetPath();
             status = Status.IDLE;
-            listenFlag = false;                      // 音のした場所に着いたらfalseにする
+            listenFlag = false;                         // 音のした場所に着いたらfalseにする
         }
 
         if (warpFlag == true && listenFlag == true && status != Status.NULL)                   // 音が聞こえた時に呼び出す
@@ -111,6 +117,10 @@ public class SlenderManCtl : MonoBehaviour
         if (warpFlag == false && listenFlag == true && status != Status.NULL)
         {
             SetTargetPoint();
+            if (searchArea_.activeSelf != false)
+            {
+                searchArea_.SetActive(false);
+            }
         }
 
         if (navMeshAgent_.pathStatus == NavMeshPathStatus.PathInvalid)
@@ -170,6 +180,7 @@ public class SlenderManCtl : MonoBehaviour
         {
             DistanceCalculation();
             navMeshAgent_.Warp(soundWarpPoint_);
+            searchArea_.SetActive(true);
         }
         warpFlag = false;
         SetTargetPoint();
@@ -185,7 +196,7 @@ public class SlenderManCtl : MonoBehaviour
             if (maxDistance > distance)                                                      // maxDistanceより値が小さくなった場合
             {
                 maxDistance = distance;                                                      // maxDistanceの再設定
-                soundWarpPoint_ = warpPoints_[i].transform.position;                          // その時のワープポイントの座標を格納する
+                soundWarpPoint_ = warpPoints_[i].transform.position;                         // その時のワープポイントの座標を格納する
             }
         }
     }
