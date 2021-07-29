@@ -45,9 +45,9 @@ public class tLightScript : MonoBehaviour
 
     void Update()
     {
-        if (gameScene_.GetPauseFlag() == true)
+        if (gameScene_.GetPauseFlag() == true||gameScene_.GetStartAnimTime() < 7.0f)
         {
-            return;            // pause中は何の処理もできないようにする
+            return;            // Scene移行時またはpause中は何の処理もできないようにする
         }
 
         // ライトオンオフ            // 隠れている時は音はならない
