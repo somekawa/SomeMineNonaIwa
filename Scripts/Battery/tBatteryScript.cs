@@ -7,6 +7,7 @@ public class tBatteryScript : MonoBehaviour
 {
     public tLightScript lightScript;
     public PlayerCollision playerCollision;
+    public HideControl hideCtl;
 
     // lightONの時に消費する量
     public float erasePoint = 0.03f;        // 1秒間に減る量（0.03f）
@@ -66,7 +67,12 @@ public class tBatteryScript : MonoBehaviour
     }
 
     void Update()
-    { 
+    {
+        if (hideCtl.GetHideFlg() == true)
+        {
+            // 箱に隠れている時は電池を消費しないようにする
+            return;
+        }
         countdown_ -= Time.deltaTime;        // カウントダウンする
       
         // 両方の充電がないとき
