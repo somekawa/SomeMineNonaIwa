@@ -30,7 +30,7 @@ public class PlayerCameraControll : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はカメラ操作ができないようにする
-        if(startAnimTime_ < 10.0f)
+        if(startAnimTime_ < 7.0f)
         {
             startAnimTime_ += Time.deltaTime;
             return;

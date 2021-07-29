@@ -10,6 +10,7 @@ public class GameScene : MonoBehaviour
     public Text batteryText;
     public Text[] keyText;
     public PlayerCollision playerColScript;
+    public GameObject collectCanvas;
 
     private bool pauseFlag_;
 
@@ -24,18 +25,23 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
+        collectCanvas.SetActive(false);
     }
 
     void Update()
     {
         // スタート時のアニメーション中はTABキー操作ができないようにする
-        if (startAnimTime_ < 10.0f)
+        if (startAnimTime_ < 7.0f)
         {
             startAnimTime_ += Time.deltaTime;
         }
+        else
+        {
+            collectCanvas.SetActive(true);
+        }
 
         // ポーズ（メニュー）を開く処理
-        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 10.0f)
+        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 7.0f)
         {
             pauseFlag_ = !pauseFlag_;
         }
