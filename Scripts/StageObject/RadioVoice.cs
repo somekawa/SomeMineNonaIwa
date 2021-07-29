@@ -23,9 +23,9 @@ public class RadioVoice : MonoBehaviour
     {
         for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
         {
-            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
+            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().slenderManCtl[i] != null)
             {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().slenderManCtl[i];
             }
         }
 

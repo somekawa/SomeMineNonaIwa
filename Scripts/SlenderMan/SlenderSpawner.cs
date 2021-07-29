@@ -6,9 +6,10 @@ using System.Linq;
 public class SlenderSpawner : MonoBehaviour
 {
     public GameObject slender;                  // 生成するオブジェクト
-    public bool instantiateFlag;
     public GameObject[] spawnSlender;           // 生成しているSlender格納用配列
+    public SlenderManCtl[] slenderManCtl;
     public GameObject warpPoints;               // ワープ予定地の親オブジェクト格納用
+    public bool instantiateFlag;                // 生成するか否かのフラグ(デフォルト：生成しない＝false)
 
     private GameObject[] warpPoint_;            // ワープ先のオブジェクト群
     private int minCnt_;
@@ -19,6 +20,7 @@ public class SlenderSpawner : MonoBehaviour
         warpPoint_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
         instantiateFlag = false;
         spawnSlender = new GameObject[4];
+        slenderManCtl = new SlenderManCtl[4];
         spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
     }
 
@@ -36,13 +38,14 @@ public class SlenderSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (instantiateFlag==true)
+        if (instantiateFlag == true)
         {
             for (int i = 0; i < spawnSlender.Length; i++)
             {
                 if (spawnSlender[i] == null)
                 {
                     spawnSlender[i] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
+                    slenderManCtl[i] = spawnSlender[i].GetComponent<SlenderManCtl>();
                     instantiateFlag = false;
                     break;
                 }
@@ -55,20 +58,15 @@ public class SlenderSpawner : MonoBehaviour
         float minDistance = 0;
         float nowDistance = 0;
         int minCnt = 0;
-        SlenderManCtl[] slenderManCtl = new SlenderManCtl[4];
 
         for (int x = 0; x < spawnSlender.Length; x++)
         {
-            if (slenderManCtl[x] == null && spawnSlender[x] != null)
-            {
-                slenderManCtl[x] = spawnSlender[x].gameObject.GetComponent<SlenderManCtl>();
-            }
-
             if (spawnSlender[x] != null)
             {
-                nowDistance = Vector3.Distance(gameObject.transform.position, spawnSlender[x].transform.position);
+                nowDistance = Vector3.Distance(gameObject.transform.position, spawnSlender[x].transform.position);      // 全ての敵の距離を測る
                 if (minDistance >= nowDistance)
                 {
+                    // 一番近い敵の情報を格納
                     minDistance = nowDistance;
                     minCnt = x;
                 }
