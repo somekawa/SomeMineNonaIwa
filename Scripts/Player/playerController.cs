@@ -33,6 +33,7 @@ public class playerController : MonoBehaviour
     private bool keyFlg2_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用2
 
     private float startAnimTime_ = 0.0f;
+    private GameScene gameScene_;
 
     // リーンの計算式に必要な値をまとめた構造体
     public struct leanSt
@@ -50,6 +51,7 @@ public class playerController : MonoBehaviour
     {
        controller_ = GetComponent<CharacterController>();
        hideControl_ = GetComponent<HideControl>();
+       gameScene_ = FindObjectOfType<GameScene>();
 
        // 初期化
        leanSt[] lean = {
@@ -86,10 +88,13 @@ public class playerController : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はキャラクター操作ができないようにする
-        if (startAnimTime_ < 10.0f)
+        if (gameScene_ != null)
         {
-            startAnimTime_ += Time.deltaTime;
-            return;
+            if (gameScene_.GetStartAnimTime() < 10.0f)
+            {
+                //startAnimTime_ += Time.deltaTime;
+                return;
+            }
         }
 
         // デバッグ中
@@ -127,14 +132,14 @@ public class playerController : MonoBehaviour
 
         PlRotate();
 
-        if(!gameManager.GetPauseFlag())
+        if (!gameManager.GetPauseFlag())
         {
             QuickTurn();
         }
 
         slowWalk_ = Input.GetKey(KeyCode.LeftShift) ? true : false;
 
-        if(!leanFlg_)   // 傾き中は移動を止める
+        if (!leanFlg_)   // 傾き中は移動を止める
         {
             CalculateMove();
         }
@@ -290,13 +295,13 @@ public class playerController : MonoBehaviour
         if (Input.GetKey(KeyCode.T))
         {
             // 長押ししても、同じ処理を1回以上行わないようにしている
-            if (!leanFlg_ && !keyFlg1_) 
+            if (!leanFlg_ && !keyFlg1_)
             {
                 keyFlg1_ = true;
                 Camera.main.transform.Rotate(new Vector3(0, 0, transform.eulerAngles.z + (30 * leanMap_[other.gameObject.tag].rotate)));
                 Camera.main.transform.position = new Vector3(Camera.main.transform.position.x + (1.0f * leanMap_[other.gameObject.tag].moveX), Camera.main.transform.position.y, Camera.main.transform.position.z + (1.0f * leanMap_[other.gameObject.tag].moveZ));
             }
-            else if(leanFlg_ && !keyFlg2_)
+            else if (leanFlg_ && !keyFlg2_)
             {
                 keyFlg2_ = true;
                 // OnTriggerEnter側で使用した値を反転させる必要があるから、-1.0fが乗算されている

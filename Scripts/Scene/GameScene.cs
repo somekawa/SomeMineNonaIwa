@@ -81,6 +81,10 @@ public class GameScene : MonoBehaviour
     {
         return pauseFlag_;
     }
+    public float GetStartAnimTime()
+    {
+        return startAnimTime_;
+    }
 
     private IEnumerator Coroutine()
     {
