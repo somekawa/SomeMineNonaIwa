@@ -33,6 +33,7 @@ public class playerController : MonoBehaviour
     private bool keyFlg2_ = false;                  // リーン中に長押ししても、同じ処理を1回以上行わないようにする為に使用2
 
     private float startAnimTime_ = 0.0f;
+    private GameScene gameScene_;
 
     // リーンの計算式に必要な値をまとめた構造体
     public struct leanSt
@@ -50,9 +51,10 @@ public class playerController : MonoBehaviour
     {
        controller_ = GetComponent<CharacterController>();
        hideControl_ = GetComponent<HideControl>();
+       gameScene_ = FindObjectOfType<GameScene>();
 
-       // 初期化
-       leanSt[] lean = {
+        // 初期化
+        leanSt[] lean = {
             new leanSt { rotate = 1.0f , moveX = -1.0f, moveZ = 0.0f },// 黄色ボックス
             new leanSt { rotate = -1.0f, moveX = 1.0f , moveZ = 0.0f },// オレンジボックス
             new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = -1.0f},// 赤ボックス
@@ -86,10 +88,13 @@ public class playerController : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はキャラクター操作ができないようにする
-        if (startAnimTime_ < 7.0f)
+        if(gameScene_!=null)
         {
-            startAnimTime_ += Time.deltaTime;
-            return;
+            if (gameScene_.GetStartAnimTime() < 7.0f)
+            {
+                //startAnimTime_ += Time.deltaTime;
+                return;
+            }
         }
 
         // デバッグ中

@@ -9,6 +9,7 @@ public class SlenderManCtl : MonoBehaviour
     // Component取得用変数
     public NavMeshAgent navMeshAgent_;          // Nav Mesh Agentの格納用
     private Animator anim_;                     // Animatorの格納用
+    private GameScene gameScene_;
 
     public Vector3 soundPoint;                  // 音のした場所に向かうための座標格納用
     public bool listenFlag = false;             // 音が聞こえたか否かのフラグ(デフォルト：聞こえていない＝false)
@@ -43,6 +44,7 @@ public class SlenderManCtl : MonoBehaviour
     {
         anim_ = this.gameObject.GetComponent<Animator>();                  // Animatorの取得
         navMeshAgent_ = this.gameObject.GetComponent<NavMeshAgent>();      // Nav Mesh Agentの取得
+        gameScene_ = FindObjectOfType<GameScene>();
 
         destinationPoint_ = GameObject.Find("DestinationPoints");
         warpPoint_ = GameObject.Find("WarpPoints");
@@ -61,12 +63,29 @@ public class SlenderManCtl : MonoBehaviour
 
         this.gameObject.transform.position = warpPoints_[Random.Range(1, warpPoints_.Length)].transform.position;
 
-        SetTargetPoint();                                                  // 移動先の決定
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gameScene_ != null)
+        {
+            if (gameScene_.GetStartAnimTime() < 7.0f)
+            {
+                status = Status.IDLE;
+                //startAnimTime_ += Time.deltaTime;
+                return;
+            }
+            else if (gameScene_.GetStartAnimTime() == 7.0f)
+            {
+                SetTargetPoint();                                                  // 移動先の決定
+            }
+            else
+            {
+                return;
+            }
+        }
+
         //if (navMeshAgent_.pathStatus != NavMeshPathStatus.PathInvalid)
         //{
         //if (navMeshAgent_.velocity.magnitude > 0)     // 移動しているかどうかの判定
