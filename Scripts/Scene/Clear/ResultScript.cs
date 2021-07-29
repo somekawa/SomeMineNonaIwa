@@ -16,17 +16,17 @@ public class ResultScript : MonoBehaviour
         MAX
     }
 
-    public GameObject rezultCanvas; // リザルトを表示するキャンバス
+    public GameObject rezultTexts; // リザルトを表示するキャンバス
     private Text[] textObj;         // resultCanvasにあるTextを入れる
     private string[] textString_;   // 表示する文字を保存
 
-    private float speed_;           // 点滅スピード
-    private float alphaTime_;       // 文字のアルファ値
-    private int removeNum_;         // TextCoroutineを呼び出した回数
+    private float speed_ = 1.0f;           // 点滅スピード
+    private float alphaTime_ = 0.0f;       // 文字のアルファ値
+    private int removeNum_ = 0;         // TextCoroutineを呼び出した回数
 
-    public GameObject stage;        // クリアシーンの森ステージ
+    public GameObject stages;
+    private GameObject[] stage_;
     public GameObject borad;
-    public GameObject resultStage;  // リザルト中の自動ステージ
     public CharacterCtl CCtl;       // アクティブ状態変更
 
     void Start()
@@ -35,17 +35,17 @@ public class ResultScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
 
         StartText();        // テキスト系初期化
-
-        speed_ = 1.0f;
-     alphaTime_ = 0.0f;
-        removeNum_ = 0;
-
-        stage.SetActive(false);
-        borad.SetActive(false);
-        resultStage.SetActive(true);
+        
+        // 0番ResultStage　1番CleaStage
+        stage_ = new GameObject[stages.transform.childCount];
+        stage_[0] = stages.transform.GetChild(0).gameObject;
+        stage_[1] = stages.transform.GetChild(1).gameObject;
+        stage_[0].SetActive(true);
+        stage_[1].SetActive(false);
         CCtl.enabled = false;
-
+        borad.SetActive(false);
     }
+
     private void StartText()
     {
         textObj = new Text[(int)textType.MAX];
@@ -61,15 +61,11 @@ public class ResultScript : MonoBehaviour
         for (int i = 0; i < (int)textType.MAX; i++)
         {
             // resultCanvasの子になっている全てのテキストを上から下に見ていく
-            textObj[i] = rezultCanvas.transform.GetChild(i).GetComponent<Text>();
-        }
+            textObj[i] = rezultTexts.transform.GetChild(i).GetComponent<Text>();
 
-        // Textに文字を代入
-        for (int i = 0; i < (int)textType.MAX; i++)
-        {
+            // 秒の2桁目がなかった場合Textに文字を代入
             if ((int)GameScene.seconds <= 9)
             {
-                // 秒の2桁目がなかった場合
                 textString_[(int)textType.TIME] = "Play Time[" + (int)GameScene.minute
                                                     + ":0" + (int)GameScene.seconds + "]";
             }
@@ -77,9 +73,9 @@ public class ResultScript : MonoBehaviour
 
             Debug.Log(i + "番目" + textString_[i].Length);
         }
+
         // 点滅させるため
         textObj[(int)textType.TAP].color = GetAlphaColor(textObj[(int)textType.TAP].color);
-
     }
 
     void Update()
@@ -101,7 +97,7 @@ public class ResultScript : MonoBehaviour
         // 文字の点滅
         alphaTime_ += Time.deltaTime * 5.0f * speed_;
         color.a = Mathf.Sin(alphaTime_) * 0.5f + 0.5f;
-        Debug.Log("alphaTime_" + alphaTime_);
+       // Debug.Log("alphaTime_" + alphaTime_);
         return color;
     }
 
@@ -109,11 +105,15 @@ public class ResultScript : MonoBehaviour
     {
         // 画面クリックから1.5秒後にリザルトを消してステージを表示
         yield return new WaitForSecondsRealtime(1.5f);
-        Destroy(resultStage);
-        Destroy(rezultCanvas);
-        CCtl.enabled = true;
-        stage.SetActive(true);
+
+        // リザルトで使用したものを削除
+        Destroy(rezultTexts);
+        Destroy(stage_[0]);
+        // リザルト後に使用するものをアクティブに
+        stage_[1].SetActive(true);
         borad.SetActive(true);
+        CCtl.enabled = true;
+
         this.enabled = false;
 
     }
