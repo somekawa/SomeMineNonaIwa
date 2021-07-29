@@ -29,13 +29,13 @@ public class GameScene : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はTABキー操作ができないようにする
-        if (startAnimTime_ < 7.0f)
+        if (startAnimTime_ < 10.0f)
         {
             startAnimTime_ += Time.deltaTime;
         }
 
         // ポーズ（メニュー）を開く処理
-        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 7.0f)
+        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 10.0f)
         {
             pauseFlag_ = !pauseFlag_;
         }
@@ -80,11 +80,6 @@ public class GameScene : MonoBehaviour
     public bool GetPauseFlag()
     {
         return pauseFlag_;
-    }
-
-    public float GetStartAnimTime()
-    {
-        return startAnimTime_;
     }
 
     private IEnumerator Coroutine()
