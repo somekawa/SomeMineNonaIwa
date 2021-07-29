@@ -20,7 +20,9 @@ public class GameScene : MonoBehaviour
     public Text timerText;                  // タイマー表示用テキスト
     private bool secondsAddFlag_ = false;   // 秒数が足されたか
 
+    // 開始時のPlayerのアニメーション関係
     private float startAnimTime_ = 0.0f;
+    private const float maxAnimTime_ = 10.0f;   // 再生時間
 
     void Start()
     {
@@ -31,7 +33,7 @@ public class GameScene : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はTABキー操作ができないようにする
-        if (startAnimTime_ < 7.0f)
+        if (startAnimTime_ < maxAnimTime_)
         {
             startAnimTime_ += Time.deltaTime;
         }
@@ -41,7 +43,7 @@ public class GameScene : MonoBehaviour
         }
 
         // ポーズ（メニュー）を開く処理
-        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= 7.0f)
+        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
         {
             pauseFlag_ = !pauseFlag_;
         }
@@ -90,6 +92,11 @@ public class GameScene : MonoBehaviour
     public float GetStartAnimTime()
     {
         return startAnimTime_;
+    }
+
+    public float GetMaxAnimTime()
+    {
+        return maxAnimTime_;
     }
 
     private IEnumerator Coroutine()

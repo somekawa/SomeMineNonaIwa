@@ -68,20 +68,16 @@ public class SlenderManCtl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameScene_ != null)
+        if ((gameScene_ != null)&& (gameScene_.GetStartAnimTime() <= gameScene_.GetMaxAnimTime()))
         {
-            if (gameScene_.GetStartAnimTime() < 7.0f)
-            {
-                status = Status.IDLE;
-                //startAnimTime_ += Time.deltaTime;
-                return;
-            }
-            else if (gameScene_.GetStartAnimTime() == 7.0f)
+            if (gameScene_.GetStartAnimTime() == gameScene_.GetMaxAnimTime())
             {
                 SetTargetPoint();                                                  // 移動先の決定
             }
             else
             {
+                status = Status.IDLE;
+                //startAnimTime_ += Time.deltaTime;
                 return;
             }
         }

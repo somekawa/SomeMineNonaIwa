@@ -47,7 +47,7 @@ public class tLightScript : MonoBehaviour
     {
         if(gameScene_!=null)
         {
-            if (gameScene_.GetPauseFlag() == true || gameScene_.GetStartAnimTime() < 7.0f)
+            if (gameScene_.GetPauseFlag() == true || gameScene_.GetStartAnimTime() < gameScene_.GetMaxAnimTime())
             {
                 return;            // Scene移行時またはpause中は何の処理もできないようにする
             }
