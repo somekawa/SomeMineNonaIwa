@@ -21,6 +21,7 @@ public class SlenderSpawner : MonoBehaviour
         instantiateFlag = false;
         spawnSlender = new GameObject[4];
         slenderManCtl = new SlenderManCtl[4];
+        minCnt_ = 0;
         spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
     }
 
@@ -71,17 +72,17 @@ public class SlenderSpawner : MonoBehaviour
                     minCnt = x;
                 }
             }
-        }
 
-        if (slenderManCtl != null)
-        {
-            slenderManCtl[minCnt].soundPoint.x = destination.gameObject.transform.position.x;
-            slenderManCtl[minCnt].soundPoint.z = destination.gameObject.transform.position.z;
-            slenderManCtl[minCnt].navMeshAgent_.stoppingDistance = 2;
-            slenderManCtl[minCnt].listenFlag = true;
-            slenderManCtl[minCnt].ringingFlag = ringingFlag;
-            slenderManCtl[minCnt].warpFlag = warpFlag;
-            minCnt_ = minCnt;
+            if (slenderManCtl[x] != null)
+            {
+                slenderManCtl[minCnt].soundPoint.x = destination.gameObject.transform.position.x;
+                slenderManCtl[minCnt].soundPoint.z = destination.gameObject.transform.position.z;
+                slenderManCtl[minCnt].navMeshAgent_.stoppingDistance = 2;
+                slenderManCtl[minCnt].listenFlag = true;
+                slenderManCtl[minCnt].ringingFlag = ringingFlag;
+                slenderManCtl[minCnt].warpFlag = warpFlag;
+                minCnt_ = minCnt;
+            }
         }
     }
 
