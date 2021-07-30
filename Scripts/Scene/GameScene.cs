@@ -48,9 +48,8 @@ public class GameScene : MonoBehaviour
         {
             for (int i = 1; i < collectUIs_.Length - 2; i++)
             {
-                collectUIs_[i].gameObject.SetActive(false);
+                collectUIs_[i].gameObject.SetActive(true);
             }
-        }
 
         // ポーズ（メニュー）を開く処理
         if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
@@ -73,6 +72,7 @@ public class GameScene : MonoBehaviour
             secondsAddFlag_ = false;
         }
         timerText.text = minute.ToString("00") + ":" + (seconds).ToString("00");
+        }
     }
 
     private void ActiveText()
