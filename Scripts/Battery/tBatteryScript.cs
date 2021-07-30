@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class tBatteryScript : MonoBehaviour
 {
+    // Component取得用変数
     public tLightScript lightScript;
     public PlayerCollision playerCollision;
     public HideControl hideCtl;

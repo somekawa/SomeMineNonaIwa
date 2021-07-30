@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemUI : MonoBehaviour
 {
+    // Component取得用変数
     public Barrier barrier;
     public ItemTrhow itemTrhow;
 

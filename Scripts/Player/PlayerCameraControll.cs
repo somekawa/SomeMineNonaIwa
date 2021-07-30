@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class PlayerCameraControll : MonoBehaviour
 {
-    public float x_sensi;                          // マウスのX座標の感度格納用
-    public float y_sensi;                          // マウスのY座標の感度格納用
-    public GameObject playerCamera;                // 動かすカメラ格納用
+    // Component取得用変数
     public playerController playerController;      // コントローラー情報の取得
     public PauseScript pause;                      // pause中の処理
 
     private CameraController cameraController_;    // カメラ情報の取得
+    private HideControl hideControl_;              // プレイヤーの隠れている状態の取得
+
+    public float x_sensi;                          // マウスのX座標の感度格納用
+    public float y_sensi;                          // マウスのY座標の感度格納用
+    public GameObject playerCamera;                // 動かすカメラ格納用
+
     private float x_Rotation_;                     // カメラの回転(X軸)
     private float y_Rotation_;                     // カメラの回転(Y軸)
-    private HideControl hideControl_;              // プレイヤーの隠れている状態の取得
     private bool operationFlag_ = true;            // カメラ操作できるか
 
     private float startAnimTime_ = 0.0f;
