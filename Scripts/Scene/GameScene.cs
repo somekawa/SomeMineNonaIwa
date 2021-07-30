@@ -7,10 +7,12 @@ using System.Linq;
 
 public class GameScene : MonoBehaviour
 {
+    // Component取得用変数
     public tBatteryScript batteryScript;
+    public PlayerCollision playerColScript;
+
     public Text batteryText;
     public Text[] keyText;
-    public PlayerCollision playerColScript;
     public GameObject collectCanvas;
 
     private bool pauseFlag_;
@@ -34,7 +36,6 @@ public class GameScene : MonoBehaviour
         {
             collectUIs_[i].gameObject.SetActive(false);
         }
-        //collectCanvas.SetActive(false);
     }
 
     void Update()
@@ -51,27 +52,27 @@ public class GameScene : MonoBehaviour
                 collectUIs_[i].gameObject.SetActive(true);
             }
 
-        // ポーズ（メニュー）を開く処理
-        if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
-        {
-            pauseFlag_ = !pauseFlag_;
-        }
-
-        ActiveText();
-
-        // 時間計測毎フレーム呼ばれないようにフラグで管理
-        if (secondsAddFlag_ == true)
-        {
-            if (seconds >= 60)
+            // ポーズ（メニュー）を開く処理
+            if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
             {
-                // count_60以上＝1分
-                minute++;
-                seconds = seconds - 60;
+                pauseFlag_ = !pauseFlag_;
             }
-            StartCoroutine("Coroutine");
-            secondsAddFlag_ = false;
-        }
-        timerText.text = minute.ToString("00") + ":" + (seconds).ToString("00");
+
+            ActiveText();
+
+            // 時間計測毎フレーム呼ばれないようにフラグで管理
+            if (secondsAddFlag_ == true)
+            {
+                if (seconds >= 60)
+                {
+                    // count_60以上＝1分
+                    minute++;
+                    seconds = seconds - 60;
+                }
+                StartCoroutine("Coroutine");
+                secondsAddFlag_ = false;
+            }
+            timerText.text = minute.ToString("00") + ":" + (seconds).ToString("00");
         }
     }
 
