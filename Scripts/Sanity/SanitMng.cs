@@ -112,18 +112,22 @@ public class SanitMng : MonoBehaviour
         }
 
         bool lightFlag = spotLight_.activeSelf;
+
+        // 懐中電灯がオフになった時
+        if ((!lightFlag) && (offTime_ == 0.0f)) 
+        {
+            d_time_ = d_nowTime_;
+            onTime_ = 0.0f;
+            offTime_ = Time.time;
+            recoveryFlag_ = false;
+        }
+
         if (oldLightFlag_ != lightFlag)
         {
+            // 懐中電灯をオンにした時
             if (lightFlag)
             {
                 DurableReset();
-            }
-            else
-            {
-                d_time_ = d_nowTime_;
-                onTime_ = 0.0f;
-                offTime_ = Time.time;
-                recoveryFlag_ = false;
             }
         }
         else
@@ -140,7 +144,6 @@ public class SanitMng : MonoBehaviour
                 }
             }
         }
-
         oldLightFlag_ = lightFlag;
     }
 
@@ -179,6 +182,7 @@ public class SanitMng : MonoBehaviour
 
     }
 
+    // 懐中電灯オフによる正気度減少処理
     private void OffAction()
     {
         d_nowTime_ = d_time_ - (Time.time - offTime_);
