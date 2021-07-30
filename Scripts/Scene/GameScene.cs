@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class GameScene : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameScene : MonoBehaviour
     public GameObject collectCanvas;
 
     private bool pauseFlag_;
+    private GameObject[] collectUIs_;
 
     // クリアシーンで使うため分と秒はpublicに
     public static int minute  = 0;          // 何分か
@@ -27,7 +29,12 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
-        collectCanvas.SetActive(false);
+        collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+        for (int i = 1; i < collectUIs_.Length - 2; i++)
+        {
+            collectUIs_[i].gameObject.SetActive(false);
+        }
+        //collectCanvas.SetActive(false);
     }
 
     void Update()
@@ -39,7 +46,10 @@ public class GameScene : MonoBehaviour
         }
         else
         {
-            collectCanvas.SetActive(true);
+            for (int i = 1; i < collectUIs_.Length - 2; i++)
+            {
+                collectUIs_[i].gameObject.SetActive(false);
+            }
         }
 
         // ポーズ（メニュー）を開く処理
