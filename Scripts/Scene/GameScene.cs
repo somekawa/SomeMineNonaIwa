@@ -7,22 +7,22 @@ using System.Linq;
 
 public class GameScene : MonoBehaviour
 {
-    // Component取得用変数
-    public tBatteryScript batteryScript;
     public PlayerCollision playerColScript;
+    public tBatteryScript batteryScript;
+    public Text pauseKeyText;   // ポーズ中に表示される鍵の数
+    public Text mainKeyText;    // ゲーム再生中に表示される鍵の数
+    public Text batteryText;    // ポーズで電池残量の数値を表示
 
-    public Text batteryText;
-    public Text[] keyText;
-    public GameObject collectCanvas;
-
-    private bool pauseFlag_;
-    private GameObject[] collectUIs_;
-
+    private bool pauseFlag_;    // ポーズ中かどうか
     // クリアシーンで使うため分と秒はpublicに
     public static int minute  = 0;          // 何分か
     public static int seconds = 0;          // 何秒か
     public Text timerText;                  // タイマー表示用テキスト
     private bool secondsAddFlag_ = false;   // 秒数が足されたか
+
+    public GameObject collectCanvas;
+    private GameObject[] collectUIs_;
+
 
     // 開始時のPlayerのアニメーション関係
     private float startAnimTime_ = 0.0f;
@@ -31,10 +31,13 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
-        collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
-        for (int i = 1; i < collectUIs_.Length - 2; i++)
+        if (SceneManager.GetActiveScene().name == "TutorialScene")
         {
-            collectUIs_[i].gameObject.SetActive(false);
+            collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
+            for (int i = 1; i < collectUIs_.Length - 2; i++)
+            {
+                collectUIs_[i].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -47,11 +50,14 @@ public class GameScene : MonoBehaviour
         }
         else
         {
-            for (int i = 1; i < collectUIs_.Length - 2; i++)
+            if (SceneManager.GetActiveScene().name == "TutorialScene")
             {
-                collectUIs_[i].gameObject.SetActive(true);
-            }
 
+                for (int i = 1; i < collectUIs_.Length - 2; i++)
+                {
+                    collectUIs_[i].gameObject.SetActive(false);
+                }
+            }
             // ポーズ（メニュー）を開く処理
             if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
             {
@@ -75,7 +81,6 @@ public class GameScene : MonoBehaviour
             timerText.text = minute.ToString("00") + ":" + (seconds).ToString("00");
         }
     }
-
     private void ActiveText()
     {
         if (SceneManager.GetActiveScene().name == "TutorialScene")
@@ -83,16 +88,16 @@ public class GameScene : MonoBehaviour
             // チュートリアル中は電池の消費なしのため
             batteryText.text = "電池残量100%";
             // チュートリアル中は基礎行動で1つ、実践で1つ
-            keyText[0].text = "(" + playerColScript.GetkeyItemCnt() + "/ 1)";
-            keyText[1].text = "×\n" + playerColScript.GetkeyItemCnt();
+            pauseKeyText.text = "(" + playerColScript.GetkeyItemCnt() + "/ 1)";
+            mainKeyText.text = "×\n" + playerColScript.GetkeyItemCnt();
         }
         else
         {
             // バッテリーの残り
-            batteryText.text = "電池残量" + batteryScript.ReturnBatteryRest() + "%";
-            // 鍵の所持数表示    // [0]ポーズ画面で　[1]ゲーム中
-            keyText[0].text = "(" + playerColScript.GetkeyItemCnt() + "/ 8)";
-            keyText[1].text = "×\n" + playerColScript.GetkeyItemCnt();
+            batteryText.text = "電池残量" + (int)batteryScript.ReturnBatteryRest() + "%";
+            // 鍵の所持数表示
+            pauseKeyText.text = "(" + playerColScript.GetkeyItemCnt() + "/ 8)";
+            mainKeyText.text = "×\n" + playerColScript.GetkeyItemCnt();
         }
     }
 
