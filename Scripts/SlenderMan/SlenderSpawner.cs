@@ -13,16 +13,17 @@ public class SlenderSpawner : MonoBehaviour
 
     private GameObject[] warpPoint_;            // ワープ先のオブジェクト群
     private int minCnt_;
+    private GameScene gameScene_;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameScene_ = FindObjectOfType<GameScene>();
         warpPoint_ = warpPoints.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
         instantiateFlag = false;
         spawnSlender = new GameObject[4];
         slenderManCtl = new SlenderManCtl[4];
         minCnt_ = 0;
-        spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
     }
 
     static SlenderSpawner Instance = null;
@@ -39,6 +40,17 @@ public class SlenderSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameScene_!=null)
+        {
+            if(gameScene_.GetStartAnimTime()>gameScene_.GetMaxAnimTime())
+            {
+                if(spawnSlender[0]==null)
+                {
+                    spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
+                }
+            }
+        }
+
         if (instantiateFlag == true)
         {
             for (int i = 0; i < spawnSlender.Length; i++)
