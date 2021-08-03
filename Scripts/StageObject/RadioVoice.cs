@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RadioVoice : MonoBehaviour
 {
@@ -21,22 +22,34 @@ public class RadioVoice : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
         {
-            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().slenderManCtl[i] != null)
+            for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
             {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().slenderManCtl[i];
+                if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().slenderManCtl[i] != null)
+                {
+                    slenderManCtl_[i] = SlenderSpawner.GetInstance().slenderManCtl[i];
+                }
             }
-        }
 
-        if (!soundFlg_)
-        {
-            slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
-            return;
+            if (!soundFlg_)
+            {
+                slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
+                return;
+            }
+            else
+            {
+                SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 2, true, false);
+            }
         }
         else
         {
-            SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 2, true, false);
+
+            if (!soundFlg_)
+            {
+                return;
+            }
+
         }
     }
 
@@ -47,5 +60,29 @@ public class RadioVoice : MonoBehaviour
             // RadioVoiceAudioのSounds関数を呼ぶ
             voiceAudio_.Sounds(int.Parse(this.gameObject.name), this.gameObject.transform.position);
         }
+
+        if (other.gameObject.tag == "ItemHitArea")
+        {
+            Debug.Log("アイテムヒットエリアと接触中");
+            // 範囲内かつ音が鳴っていなかったら
+            if (voiceAudio_.GetNowVoice() == false)
+            {
+                voiceAudio_.SetVoiceAround(true);
+            }
+            else
+            {
+                voiceAudio_.SetVoiceAround(false);
+            }
+        }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // ItemHitAreaの範囲外になったらfalse 
+        if (other.gameObject.tag == "ItemHitArea")
+        {
+            voiceAudio_.SetVoiceAround(false);
+        }
+    }
+
 }

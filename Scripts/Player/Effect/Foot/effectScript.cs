@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class effectScript : MonoBehaviour
 {
@@ -17,7 +18,15 @@ public class effectScript : MonoBehaviour
     void Start()
     {
         // プレイヤー情報を取得する
-        player_ = GameObject.Find("Player");
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
+        {
+            player_ = GameObject.Find("Player");
+        }
+        else
+        {
+            player_ = GameObject.Find("tPlayer");
+
+        }
         if (player_ != null)
         {
             plSc_ = player_.GetComponent<playerController>();

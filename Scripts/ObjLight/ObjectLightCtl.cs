@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ObjectLightCtl : MonoBehaviour
 {
@@ -15,7 +16,14 @@ public class ObjectLightCtl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        comingObject = GameObject.Find("Player");
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
+        {
+            comingObject = GameObject.Find("Player");
+        }
+        else
+        {
+            comingObject = GameObject.Find("tPlayer");
+        }
         cameraController_ = CameraController.FindObjectOfType<CameraController>();
         objectLight_ = gameObject.GetComponentInChildren<Light>().gameObject;     // 子オブジェクトのlightを取得
     }

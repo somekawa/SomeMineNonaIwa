@@ -28,7 +28,7 @@ public class SystemMessage : MonoBehaviour
     public GameObject leanMessage;      // レーン用の文字
 
     private HideBox hideBox_;        // ボックスとプレイヤーの接触状態
-    private RadioVoice radioVoice_;   // ラジオを使える時
+    public RadioVoiceAudio radioAudio_;   // ラジオを使える時
 
     private float alpha_ = 1.0f;    // テキストのアルファ値を変更
     private bool textActiveFlag_ = false;
@@ -39,10 +39,6 @@ public class SystemMessage : MonoBehaviour
         // 隠れる箱を探す
         GameObject hideObj = GameObject.Find("MannequinBox").gameObject;
         hideBox_ = hideObj.GetComponent<HideBox>();
-
-        // ラジオを見つける
-        GameObject radioObj = GameObject.Find("RadioVintage").gameObject;
-        radioVoice_ = radioObj.GetComponent<RadioVoice>();
 
         action_ = action.NON;
         message_ = new string[(int)action.MAX]{"","ライトを充電しました",
