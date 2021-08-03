@@ -31,7 +31,7 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
-        if (SceneManager.GetActiveScene().name == "TutorialScene")
+        if (SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "MainScene")
         {
             collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
             for (int i = 1; i < collectUIs_.Length - 2; i++)
@@ -50,12 +50,11 @@ public class GameScene : MonoBehaviour
         }
         else
         {
-            if (SceneManager.GetActiveScene().name == "TutorialScene")
+            if (SceneManager.GetActiveScene().name == "TutorialScene"|| SceneManager.GetActiveScene().name == "MainScene")
             {
-
                 for (int i = 1; i < collectUIs_.Length - 2; i++)
                 {
-                    collectUIs_[i].gameObject.SetActive(false);
+                    collectUIs_[i].gameObject.SetActive(true);
                 }
             }
             // ポーズ（メニュー）を開く処理
