@@ -31,7 +31,7 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
-        if (SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "MainScene")
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
         {
             collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
             for (int i = 1; i < collectUIs_.Length - 2; i++)
@@ -50,7 +50,7 @@ public class GameScene : MonoBehaviour
         }
         else
         {
-            if (SceneManager.GetActiveScene().name == "TutorialScene"|| SceneManager.GetActiveScene().name == "MainScene")
+            if (SceneManager.GetActiveScene().name != "TutorialScene")
             {
                 for (int i = 1; i < collectUIs_.Length - 2; i++)
                 {
