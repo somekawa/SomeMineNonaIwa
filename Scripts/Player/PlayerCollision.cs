@@ -232,6 +232,11 @@ public class PlayerCollision : MonoBehaviour
         return keyItemCnt_;
     }
 
+    public void SetKeyItemCnt(int num)
+    {
+        keyItemCnt_ = num;
+    }
+
     // 扉の共通処理
     void ChainCheck(Transform c ,string str)
     {

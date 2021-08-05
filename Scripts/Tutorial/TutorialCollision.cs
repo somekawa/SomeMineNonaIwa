@@ -166,7 +166,7 @@ public class TutorialCollision : MonoBehaviour
             //ドアと接触したら実践ミッションステージに移る
             if (other.gameObject.tag == "Door")
             {
-                playerCol_.SetKeyItemCnt(0);    // 鍵の所持数をリセット
+                playerCol_.SetKeyItemCnt(0);   // 鍵の所持数をリセット
                 tutorialMain.SetDoorColFlag(true);
                 nextMissionFlag_ = true;
                 Debug.Log("ドアに接触nextMissionFlag_"+ nextMissionFlag_);
