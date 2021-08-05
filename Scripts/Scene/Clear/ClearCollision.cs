@@ -25,7 +25,7 @@ public class ClearCollision : MonoBehaviour
             if (doorAnimation.GetFullOpneFlag() == true)
             {
                 Debug.Log("ドアが開ききりました。タイトルシーンに移動します");
-                //  SceneManager.LoadScene("TitleSample");
+                SceneManager.LoadScene("TitleSample");
             }
         }
         else if (other.gameObject.tag == "GameDoor")
@@ -35,8 +35,12 @@ public class ClearCollision : MonoBehaviour
             if (doorAnimation.GetFullOpneFlag() == true)
             {
                 Debug.Log("ドアが開ききりました。ゲームシーンに移動します");
-                // SceneManager.LoadScene("MainScene");
+                SceneManager.LoadScene("MainScene");
             }
+        }
+        else
+        {
+            // 何も処理を行わない
         }
     }
 }
