@@ -82,7 +82,7 @@ public class playerController : MonoBehaviour
 
         textBack.enabled = false;
         LeanAnnounceText.SetActive(false);
-        LeanAnnounceText.GetComponent<Text>().text = "Tキー：通路を覗き込む";
+        LeanAnnounceText.GetComponent<Text>().text = "【T】通路を覗き込む";
    }
 
     void Update()
@@ -122,10 +122,12 @@ public class playerController : MonoBehaviour
             leanFlg_ = !leanFlg_;
             if (leanFlg_)
             {
+                LeanAnnounceText.GetComponent<Text>().text = "【T】視点を戻す";
                 keyFlg1_ = false;
             }
             else
             {
+                LeanAnnounceText.GetComponent<Text>().text = "【T】通路を覗き込む";
                 keyFlg2_ = false;
             }
         }
@@ -276,7 +278,7 @@ public class playerController : MonoBehaviour
     private void OnTriggerExit()
     {
         textBack.enabled = false;
-        LeanAnnounceText.SetActive(false);
+       LeanAnnounceText.SetActive(false);
     }
 
     private void OnTriggerStay(Collider other)
@@ -287,13 +289,13 @@ public class playerController : MonoBehaviour
             return;
         }
 
-        // リーン中でないときは、傾けられるというメッセージを表示する
-        LeanAnnounceText.SetActive(!leanFlg_ ? true : false);// falseなら表示(true)
+        LeanAnnounceText.SetActive(true );// falseなら表示(true)
         textBack.enabled = true;
 
         // キー押下中
         if (Input.GetKey(KeyCode.T))
         {
+
             // 長押ししても、同じ処理を1回以上行わないようにしている
             if (!leanFlg_ && !keyFlg1_)
             {

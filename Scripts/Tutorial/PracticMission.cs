@@ -44,8 +44,8 @@ public class PracticMission : MonoBehaviour
         checkPractic_ = practic.HIDE;
 
         textString = new string[(int)practic.MAX]
-            { "隠れてください", "敵の位置を確認しましょう","鍵を探しましょう",
-                "敵を誘導しましょう","ドアまで移動して脱出しましょう",};
+            { "箱に隠れてください", "黄色ポイントから\n敵の位置を確認しましょう","鍵を探しましょう",
+                "ラジオで敵を誘導しましょう","ドアまで移動して脱出しましょう",};
 
         // 各の情報を初期化
         textBackImage = practicUIs.transform.GetChild(0).GetComponent<Image>();
