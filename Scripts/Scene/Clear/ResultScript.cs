@@ -20,29 +20,30 @@ public class ResultScript : MonoBehaviour
     private Text[] textObj;         // resultCanvasにあるTextを入れる
     private string[] textString_;   // 表示する文字を保存
 
-    private float speed_ = 1.0f;           // 点滅スピード
-    private float alphaTime_ = 0.0f;       // 文字のアルファ値
-    private int removeNum_ = 0;         // TextCoroutineを呼び出した回数
+    private float speed_ = 1.0f; // 点滅スピード
+    private float alphaTime_ = 0.0f; // 文字のアルファ値
+    private int removeNum_ = 0; // TextCoroutineを呼び出した回数
 
     public GameObject stages;
     private GameObject[] stage_;
     public GameObject borad;
-    public CharacterCtl CCtl;       // アクティブ状態変更
+    public GameObject player;
+    private CharacterCtl CCtl_; // アクティブ状態変更
 
     void Start()
     {
         Cursor.visible = true;                                    // マウスカーソルの表示
         Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
+        CCtl_ = player.GetComponent<CharacterCtl>();
+        StartText(); // テキスト系初期化
 
-        StartText();        // テキスト系初期化
-        
         // 0番ResultStage　1番CleaStage
         stage_ = new GameObject[stages.transform.childCount];
         stage_[0] = stages.transform.GetChild(0).gameObject;
         stage_[1] = stages.transform.GetChild(1).gameObject;
         stage_[0].SetActive(true);
         stage_[1].SetActive(false);
-        CCtl.enabled = false;
+        CCtl_.enabled = false;
         borad.SetActive(false);
     }
 
@@ -89,7 +90,10 @@ public class ResultScript : MonoBehaviour
             }
         }
 
-        textObj[(int)textType.TAP].color = GetAlphaColor(textObj[(int)textType.TAP].color);
+        if (rezultTexts != null)
+        {
+            textObj[(int)textType.TAP].color = GetAlphaColor(textObj[(int)textType.TAP].color);
+        }
     }
 
     Color GetAlphaColor(Color color)
@@ -111,11 +115,12 @@ public class ResultScript : MonoBehaviour
         Destroy(stage_[0]);
         // リザルト後に使用するものをアクティブに
         stage_[1].SetActive(true);
+
         borad.SetActive(true);
-        CCtl.enabled = true;
+        CCtl_.enabled = true;
+        player.SetActive(true);
 
         this.enabled = false;
-
     }
 
     private IEnumerator TextCoroutine()
