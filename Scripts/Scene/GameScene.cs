@@ -112,7 +112,7 @@ public class GameScene : MonoBehaviour
 
     public float GetMaxAnimTime()
     {
-        if (SceneManager.GetActiveScene().name != "GameScene") 
+        if (SceneManager.GetActiveScene().name != "MainScene") 
         {
             // ゲーム画面以外ではアニメーションは再生しない
             return 0.0f;
