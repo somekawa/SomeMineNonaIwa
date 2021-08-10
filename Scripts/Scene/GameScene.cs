@@ -44,7 +44,7 @@ public class GameScene : MonoBehaviour
     void Update()
     {
         // スタート時のアニメーション中はTABキー操作ができないようにする
-        if (startAnimTime_ < maxAnimTime_)
+        if (startAnimTime_ < GetMaxAnimTime())
         {
             startAnimTime_ += Time.deltaTime;
         }
@@ -59,7 +59,7 @@ public class GameScene : MonoBehaviour
                 }
             }
             // ポーズ（メニュー）を開く処理
-            if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= maxAnimTime_)
+            if (Input.GetKeyDown(KeyCode.Tab) && startAnimTime_ >= GetMaxAnimTime())
             {
                 pauseFlag_ = !pauseFlag_;
             }
@@ -112,6 +112,11 @@ public class GameScene : MonoBehaviour
 
     public float GetMaxAnimTime()
     {
+        if (SceneManager.GetActiveScene().name != "GameScene") 
+        {
+            // ゲーム画面以外ではアニメーションは再生しない
+            return 0.0f;
+        }
         return maxAnimTime_;
     }
 
