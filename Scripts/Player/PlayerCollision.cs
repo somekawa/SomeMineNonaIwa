@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// アイテムを2つ同時に取得できなくする
 
 public class PlayerCollision : MonoBehaviour
 {
@@ -13,11 +12,12 @@ public class PlayerCollision : MonoBehaviour
         NON,
         BATTERY,
         BARRIER,
-        INDUCTION,
+        //INDUCTION,
         ESCAPE,
         MAX
     }
     private item item_;
+    private item findItem_;// アイテムと接触している時用
 
     private HideControl hideControl_;     // 箱に隠れる処理
 
@@ -40,7 +40,7 @@ public class PlayerCollision : MonoBehaviour
     void Start()
     {
         item_ = item.NON;
-
+        findItem_ = item.NON;
         // PlayerからHideControl取得
         GameObject playerObj = transform.root.gameObject;
         hideControl_ = playerObj.GetComponent<HideControl>();
@@ -81,6 +81,7 @@ public class PlayerCollision : MonoBehaviour
                 Debug.Log("アイテムの取得可能時間になりました");
             }
         }
+        Debug.Log("PlayerCollision" + findItem_);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -124,11 +125,13 @@ public class PlayerCollision : MonoBehaviour
         // 脱出アイテムとの当たり判定
         if (other.gameObject.tag == "EscapeItem")
         {
+            findItem_ = item.ESCAPE;// 接触中
             if (Common(other))
             {
                 Debug.Log("脱出アイテムゲット");
                 keyItemColFlag_ = true;
                 item_ = item.ESCAPE;
+                findItem_ = item.NON;
                 // SEの音を鳴らす
                 SoundScript.GetInstance().PlaySound(7);
             }
@@ -137,11 +140,13 @@ public class PlayerCollision : MonoBehaviour
         // 電池との当たり判定
         else if (other.gameObject.tag == "Battery")
         {
-            if(Common(other))
+           findItem_ = item.BATTERY; // 接触中
+            if (Common(other))
             {
                 Debug.Log("電池ゲット");
                 batteryGetFlag_ = true;
                 item_ = item.BATTERY;
+                findItem_ = item.NON;
                 // SEの音を鳴らす
                 SoundScript.GetInstance().PlaySound(8);
             }
@@ -150,6 +155,7 @@ public class PlayerCollision : MonoBehaviour
         // 防御アイテム取得処理
         else if (other.gameObject.tag == "BarrierItem")
         {
+            findItem_ = item.BARRIER;// 接触中
             if (Common(other))
             {
                 Barrier barrier = Barrier.FindObjectOfType<Barrier>();
@@ -158,6 +164,7 @@ public class PlayerCollision : MonoBehaviour
                 // Barrierクラスのflagをtrueにしたい
                 Debug.Log("防御アイテムゲット");
                 item_ = item.BARRIER;
+                findItem_ = item.NON;
                 // SEの音を鳴らす
                 SoundScript.GetInstance().PlaySound(8);
             }
@@ -174,7 +181,19 @@ public class PlayerCollision : MonoBehaviour
         {
             return;
         }
+
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "EscapeItem"
+        || other.gameObject.tag == "Battery"
+        || other.gameObject.tag == "BarrierItem")
+        {
+            findItem_ = item.NON;
+        }
+    }
+
 
     public bool GetBatteryFlag()
     {
@@ -195,6 +214,10 @@ public class PlayerCollision : MonoBehaviour
     {
         // どのアイテムを取得したか
         return item_;
+    }
+    public item GetFindItem()
+    {
+        return findItem_;// どのアイテムが範囲にあるか
     }
 
     public void SetItemNum(item setItem)
