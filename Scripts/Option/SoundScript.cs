@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class SoundScript : MonoBehaviour
 {
+    public enum Difficulty
+    {
+        EASY,
+        HARD
+    };
+
+    public Difficulty difficulty;
+
     public AudioClip[] bgmList;//BGMを読み込む
     public AudioSource audioSourceBGM;//BGMの音の大きさを調節するために読み込む
 
@@ -58,6 +66,11 @@ public class SoundScript : MonoBehaviour
     //SEを再生する関数を作成
     public void PlaySound(int index)
     {
+        // 物が落下した際に、他のSEが鳴っていたらそのSEを中断させる
+        if (index == 6 && audioSourceSE.isPlaying)
+        {
+            audioSourceSE.Stop();
+        }
         audioSourceSE.clip = seList[index];
         audioSourceSE.Play();
     }

@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public class TitleScene : MonoBehaviour
 {
     public Canvas titleCanvas;
+    public GameObject difficultButton;
 
     void Start()
     {
         Time.timeScale = 1.0f;
+        difficultButton.SetActive(false);
     }
 
     void Update()
@@ -19,12 +21,14 @@ public class TitleScene : MonoBehaviour
 
     public void TransitionGame()
     {
-        Common("MainScene");
+        //Common("MainScene");
+        difficultButton.SetActive(true);
     }
 
     public void TransitionTutorial()
     {
         Common("TutorialScene");
+        SoundScript.GetInstance().difficulty = SoundScript.Difficulty.EASY;
     }
 
     public void ReturnOption()
@@ -44,5 +48,17 @@ public class TitleScene : MonoBehaviour
         SoundScript.GetInstance().audioSourceSE.clip = null;
         SoundScript.GetInstance().PlaySound(2);
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void DifficultyEasy()
+    {
+        SoundScript.GetInstance().difficulty = SoundScript.Difficulty.EASY;
+        Common("MainScene");
+    }
+
+    public void DifficultyHard()
+    {
+        SoundScript.GetInstance().difficulty = SoundScript.Difficulty.HARD;
+        Common("MainScene");
     }
 }

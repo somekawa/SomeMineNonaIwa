@@ -42,25 +42,25 @@ public class SlenderSpawner : MonoBehaviour
     {
         if(gameScene_!=null)
         {
-            if(gameScene_.GetStartAnimTime()>gameScene_.GetMaxAnimTime())
+            if (gameScene_.GetStartAnimTime() > gameScene_.GetMaxAnimTime())
             {
-                if(spawnSlender[0]==null)
+                if (spawnSlender[0] == null)
                 {
                     spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
                 }
-            }
-        }
 
-        if (instantiateFlag == true)
-        {
-            for (int i = 0; i < spawnSlender.Length; i++)
-            {
-                if (spawnSlender[i] == null)
+                if (instantiateFlag == true && SoundScript.GetInstance().difficulty == SoundScript.Difficulty.HARD)
                 {
-                    spawnSlender[i] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
-                    slenderManCtl[i] = spawnSlender[i].GetComponent<SlenderManCtl>();
-                    instantiateFlag = false;
-                    break;
+                    for (int i = 0; i < spawnSlender.Length; i++)
+                    {
+                        if (spawnSlender[i] == null)
+                        {
+                            spawnSlender[i] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
+                            slenderManCtl[i] = spawnSlender[i].GetComponent<SlenderManCtl>();
+                            instantiateFlag = false;
+                            break;
+                        }
+                    }
                 }
             }
         }
