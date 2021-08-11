@@ -42,11 +42,6 @@ public class TutorialScript : MonoBehaviour
     // チュートリアル用のCollisionを使ってアイテムを拾ったか確認
     public PlayerCollision pCollision;
 
-    // 音楽関連
-    private AudioSource audioSource_;
-    [SerializeField] private AudioClip roundClearSE_;   // ラウンドクリア時のSE
-    [SerializeField] private AudioClip stageChangeSE_;   // 基本から実践にステージが変わるときのSE
-
     struct statusMission
     {
         public Text moveText;       // どのテキストであるか
@@ -73,8 +68,6 @@ public class TutorialScript : MonoBehaviour
 
     void Start()
     {
-        audioSource_ = GetComponent<AudioSource>();
-
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
 
@@ -326,7 +319,7 @@ public class TutorialScript : MonoBehaviour
                 if (doorColFlag_ == true)
                 {
                     // SEの音を鳴らす
-                    audioSource_.PlayOneShot(stageChangeSE_);
+                    SoundScript.GetInstance().PlaySound(10);
                 }
             }
         }
@@ -381,7 +374,7 @@ public class TutorialScript : MonoBehaviour
                     missionRound++;
                     Debug.Log("missionRound"+ missionRound);
                     // SEの音を鳴らす
-                    audioSource_.PlayOneShot(roundClearSE_);
+                    SoundScript.GetInstance().PlaySound(11);
 
                   //  Debug.Log("ミッションのラウンドをプラスします");
                 }

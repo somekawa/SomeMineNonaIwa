@@ -66,11 +66,6 @@ public class SoundScript : MonoBehaviour
     //SEを再生する関数を作成
     public void PlaySound(int index)
     {
-        // 物が落下した際に、他のSEが鳴っていたらそのSEを中断させる
-        if (index == 6 && audioSourceSE.isPlaying)
-        {
-            audioSourceSE.Stop();
-        }
         audioSourceSE.clip = seList[index];
         audioSourceSE.Play();
     }
