@@ -65,6 +65,7 @@ public class TutorialScript : MonoBehaviour
     private bool[] roundFlag_;      // 終了したラウンドをチェック　終了=true
 
     private bool doorColFlag_ = false;
+    private bool turnFlag_ = false;
 
     void Start()
     {
@@ -207,7 +208,11 @@ public class TutorialScript : MonoBehaviour
             // 遅い歩き
             if (playerCtl_.GetSlowWalkFlg() == true)
             {
-                nowNum_ = (int)mission.FOUR;
+                if ((Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.A))
+                    || (Input.GetKeyDown(KeyCode.S)) || (Input.GetKeyDown(KeyCode.D)))
+                {
+                    nowNum_ = (int)mission.FOUR;
+                }
             }
 
             // NON以外が入る＝行動をした
@@ -222,12 +227,15 @@ public class TutorialScript : MonoBehaviour
 
     void ThirdMissions()
     {
+        Debug.Log(nowNum_ + "番目のミッション activeFlag" + status_[nowNum_].activeFlag);
         if (status_[nowNum_].checkFlag == true)
         {
             Choice((mission)nowNum_);
         }
         else
         {
+
+
             // 隠れることができたか
             if (hideCtl_.GetHideFlg() == true)
             {
@@ -239,12 +247,15 @@ public class TutorialScript : MonoBehaviour
             {
                 nowNum_ = (int)mission.TWO;
             }
-
+           
             // クイックターンができたかどうか
-            if (playerCtl_.GetTurnCheckFlag() == true)
+            if (playerCtl_.GetTurnCheckFlag() == true
+                && turnFlag_ == false)
             {
-                    nowNum_ = (int)mission.THREE;
+                turnFlag_ = true;
+                nowNum_ = (int)mission.THREE;
             }
+
 
             // ドアに触れたかどうか
             if (doorColFlag_ == true)
@@ -256,12 +267,14 @@ public class TutorialScript : MonoBehaviour
             if (nowNum_ != (int)mission.NON
                 && status_[nowNum_].activeFlag == true)
             {
-                    status_[nowNum_].checkFlag = true;
+                Debug.Log(nowNum_+"番目のミッションを削除します"); 
+                status_[nowNum_].checkFlag = true;
             }
 
         }
         RoundCheck();
     }
+
     private void Choice(mission move_)
     {
        Debug.Log((int)move_+"目のミッションを達成しました。");
@@ -297,6 +310,7 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
+          //  if(missionRound==round.THIRD&&move_!=mission.ONE)
             if (alphaNum_ <= 0.0f)
             {
                 //////Debug.Log("alpha値が最小のため非表示にします。");
@@ -316,6 +330,7 @@ public class TutorialScript : MonoBehaviour
                 // Debug.Log("alpha値を減少させます");
                 // 達成された表示ミッションを徐々に消す
                 EraseAlpha((int)move_, 0.005f);
+
                 if (doorColFlag_ == true)
                 {
                     // SEの音を鳴らす
@@ -341,6 +356,7 @@ public class TutorialScript : MonoBehaviour
     // 選ばれたミッション、画像のアルファ値
     private void EraseAlpha(int num, float alpha)
     {
+        //eraseM.EraseAlphaPractic(status_[num].moveText, status_[num].textBackImage, 0.005f);
         //// クリアしたミッションを徐々に消す処理
         alphaNum_ -= alpha;
         status_[num].textBackImage.color = new Color(255.0f, 255.0f, 0.0f, alphaNum_); //imageColor;
@@ -376,7 +392,7 @@ public class TutorialScript : MonoBehaviour
                     // SEの音を鳴らす
                     SoundScript.GetInstance().PlaySound(11);
 
-                  //  Debug.Log("ミッションのラウンドをプラスします");
+                    //  Debug.Log("ミッションのラウンドをプラスします");
                 }
             }
             else
