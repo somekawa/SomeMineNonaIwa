@@ -23,8 +23,9 @@ public class ParticleSmoke : MonoBehaviour
         {
             //現在の位置を取得
             Vector3 pos = this.gameObject.transform.localPosition;
+            pos.x += 100.0f * Time.deltaTime;
             //現在の位置からx方向に1移動する
-            this.gameObject.transform.localPosition = new Vector3(pos.x + 1.0f, pos.y, pos.z);
+            this.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
         }
 
         if (Input.GetMouseButtonDown(0))   // マウスの左クリックをしたとき

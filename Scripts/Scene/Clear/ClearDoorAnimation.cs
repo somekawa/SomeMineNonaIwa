@@ -46,6 +46,9 @@ public class ClearDoorAnimation : MonoBehaviour
 
         if (openFlag_[(int)doorType_] == true)
         {
+            // SEの音を鳴らす(ドアを開く音)
+            SoundScript.GetInstance().PlaySound(12);
+
             Debug.Log(doorType_+"のドアに接触しました");
             float step = 120.0f * Time.deltaTime;
             panelAlpha_ += 0.01f;

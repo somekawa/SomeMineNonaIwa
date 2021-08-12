@@ -30,8 +30,14 @@ public class ResultScript : MonoBehaviour
     public GameObject player;
     private CharacterCtl CCtl_; // アクティブ状態変更
 
+    // SE関連
+    private AudioSource audioSource_;
+    [SerializeField] private AudioClip effectSE_;   // エフェクト再生時のSE
+
     void Start()
     {
+        audioSource_ = GetComponent<AudioSource>();
+
         Cursor.visible = true;                                    // マウスカーソルの表示
         Cursor.lockState = CursorLockMode.None;                   // マウスカーソルの場所の固定解除
         CCtl_ = player.GetComponent<CharacterCtl>();
@@ -86,6 +92,11 @@ public class ResultScript : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))  　// マウスの左クリックをしたとき
             {
+                // SEの音を鳴らす(TAP音)
+                SoundScript.GetInstance().PlaySound(13);
+                // SEの同時再生をさせるため、SoundListに依存せず音を鳴らす(smokeエフェクト音)
+                audioSource_.PlayOneShot(effectSE_);
+
                 StartCoroutine("TextCoroutine");
             }
         }
