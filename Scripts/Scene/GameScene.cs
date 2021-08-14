@@ -12,6 +12,7 @@ public class GameScene : MonoBehaviour
     public Text pauseKeyText;   // ポーズ中に表示される鍵の数
     public Text mainKeyText;    // ゲーム再生中に表示される鍵の数
     public Text batteryText;    // ポーズで電池残量の数値を表示
+    public GameObject pauseUI;   //　ポーズした時に表示するUI
 
     private bool pauseFlag_;    // ポーズ中かどうか
     // クリアシーンで使うため分と秒はpublicに
@@ -31,6 +32,7 @@ public class GameScene : MonoBehaviour
     void Start()
     {
         StartCoroutine("Coroutine");
+        pauseUI.SetActive(false);
         if (SceneManager.GetActiveScene().name != "TutorialScene")
         {
             collectUIs_ = collectCanvas.gameObject.GetComponentsInChildren<Transform>().Select(t => t.gameObject).ToArray();
@@ -99,6 +101,19 @@ public class GameScene : MonoBehaviour
             pauseKeyText.text = "(" + playerColScript.GetkeyItemCnt() + "/ 8)";
             mainKeyText.text = "×\n" + playerColScript.GetkeyItemCnt();
         }
+
+        //　ポーズUIのアクティブ状態切り替え
+        if (pauseFlag_ == true)
+        {
+            ChangePauseActive(pauseFlag_, 0.0f);
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+        }
+        else
+        {
+            ChangePauseActive(pauseFlag_, 1.0f);
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+        }
+
     }
 
     public bool GetPauseFlag()
@@ -119,6 +134,21 @@ public class GameScene : MonoBehaviour
         }
         return maxAnimTime_;
     }
+
+    public void TransitionTitle()
+    {
+        SceneManager.LoadScene("TitleSample");
+        Time.timeScale = 1.0f;
+    }
+
+    // テストコード
+    void ChangePauseActive(bool flag, float time)
+    {
+        pauseUI.SetActive(flag);
+        Time.timeScale = time;
+        pauseFlag_ = flag;
+    }
+
 
     private IEnumerator Coroutine()
     {
