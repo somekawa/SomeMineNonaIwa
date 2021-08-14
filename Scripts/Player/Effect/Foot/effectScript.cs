@@ -17,24 +17,35 @@ public class effectScript : MonoBehaviour
 
     void Start()
     {
-        // プレイヤー情報を取得する
-        if (SceneManager.GetActiveScene().name != "TutorialScene")
-        {
-            player_ = GameObject.Find("Player");
-        }
-        else
-        {
-            player_ = GameObject.Find("tPlayer");
+        string sceneName = SceneManager.GetActiveScene().name;
 
-        }
-        if (player_ != null)
+        if (sceneName == "TutorialScene")
         {
-            plSc_ = player_.GetComponent<playerController>();
+            // プレイヤー情報を取得する
+            player_ = GameObject.Find("tPlayer");
+            if (player_ != null)
+            {
+                plSc_ = player_.GetComponent<playerController>();
+            }
+            else
+            {
+                Debug.Log("Playerがnullでエラー");
+            }
         }
         else
         {
-            Debug.Log("Playerがnullでエラー");
+            // プレイヤー情報を取得する
+            player_ = GameObject.Find("Player");
+            if (player_ != null)
+            {
+                plSc_ = player_.GetComponent<playerController>();
+            }
+            else
+            {
+                Debug.Log("Playerがnullでエラー");
+            }
         }
+
 
         if (plSc_ == null)
         {
