@@ -14,6 +14,7 @@ public class playerController : MonoBehaviour
     private CharacterController controller_;
     private HideControl hideControl_;
 
+    private string sceneName_;
     private float speed_   = 4.0f;        // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
     private bool walkFlg_  = false;       // 移動中はtrue
@@ -83,12 +84,14 @@ public class playerController : MonoBehaviour
         textBack.enabled = false;
         LeanAnnounceText.SetActive(false);
         LeanAnnounceText.GetComponent<Text>().text = "【T】通路を覗き込む";
+
+        sceneName_ = SceneManager.GetActiveScene().name;
    }
 
     void Update()
     {
         // スタート時のアニメーション中はキャラクター操作ができないようにする
-        if (gameScene_ != null)
+        if (gameScene_ != null && sceneName_ != "TutorialScene")
         {
             if (gameScene_.GetStartAnimTime() < 7.0f)
             {

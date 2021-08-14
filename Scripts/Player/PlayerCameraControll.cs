@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCameraControll : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class PlayerCameraControll : MonoBehaviour
     private bool operationFlag_ = true;            // カメラ操作できるか
 
     private float startAnimTime_ = 0.0f;
+    private string sceneName_;
 
     void Start()
     {
@@ -28,12 +30,14 @@ public class PlayerCameraControll : MonoBehaviour
 
         Cursor.visible = false;                                    // マウスカーソルの非表示
         Cursor.lockState = CursorLockMode.Locked;                  // マウスカーソルの場所の固定
+
+        sceneName_ = SceneManager.GetActiveScene().name;
     }
 
     void Update()
     {
         // スタート時のアニメーション中はカメラ操作ができないようにする
-        if(startAnimTime_ < 7.0f)
+        if(startAnimTime_ < 7.0f && sceneName_ != "TutorialScene")
         {
             startAnimTime_ += Time.deltaTime;
             return;
