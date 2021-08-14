@@ -7,7 +7,7 @@ public class PlayerCameraControll : MonoBehaviour
 {
     // Component取得用変数
     public playerController playerController;      // コントローラー情報の取得
-    public PauseScript pause;                      // pause中の処理
+    private GameScene gameScene_;
 
     private CameraController cameraController_;    // カメラ情報の取得
     private HideControl hideControl_;              // プレイヤーの隠れている状態の取得
@@ -25,6 +25,7 @@ public class PlayerCameraControll : MonoBehaviour
 
     void Start()
     {
+        gameScene_ = FindObjectOfType<GameScene>();
         cameraController_ = CameraController.FindObjectOfType<CameraController>();
         hideControl_ = GetComponent<HideControl>();
 
@@ -36,8 +37,8 @@ public class PlayerCameraControll : MonoBehaviour
 
     void Update()
     {
-        // スタート時のアニメーション中はカメラ操作ができないようにする
-        if(startAnimTime_ < 7.0f && sceneName_ != "TutorialScene")
+            // スタート時のアニメーション中はカメラ操作ができないようにする
+            if (startAnimTime_ < 7.0f && sceneName_ != "TutorialScene")
         {
             startAnimTime_ += Time.deltaTime;
             return;
@@ -49,7 +50,7 @@ public class PlayerCameraControll : MonoBehaviour
 
     private void CameraOn()
     {
-        if (pause.GetPauseFlag() == false || cameraController_.FullMapFlag() == false ||
+        if (gameScene_.GetPauseFlag() == false || cameraController_.FullMapFlag() == false ||
            ((hideControl_ != null) && (hideControl_.GetHideFlg() == true)))
         {
             Cursor.visible = false;                                    // マウスカーソルの非表示

@@ -27,7 +27,8 @@ public class PracticMission : MonoBehaviour
     private playerController playerCtl_;    // 覗き見のフラグを見る
     private HideControl hideCtl_;    // 隠れたときのフラグを見るため
 
-    public PauseScript pause;
+    // public PauseScript pause;
+    private GameScene gameScene_;
 
     private Text moveText;       // どのテキストであるか
     private Image textBackImage; // どの背景画像か
@@ -41,6 +42,8 @@ public class PracticMission : MonoBehaviour
         practicUIs.SetActive(true);
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
+        gameScene_ = FindObjectOfType<GameScene>();
+
         checkPractic_ = practic.HIDE;
 
         textString = new string[(int)practic.MAX]
@@ -59,7 +62,7 @@ public class PracticMission : MonoBehaviour
 
     void Update()
     {
-        if (pause.GetPauseFlag() == true)
+        if (gameScene_.GetPauseFlag())
         {
             return;            // pause中は何の処理もできないようにする
         }

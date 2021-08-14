@@ -37,7 +37,8 @@ public class TutorialScript : MonoBehaviour
     // fillAmountが1になったらラジオを使った処理のため
     public Image monochromeUI;
 
-    public PauseScript pause;
+    // public PauseScript pause;
+    private GameScene gameScene_;
 
     // チュートリアル用のCollisionを使ってアイテムを拾ったか確認
     public PlayerCollision pCollision;
@@ -71,6 +72,7 @@ public class TutorialScript : MonoBehaviour
     {
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
+        gameScene_ = FindObjectOfType<GameScene>();
 
         missionRound = round.FIRST;
         textString = new string[(int)round.MAX, (int)mission.MAX]{ 
@@ -118,7 +120,7 @@ public class TutorialScript : MonoBehaviour
 
     void Update()
     {
-        if (pause.GetPauseFlag() == true)
+        if (gameScene_.GetPauseFlag())
         {
             return;            // pause中は何の処理もできないようにする
         }
