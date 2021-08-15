@@ -55,7 +55,11 @@ public class SoundPresenter : MonoBehaviour
         if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")
             && slenderAudio_==null)
         {
-            slenderAudio_ = GameObject.FindGameObjectWithTag("Enemy").GetComponent<AudioSource>();
+            // メインのアニメーション中に検索した際のnullチェック
+            if (GameObject.FindGameObjectWithTag("Enemy") != null)
+            {
+                slenderAudio_ = GameObject.FindGameObjectWithTag("Enemy").GetComponent<AudioSource>();
+            }
         }
 
         if(SceneManager.GetActiveScene().name == "MainScene" && batteryScript_ == null)
