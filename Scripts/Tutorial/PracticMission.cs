@@ -21,13 +21,13 @@ public class PracticMission : MonoBehaviour
     public GameObject practicUIs;   // 実践ミッション表示用
     public GameObject escapeKey;    // 鍵を取得したかのミッション用
     public Image monochromeUI;      // ラジオを再生したかのミッション用
+    public GameObject radio;
 
     /*プレイヤー関連*/
     public GameObject player;
     private playerController playerCtl_;    // 覗き見のフラグを見る
     private HideControl hideCtl_;    // 隠れたときのフラグを見るため
 
-    // public PauseScript pause;
     private GameScene gameScene_;
 
     private Text moveText;       // どのテキストであるか
@@ -39,6 +39,7 @@ public class PracticMission : MonoBehaviour
 
     void Start()
     {
+        radio.SetActive(false);
         practicUIs.SetActive(true);
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
@@ -100,6 +101,7 @@ public class PracticMission : MonoBehaviour
             {
                 if (escapeKey == null)
                 {
+                    radio.SetActive(true);
                     pCheckFlag_ = true;
                 }
             }

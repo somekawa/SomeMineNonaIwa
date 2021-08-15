@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class TutorialCollision : MonoBehaviour
@@ -33,6 +34,8 @@ public class TutorialCollision : MonoBehaviour
 
     public GameObject parentStage;
     private GameObject[] stages;
+
+    public Image monochromeUI;
 
     void Start()
     {
@@ -110,7 +113,8 @@ public class TutorialCollision : MonoBehaviour
             // 鍵の取得を確認したらドアを表示する
             if (destroyCheckFlag_[(int)item.ESCAPE] == true)
             {
-                if (tutorialMain.GetCompleteFlag() == true)
+                if (tutorialMain.GetCompleteFlag() == true
+                    && monochromeUI.fillAmount==0.0f)
                 {
                     item_[(int)item.DOOR].SetActive(true);
                 }

@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5160792304005244863}
   - component: {fileID: 5160792304005244857}
   - component: {fileID: 5160792304005244856}
+  - component: {fileID: 6993962800964830121}
   m_Layer: 0
   m_Name: RadioVoice
   m_TagString: Untagged
@@ -176,6 +177,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VoiceSound: {fileID: 8300000, guid: 173fbb4c98d248849be0152a9e3225c7, type: 3}
+  monochromeUI: {fileID: 0}
+--- !u!65 &6993962800964830121
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5160792304005244862}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5160792302677457657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,7 +283,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Radio
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8816786241120349184, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b,
+        type: 3}
+      propertyPath: m_Name
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5475940547091785897, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
 --- !u!4 &4451057397798414156 stripped
 Transform:
@@ -368,7 +389,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Radio
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8816786241120349184, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b,
+        type: 3}
+      propertyPath: m_Name
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5475940547091785897, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
 --- !u!4 &4451057396713329030 stripped
 Transform:
@@ -468,7 +495,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Radio
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8816786241120349184, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b,
+        type: 3}
+      propertyPath: m_Name
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5475940547091785897, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
 --- !u!4 &4451057396667892649 stripped
 Transform:
@@ -568,7 +601,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Radio
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8816786241120349184, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b,
+        type: 3}
+      propertyPath: m_Name
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5475940547091785897, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9cd670ba19c6e0e46a2a441ac3e0b34b, type: 3}
 --- !u!4 &4451057397019780017 stripped
 Transform:

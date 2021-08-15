@@ -17,12 +17,11 @@ public class RadioVoiceAudio : MonoBehaviour
 
     private int radioNum_ = -1;
 
-
-
     public Image monochromeUI;     // 再生中のUI
     private float eraseCnt_ = 0.0f;// 再生時間に対するfillAmountが1秒に減る値
     private bool nowVoice_ = false;     // UI用　音が鳴っている間に表示を変える
     private bool playVoice_ = false;    // メッセージ用　音が鳴っているか
+    private bool nowRoundFlag_ = false; // BGM再生オブジェクトの範囲にいるかどうか
     private int nowTime = 1;            // nowVoiceが加算されるごとに1増える 1からなのはUIを表示する時間必要なため
 
     void Start()
@@ -59,7 +58,7 @@ public class RadioVoiceAudio : MonoBehaviour
         else
         {
             nowVoiceTime += Time.deltaTime;
-            nowVoice_ = true;       // 使用中のためメッセージが出ないようにする 
+          nowVoice_ = true;       // 使用中のためメッセージが出ないようにする 
 
             if (nowTime < (int)nowVoiceTime)
             {
@@ -68,6 +67,7 @@ public class RadioVoiceAudio : MonoBehaviour
                 monochromeUI.fillAmount -= eraseCnt_;
             }
         }
+        Debug.Log("Updateラジオの番号" + radioNum_);
 
     }
 
@@ -98,7 +98,7 @@ public class RadioVoiceAudio : MonoBehaviour
         else              // SEのOFF
         {
             // 再生中の同じラジオじゃないと停止できないようにする
-            if(radioNum == radioNum_)
+            if (radioNum == radioNum_)
             {
                 CommonSoundStop();
                 Debug.Log("SEのOFF");
@@ -109,8 +109,6 @@ public class RadioVoiceAudio : MonoBehaviour
                 Debug.Log("別のラジオの為、OFFにできない");
             }
         }
-
-
     }
 
     // 音再生の共通ストップ処理
@@ -125,14 +123,14 @@ public class RadioVoiceAudio : MonoBehaviour
         nowTime = 1;
     }
 
-    public bool GetSoundFlg()
-    {
-        return soundFlg_;
-    }
-
     public void SetVoiceAround(bool flag)
     {
         playVoice_ = flag;
+    }
+
+    public bool GetSoundFlag()
+    {
+        return soundFlg_;
     }
 
     public bool GetRadioAround()
@@ -144,4 +142,23 @@ public class RadioVoiceAudio : MonoBehaviour
     {
         return nowVoice_;
     }
+
+    public bool GetNowRound()
+    {
+        return nowRoundFlag_;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "ItemHitArea")
+        {
+            nowRoundFlag_ = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        nowRoundFlag_ = false;
+    }
+
 }

@@ -34,7 +34,10 @@ public class RadioVoice : MonoBehaviour
 
             if (!soundFlg_)
             {
-                slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
+                if (slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()] != null)
+                {
+                    slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
+                }
                 return;
             }
             else
@@ -44,12 +47,10 @@ public class RadioVoice : MonoBehaviour
         }
         else
         {
-
             if (!soundFlg_)
             {
                 return;
             }
-
         }
     }
 
@@ -64,15 +65,7 @@ public class RadioVoice : MonoBehaviour
         if (other.gameObject.tag == "ItemHitArea")
         {
             Debug.Log("アイテムヒットエリアと接触中");
-            // 範囲内かつ音が鳴っていなかったら
-            if (voiceAudio_.GetNowVoice() == false)
-            {
-                voiceAudio_.SetVoiceAround(true);
-            }
-            else
-            {
-                voiceAudio_.SetVoiceAround(false);
-            }
+            voiceAudio_.SetVoiceAround(true);
         }
     }
 
