@@ -57,7 +57,7 @@ public class GameScene : MonoBehaviour
 
                 for (int i = 1; i < collectUIs_.Length - 2; i++)
                 {
-                    collectUIs_[i].gameObject.SetActive(false);
+                    collectUIs_[i].gameObject.SetActive(true);
                 }
             }
             // ポーズ（メニュー）を開く処理
