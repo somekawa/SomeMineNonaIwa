@@ -1,0 +1,17 @@
+①PackageManagerからProBuilderをインポートする
+②git(8/16 10:47)にあげたConeというファイルを持っ　てきて、その中のCone.objをPlayer-MainCameraに　アタッチする
+③Coneの中にあるConeの設定を行う
+　<設定内容>
+　a.Transform pos(2,-0.75,4.32)
+           ratate(-90,0,0)
+           大きさ(2,2,2)
+  b.Cone(MeshFilter)にConeがついているか確認
+　c.MeshRenderはチェックが外れているか確認
+　d.RigidBodyを付けて、キネマティックにチェック
+　e.MeshColiderを付けて凸状にするにチェック
+　　メッシュはConeを選択
+　f.T LightRange(Script)をアタッチする
+　　引数は、BarrierにPlayer
+           CameraActionにMainCamera
+
+※もしかしたら内部で大きさを決めても変更されていない可能性があります(私がそうでした)その為、設定後にきちんと大きさが(2,2,2)になっていて、オブジェクトが暴れていないか(rigidbodyのキネマティックにチェックし忘れ)を確認してください
