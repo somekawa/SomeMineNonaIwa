@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SystemMessage : MonoBehaviour
 {
@@ -31,9 +32,10 @@ public class SystemMessage : MonoBehaviour
     private int useKeyNum_;     // 鍵の所持数を保存
    
     /*隠れる関連*/
-    public GameObject hideBoxes_;// Boxの親を入れる
+    public GameObject hideBoxes;// Boxの親を入れる
     private HideBox[] testBox_;// 子どもを代入
     private int boxNum_;// どの子どもの箱に入ったかを代入
+    private int boxMaxCnt_;// 箱の個数
 
     public RadioVoiceAudio radioAudio_; // ラジオを使える時
 
@@ -44,13 +46,21 @@ public class SystemMessage : MonoBehaviour
 
     void Start()
     {
-        //// 隠れる箱を探す
-        testBox_ = new HideBox[hideBoxes_.transform.childCount];
-        for (int i = 0; i < hideBoxes_.transform.childCount; i++)
+        if (SceneManager.GetActiveScene().name == "TutorialScene")
         {
-            testBox_[i] = hideBoxes_.transform.GetChild(i).GetComponent<HideBox>();
-            Debug.Log("箱の個数" + hideBoxes_.transform.childCount);
+            boxMaxCnt_ = hideBoxes.transform.childCount;
         }
+        else
+        {
+            boxMaxCnt_ = hideBoxes.transform.childCount-1;
+        }
+        //// 隠れる箱を探す
+        testBox_ = new HideBox[boxMaxCnt_];
+        for (int i = 0; i < boxMaxCnt_; i++)
+        {
+            testBox_[i] = hideBoxes.transform.GetChild(i).GetComponent<HideBox>();
+        }
+        Debug.Log("箱の個数" + boxMaxCnt_);
 
 
         action_ = action.NON;
@@ -102,19 +112,27 @@ public class SystemMessage : MonoBehaviour
     }
 
     private void ItemAction()
-    {
+    {     
+        // NON以外＝何らかの行動をしているからテキストを表示
+        if (action_ != action.NON)
+        {
+            textActiveFlag_ = true;
+            return;
+        }
+
         Debug.Log("どのアイテムかをチェックする");
 
-        for (int i = 0; i < (int)PlayerCollision.item.MAX; i++)
+        if (collision.GetFindItem() != PlayerCollision.item.NON)
         {
-            if (collision.GetFindItem() != PlayerCollision.item.NON)
-            {
+            for (int i = 0; i < (int)PlayerCollision.item.MAX; i++)
+        {
                 // アイテム接触系
                 if (collision.GetFindItem() == (PlayerCollision.item)i)
                 {
                     action_ = (action)collision.GetFindItem();
                     itemFindFlag_ = true;
                     Debug.Log(action_ + "と接触しています。メッセージを表示しますitemFindFlag_" + itemFindFlag_);
+                    return;
                 }
             }
         }
@@ -123,31 +141,26 @@ public class SystemMessage : MonoBehaviour
         if (radioAudio_.GetRadioAround() == true)
         {
             action_ = action.RADIO_USE;
+            return;
         }
 
-        for (int i = 0; i < hideBoxes_.transform.childCount; i++)
+        for (int i = 0; i < boxMaxCnt_; i++)
         {
             // ボックスを使える範囲にいる時
             if (testBox_[i].InFlagCheck() == true)
             {
                 action_ = action.BOX_IN;
                 boxNum_ = i;
-                break;
+                return;
             }
         }
 
         if (collision.GetDoorColFlag() == true)
         {
             action_ = action.DOOR;
-        }
-
-        // NON以外＝何らかの行動をしているからテキストを表示
-        if (action_ != action.NON)
-        {
-            textActiveFlag_ = true;
+            return;
         }
     }
-
 
     private void FindMessage()
     {
@@ -187,7 +200,6 @@ public class SystemMessage : MonoBehaviour
         textBack.enabled = true;
         textMessage.enabled = true;
 
-
         // 拾わずに離れた場合
         if (collision.GetFindItem() == PlayerCollision.item.NON)
         {
@@ -201,16 +213,14 @@ public class SystemMessage : MonoBehaviour
     {
         if (radioAudio_.GetRadioAround() == false)
         {
-            // ラジオボックスの範囲外の時
-            NonTextCommon();
+            NonTextCommon();    // ラジオボックスの範囲外の時
         }
         else
         {
             // ラジオの範囲内にいる時
             if (radioAudio_.GetNowVoice() == false)
             {
-                // 再生されてない時
-                TextCommon(true, text);
+                TextCommon(true, text);   // 再生されてない時
             }
             else
             {
