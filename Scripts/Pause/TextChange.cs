@@ -19,7 +19,6 @@ public class TextChange : MonoBehaviour
 
     private int rangeNum_ = -1;             // 書き換えるテキストの値を保存する
 
-    // Start is called before the first frame update
     void Start()
     {
         for(int i = 0; i < TextMng.transform.childCount; i++)
@@ -30,7 +29,6 @@ public class TextChange : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         // 正気度が50を下回るまでは文字化けを発生させないでおく
