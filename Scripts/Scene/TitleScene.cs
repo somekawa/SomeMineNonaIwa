@@ -6,21 +6,22 @@ using UnityEngine.UI;
 
 public class TitleScene : MonoBehaviour
 {
-    public Canvas titleCanvas;
     public GameObject difficultButton;
-    private AudioSource buttonAudio;
+    private Canvas titleCanvas_;
+    private AudioSource buttonAudio_;
 
     void Start()
     {
         Time.timeScale = 1.0f;
         difficultButton.SetActive(false);
-        buttonAudio = this.GetComponent<AudioSource>();
+        buttonAudio_ = this.GetComponent<AudioSource>();
+        titleCanvas_ = GameObject.Find("TitleCanvas").GetComponent<Canvas>();
     }
 
     void Update()
     {
-        buttonAudio.volume = SoundScript.GetInstance().audioSourceSE.volume;
-        buttonAudio.clip = SoundScript.GetInstance().seList[2];
+        buttonAudio_.volume = SoundScript.GetInstance().audioSourceSE.volume;
+        buttonAudio_.clip = SoundScript.GetInstance().seList[2];
     }
 
     public void TransitionGame()
@@ -37,12 +38,12 @@ public class TitleScene : MonoBehaviour
 
     public void ReturnOption()
     {
-        titleCanvas.gameObject.SetActive(true);
+        titleCanvas_.gameObject.SetActive(true);
     }
 
     public void HeadOption()
     {
-        titleCanvas.gameObject.SetActive(false);
+        titleCanvas_.gameObject.SetActive(false);
     }
 
     // シーン遷移の共通処理
@@ -50,7 +51,7 @@ public class TitleScene : MonoBehaviour
     {
         SoundScript.GetInstance().audioSourceBGM.clip = null;
         SoundScript.GetInstance().audioSourceSE.clip = null;
-        buttonAudio.Play();
+        buttonAudio_.Play();
         SceneManager.LoadScene(sceneName);
     }
 
