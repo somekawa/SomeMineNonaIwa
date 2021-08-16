@@ -8,15 +8,19 @@ public class TitleScene : MonoBehaviour
 {
     public Canvas titleCanvas;
     public GameObject difficultButton;
+    private AudioSource buttonAudio;
 
     void Start()
     {
         Time.timeScale = 1.0f;
         difficultButton.SetActive(false);
+        buttonAudio = this.GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        buttonAudio.volume = SoundScript.GetInstance().audioSourceSE.volume;
+        buttonAudio.clip = SoundScript.GetInstance().seList[2];
     }
 
     public void TransitionGame()
@@ -46,7 +50,7 @@ public class TitleScene : MonoBehaviour
     {
         SoundScript.GetInstance().audioSourceBGM.clip = null;
         SoundScript.GetInstance().audioSourceSE.clip = null;
-        SoundScript.GetInstance().PlaySound(2);
+        buttonAudio.Play();
         SceneManager.LoadScene(sceneName);
     }
 
