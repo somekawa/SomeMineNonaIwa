@@ -20,7 +20,6 @@ public class PlayerCameraControll : MonoBehaviour
     private float y_Rotation_;                     // カメラの回転(Y軸)
     private bool operationFlag_ = true;            // カメラ操作できるか
 
-    private float startAnimTime_ = 0.0f;
     private string sceneName_;
 
     void Start()
@@ -37,10 +36,10 @@ public class PlayerCameraControll : MonoBehaviour
 
     void Update()
     {
-            // スタート時のアニメーション中はカメラ操作ができないようにする
-            if (startAnimTime_ < 7.0f && sceneName_ != "TutorialScene")
+        // スタート時のアニメーション中はカメラ操作ができないようにする
+        if (gameScene_ != null && gameScene_.GetStartAnimTime() < gameScene_.GetMaxAnimTime() 
+            && sceneName_ != "TutorialScene")
         {
-            startAnimTime_ += Time.deltaTime;
             return;
         }
 

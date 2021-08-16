@@ -93,7 +93,7 @@ public class playerController : MonoBehaviour
         // スタート時のアニメーション中はキャラクター操作ができないようにする
         if (gameScene_ != null && sceneName_ != "TutorialScene")
         {
-            if (gameScene_.GetStartAnimTime() < 7.0f)
+            if (gameScene_.GetStartAnimTime() < gameScene_.GetMaxAnimTime())
             {
                 //startAnimTime_ += Time.deltaTime;
                 return;
