@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 // ①敵とプレイヤーが接触時、アイテムを持っていたら減らす
 // ②敵を懐中電灯で照らした時、アイテムを持っていたら減らす
@@ -23,7 +25,7 @@ public class Barrier : MonoBehaviour
     // trigger系→Collider collision系→Collision
     private void OnTriggerEnter(Collider collider)
     {
-        if(hideControl_.GetHideFlg())
+        if (hideControl_.GetHideFlg())
         {
             // 箱に隠れてる
             return;
@@ -32,18 +34,29 @@ public class Barrier : MonoBehaviour
         if (collider.gameObject.tag == targeTag)
         {
             Debug.Log("敵と衝突しました");
-            if (BarrierItemHaveFlg_)
+            if (SceneManager.GetActiveScene().name != "TutorialScene")
             {
-                Debug.Log("防御アイテム使用");
-                BarrierItemHaveFlg_ = false;
-                collider.gameObject.GetComponent<SlenderManCtl>().inSightFlag = true;
+                if (BarrierItemHaveFlg_)
+                {
+                    Debug.Log("防御アイテム使用");
+                    BarrierItemHaveFlg_ = false;
+                    collider.gameObject.GetComponent<SlenderManCtl>().inSightFlag = true;
+                }
+                else
+                {
+                    // slenderMan ワープ
+                    Debug.Log("即死処理へ");
+                    GameObject sanitMng = GameObject.Find("SanitMng");
+                    sanitMng.GetComponent<SanitMng>().GameOverSetAction(SanitMng.DeadType.HIT);
+                }
             }
             else
             {
-                // slenderMan ワープ
-                Debug.Log("即死処理へ");
-                GameObject sanitMng = GameObject.Find("SanitMng");
-                sanitMng.GetComponent<SanitMng>().GameOverSetAction(SanitMng.DeadType.HIT);
+                if (BarrierItemHaveFlg_)
+                {
+                    Debug.Log("防御アイテム使用");
+                    BarrierItemHaveFlg_ = false;
+                }
             }
         }
     }
