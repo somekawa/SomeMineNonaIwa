@@ -12,7 +12,6 @@ public class PlayerCollision : MonoBehaviour
         NON,
         BATTERY,
         BARRIER,
-        //INDUCTION,
         ESCAPE,
         MAX
     }
@@ -26,16 +25,14 @@ public class PlayerCollision : MonoBehaviour
     // 脱出アイテム関連
     private int keyItemCnt_    = 0;       // 現在所持してる脱出アイテムの数
     private int maxKeyItemNum_ = 8;       // 脱出アイテムの個数(8個)
+    private bool keyItemColFlag_ = false; // 鍵と接触したか
+    private bool doorColFlag_ = false;    // ドアと接触しているか
 
-    // 脱出アイテムと接触したか(true：接触 false：接触してない)
-    private bool keyItemColFlag_ = false;
-
-    private int chainCnt_ = 0;            // 扉の鎖の本数
+    private int chainCnt_ = 0;            // 扉の鎖の外した本数
 
     private bool  itemGetFlg_  = true;    // true：取得できる,false：取得できない
     private float itemGetTime_ = 0.0f;    // アイテムが取得できるようになるまでの時間
     private float itemGetTimeMax_ = 1.0f; // アイテムが取得できるようになるまでの時間の最大値
-
 
     void Start()
     {
@@ -81,6 +78,7 @@ public class PlayerCollision : MonoBehaviour
                 Debug.Log("アイテムの取得可能時間になりました");
             }
         }
+
         Debug.Log("PlayerCollision" + findItem_);
     }
 
@@ -97,7 +95,6 @@ public class PlayerCollision : MonoBehaviour
             }
        }
     }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Untagged")
@@ -109,15 +106,16 @@ public class PlayerCollision : MonoBehaviour
         if (other.gameObject.tag == "Door")
         {
             Debug.Log("ドアに接触");
+            doorColFlag_ = true;
             if (Input.GetKeyUp(KeyCode.E))
             {
+                Debug.Log("ドアの鍵を開けました");
                 // 鍵を開ける音を鳴らす
-                SoundScript.GetInstance().PlaySound(9);
-
+                 SoundScript.GetInstance().PlaySound(9);
                 foreach (Transform c in other.gameObject.transform)
                 {
-                    ChainCheck(c,"chain");
-                    ChainCheck(c,"padLock");
+                    ChainCheck(c, "chain");
+                    ChainCheck(c, "padLock");
                 }
             }
         }
@@ -140,7 +138,7 @@ public class PlayerCollision : MonoBehaviour
         // 電池との当たり判定
         else if (other.gameObject.tag == "Battery")
         {
-           findItem_ = item.BATTERY; // 接触中
+            findItem_ = item.BATTERY; // 接触中
             if (Common(other))
             {
                 Debug.Log("電池ゲット");
@@ -181,11 +179,17 @@ public class PlayerCollision : MonoBehaviour
         {
             return;
         }
-
     }
 
     private void OnTriggerExit(Collider other)
     {
+        // ドアと接触
+        if (other.gameObject.tag == "Door")
+        {
+            Debug.Log("ドアから離れる");
+            doorColFlag_ = false;
+        }
+
         if (other.gameObject.tag == "EscapeItem"
         || other.gameObject.tag == "Battery"
         || other.gameObject.tag == "BarrierItem")
@@ -193,7 +197,6 @@ public class PlayerCollision : MonoBehaviour
             findItem_ = item.NON;
         }
     }
-
 
     public bool GetBatteryFlag()
     {
@@ -260,6 +263,16 @@ public class PlayerCollision : MonoBehaviour
         keyItemCnt_ = num;
     }
 
+    public bool GetDoorColFlag()
+    {
+        return doorColFlag_;
+    }
+
+    public int GetUseKeyCnt()
+    {
+        return chainCnt_;
+    }
+
     // 扉の共通処理
     void ChainCheck(Transform c ,string str)
     {
@@ -274,6 +287,7 @@ public class PlayerCollision : MonoBehaviour
             if(c.gameObject.tag == "padLock")
             {
                 chainCnt_++;
+                Debug.Log("ドアのチェーン破壊" + chainCnt_);
             }
         }
         else

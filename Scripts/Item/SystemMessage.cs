@@ -12,6 +12,7 @@ public class SystemMessage : MonoBehaviour
         BARRIER_GET,// バリアを取得した
         KEY,        // 鍵を取得した
         RADIO_USE,  // ラジオを使えます
+        DOOR,       // ドアに接触
         BOX_IN,     // 隠れる
         BOX_OUT,    // 隠れてる状態から出る
         LEAN,       // 傾きから戻す
@@ -27,7 +28,13 @@ public class SystemMessage : MonoBehaviour
     public Text textMessage;            // 表示する文字
     public GameObject leanMessage;      // レーン用の文字
 
-    private HideBox hideBox_;           // ボックスとプレイヤーの接触状態
+    private int useKeyNum_;     // 鍵の所持数を保存
+   
+    /*隠れる関連*/
+    public GameObject hideBoxes_;// Boxの親を入れる
+    private HideBox[] testBox_;// 子どもを代入
+    private int boxNum_;// どの子どもの箱に入ったかを代入
+
     public RadioVoiceAudio radioAudio_; // ラジオを使える時
 
     private float alpha_ = 1.0f;    // テキストのアルファ値を変更
@@ -37,25 +44,28 @@ public class SystemMessage : MonoBehaviour
 
     void Start()
     {
-        // 隠れる箱を探す
-        GameObject hideObj = GameObject.Find("MannequinBox").gameObject;
-        hideBox_ = hideObj.GetComponent<HideBox>();
+        //// 隠れる箱を探す
+        testBox_ = new HideBox[hideBoxes_.transform.childCount];
+        for (int i = 0; i < hideBoxes_.transform.childCount; i++)
+        {
+            testBox_[i] = hideBoxes_.transform.GetChild(i).GetComponent<HideBox>();
+            Debug.Log("箱の個数" + hideBoxes_.transform.childCount);
+        }
 
 
         action_ = action.NON;
         message_ = new string[(int)action.MAX]{"","ライトを充電しました",
             "防御アイテムを拾いました" , "鍵を拾いました",
-            "【E】ラジオを使う", "【E】隠れる","【E】出る","【T】通路を覗き込む"};
+            "【E】ラジオを使う", "【E】鍵を使う",
+            "【E】隠れる","【E】出る","【T】通路を覗き込む"};
 
         textMessage.text = message_[(int)action.NON];
         textBack.enabled = false;
+        useKeyNum_ = collision.GetUseKeyCnt();
     }
 
     void Update()
     {
-        //if (radioAudio_.GetSoundFlag() == true)
-        //{
-        //}
         Debug.Log("今のアクション" + action_);
         if (textActiveFlag_ == false)
         {
@@ -65,22 +75,26 @@ public class SystemMessage : MonoBehaviour
         else
         {
             //Debug.Log("SystemMessageのfind_" + find_);
-            if (itemFindFlag_ ==true)
+            if (itemFindFlag_ == true)
             {
                 FindMessage();
             }
-           else  if (action.BOX_IN <= action_)
+            else if (action.BOX_IN <= action_)
             {
                 // ラジオ以降（〇〇できる系）
                 // 行動を起こすまで表示
                 ActionMessage(action_);
             }
-            else if(action.RADIO_USE== action_)
+            else if (action.RADIO_USE == action_)
             {
                 RadioMessage(action_);
             }
+            else if (action.DOOR == action_)
+            {
+                UseKeyMessage();
+            }
 
-            if(action_<= action.KEY&& itemFindFlag_==false)
+            if (action_ <= action.KEY && itemFindFlag_ == false)
             {
                 ItemGetMessage(action_);
             }
@@ -111,22 +125,42 @@ public class SystemMessage : MonoBehaviour
             action_ = action.RADIO_USE;
         }
 
-        // ボックスを使える範囲にいる時
-        if (hideBox_.InFlagCheck() == true)
+        for (int i = 0; i < hideBoxes_.transform.childCount; i++)
         {
-            action_ = action.BOX_IN;
+            // ボックスを使える範囲にいる時
+            if (testBox_[i].InFlagCheck() == true)
+            {
+                action_ = action.BOX_IN;
+                boxNum_ = i;
+                break;
+            }
+        }
+
+        if (collision.GetDoorColFlag() == true)
+        {
+            action_ = action.DOOR;
         }
 
         // NON以外＝何らかの行動をしているからテキストを表示
-        if (action_!=action.NON)
+        if (action_ != action.NON)
         {
             textActiveFlag_ = true;
         }
     }
 
+
     private void FindMessage()
     {
-        if (action_==action.BATTERY)
+        if (collision.GetItemNum() == (PlayerCollision.item)action_)
+        {
+            Debug.Log("アイテムを拾えますからアイテムを拾った");
+            itemFindFlag_ = false;
+            action_ = (action)collision.GetItemNum();
+            ItemGetMessage(action_);
+            return;
+        }
+
+        if (action_ == action.BATTERY)
         {
             textMessage.text = "【E】電池を拾う";
             Debug.Log("FindMessage電池を拾うのなか");
@@ -153,24 +187,13 @@ public class SystemMessage : MonoBehaviour
         textBack.enabled = true;
         textMessage.enabled = true;
 
-        if (collision.GetItemNum() == (PlayerCollision.item)action_)
-        {
-            Debug.Log("アイテムを拾えますからアイテムを拾った");
-            itemFindFlag_ = false;
-            action_ = (action)collision.GetItemNum();
-            ItemGetMessage(action_);
-            return;
-        }
 
         // 拾わずに離れた場合
         if (collision.GetFindItem() == PlayerCollision.item.NON)
         {
             Debug.Log("アイテムの範囲外に出ました");
-            textBack.enabled = false;
-            textMessage.enabled = false;
             itemFindFlag_ = false;
-            collision.SetItemNum(PlayerCollision.item.NON);     // ItemNumをリセット
-            action_ = action.NON;     // どのアクションでもない
+            NonTextCommon();
         }
     }
 
@@ -179,10 +202,7 @@ public class SystemMessage : MonoBehaviour
         if (radioAudio_.GetRadioAround() == false)
         {
             // ラジオボックスの範囲外の時
-            textMessage.text = message_[(int)action.NON]; // 何も表示しない状態
-            textActiveFlag_ = false;        // テキストのアクティブ状態を変更 
-            textBack.enabled = false; // 背景を非表示
-            action_ = action.NON;     // どのアクションでもない
+            NonTextCommon();
         }
         else
         {
@@ -190,12 +210,11 @@ public class SystemMessage : MonoBehaviour
             if (radioAudio_.GetNowVoice() == false)
             {
                 // 再生されてない時
-                ActiveCommon(true, text);
+                TextCommon(true, text);
             }
             else
             {
                 // 再生されている時
-                // 保存された番号と使おうとしている番号があっているか
                 if (radioAudio_.GetNowRound() == true)
                 {
                     textBack.enabled = true;
@@ -210,36 +229,54 @@ public class SystemMessage : MonoBehaviour
         }
     }
 
-    private void ActionMessage(action text)
+    private void UseKeyMessage()
     {
-
-        Debug.Log("○○できます系のなか");
-        if (mainCamera.activeSelf == true       // プレイヤーのカメラがアクティブの時
-        && hideBox_.InFlagCheck() == false )       // ボックスの範囲外
+        if (collision.GetDoorColFlag() == false || useKeyNum_ == 8)
         {
             // プレイヤーのカメラがアクティブの時
-            textMessage.text = message_[(int)action.NON]; // 何も表示しない状態
-            textActiveFlag_ = false;        // テキストのアクティブ状態を変更 
-            textBack.enabled = false; // 背景を非表示
-            action_ = action.NON;     // どのアクションでもない
+            NonTextCommon(); 
+            return;
+        }
+
+        if (useKeyNum_ == collision.GetkeyItemCnt())
+        {
+            textBack.enabled = true; // 背景を表示
+            textMessage.text = "あと" + (8 - collision.GetkeyItemCnt()) + "個";
+        }
+        else
+        {
+            useKeyNum_ = collision.GetUseKeyCnt();
+            Debug.Log("使用したドアのカギ" + useKeyNum_);
+            TextCommon(true, action.DOOR);
+        }
+    }
+
+    private void ActionMessage(action text)
+    {
+        Debug.Log("○○できます系のなか");
+        if (mainCamera.activeSelf == true       // プレイヤーのカメラがアクティブの時
+        && testBox_[boxNum_].InFlagCheck() == false)       // ボックスの範囲外
+        {
+            // プレイヤーのカメラがアクティブの時
+            NonTextCommon();
         }
         else
         {
             // 箱から出る時
-            if (mainCamera.activeSelf == false && hideBox_.InFlagCheck() == false)
+            if (mainCamera.activeSelf == false && testBox_[boxNum_].InFlagCheck() == false)
             {
-                text = action.BOX_OUT; 
+                text = action.BOX_OUT;
             }
-
-            ActiveCommon(true, text);
+            TextCommon(true, text);
         }
     }
 
     private void ItemGetMessage(action text)
     {
         Debug.Log("○○拾いました系のなか");
+        textMessage.text = message_[(int)text];
         if (0.0f < alpha_)
-        {           
+        {
             // 表示中　
             leanMessage.SetActive(false);    // アイテム文字表示中に出ないように
             alpha_ -= 0.005f;                // 透明度を下げていく
@@ -253,12 +290,11 @@ public class SystemMessage : MonoBehaviour
             collision.SetItemNum(PlayerCollision.item.NON);     // ItemNumをリセット
             action_ = action.NON;       // どのアクションでもない
             textActiveFlag_ = false;          // テキストのアクティブ状態を変更
-
-            ActiveCommon(false, text);
+            TextCommon(false, text);
         }
     }
 
-    private void ActiveCommon(bool flag ,action text )
+    private void TextCommon(bool flag, action text)
     {
         // true ずっと表示する系
         // false 表示後リセットのする系
@@ -268,6 +304,13 @@ public class SystemMessage : MonoBehaviour
         alpha_ = 1.0f;
         textMessage.color = new Color(0.0f, 0.0f, 0.0f, alpha_);
         textBack.color = new Color(255.0f, 255.0f, 255.0f, alpha_);
+    }
 
+    private void NonTextCommon()
+    {
+        textMessage.text = message_[(int)action.NON]; // 何も表示しない状態
+        action_ = action.NON;     // どのアクションでもない
+        textActiveFlag_ = false;  // テキストのアクティブ状態を変更 
+        textBack.enabled = false; // 背景を非表示
     }
 }
