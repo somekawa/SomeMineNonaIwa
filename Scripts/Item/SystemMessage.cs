@@ -199,7 +199,7 @@ public class SystemMessage : MonoBehaviour
                 if (radioAudio_.GetNowRound() == true)
                 {
                     textBack.enabled = true;
-                    textMessage.text = "ラジオを止める";
+                    textMessage.text = "【E】ラジオ停止";
                 }
                 else
                 {

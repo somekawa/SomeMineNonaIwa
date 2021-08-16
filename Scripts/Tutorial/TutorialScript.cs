@@ -67,6 +67,7 @@ public class TutorialScript : MonoBehaviour
 
     private bool doorColFlag_ = false;
     private bool turnFlag_ = false;
+    private bool soundFlag_ = false;
 
     void Start()
     {
@@ -204,14 +205,18 @@ public class TutorialScript : MonoBehaviour
             // fillAmounが0以上＝ラジオを使用した
             if (0.0f < monochromeUI.fillAmount)
             {
-                nowNum_ = (int)mission.THREE;
+                if (soundFlag_ == false)
+                {
+                    soundFlag_ = true;
+                    nowNum_ = (int)mission.THREE;
+                }
             }
 
-            // 遅い歩き
-            if (playerCtl_.GetSlowWalkFlg() == true)
+            if ((Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.A))
+            || (Input.GetKeyDown(KeyCode.S)) || (Input.GetKeyDown(KeyCode.D)))
             {
-                if ((Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.A))
-                    || (Input.GetKeyDown(KeyCode.S)) || (Input.GetKeyDown(KeyCode.D)))
+                // 遅い歩き
+                if (playerCtl_.GetSlowWalkFlg() == true)
                 {
                     nowNum_ = (int)mission.FOUR;
                 }
