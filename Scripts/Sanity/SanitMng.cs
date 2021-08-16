@@ -14,6 +14,7 @@ public class SanitMng : MonoBehaviour
         MAX
     }
 
+    public GameScene gameScene_;
     public GameObject spotLight_;                       // ライト
     public NoiseControl noiseControl_;                  // ノイズ
     public HideControl hideControl_;                    // 箱に隠れる処理
@@ -57,6 +58,12 @@ public class SanitMng : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameScene_.GetPauseFlag())
+        {
+            // ポーズ中
+            return;
+        }
+
         if (!gameOvreFlag_)
         {
             if (sanit_ <= 0.0f)
