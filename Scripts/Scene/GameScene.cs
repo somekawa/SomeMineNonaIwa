@@ -41,6 +41,7 @@ public class GameScene : MonoBehaviour
                 collectUIs_[i].gameObject.SetActive(false);
             }
         }
+        SoundScript.GetInstance().audioSourceSE.clip = null;
     }
 
     void Update()
