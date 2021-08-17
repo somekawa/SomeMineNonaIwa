@@ -23,7 +23,7 @@ public class PlayerCollision : MonoBehaviour
     private bool batteryGetFlag_ = false; // バッテリーを拾ったかのチェック
 
     // 脱出アイテム関連
-    private int keyItemCnt_    = 0;       // 現在所持してる脱出アイテムの数
+    private int keyItemCnt_    = 1;       // 現在所持してる脱出アイテムの数
     private int maxKeyItemNum_ = 8;       // 脱出アイテムの個数(8個)
     private bool keyItemColFlag_ = false; // 鍵と接触したか
     private bool doorColFlag_ = false;    // ドアと接触しているか
@@ -111,7 +111,7 @@ public class PlayerCollision : MonoBehaviour
             {
                 Debug.Log("ドアの鍵を開けました");
                 // 鍵を開ける音を鳴らす
-                 SoundScript.GetInstance().PlaySound(9);
+                SoundScript.GetInstance().PlaySound(9);
                 foreach (Transform c in other.gameObject.transform)
                 {
                     ChainCheck(c, "chain");

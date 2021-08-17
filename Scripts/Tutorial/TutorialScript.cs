@@ -69,6 +69,10 @@ public class TutorialScript : MonoBehaviour
     private bool turnFlag_ = false;
     private bool soundFlag_ = false;
 
+
+    //public Image blackPanel;
+    //private float panelAlpha_ = 0.0f;
+
     void Start()
     {
         playerCtl_ = player.GetComponent<playerController>();
@@ -241,8 +245,6 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
-
-
             // 隠れることができたか
             if (hideCtl_.GetHideFlg() == true)
             {
@@ -264,7 +266,7 @@ public class TutorialScript : MonoBehaviour
             }
 
 
-            // ドアに触れたかどうか
+            //ドアに触れたかどうか
             if (doorColFlag_ == true)
             {
                 nowNum_ = (int)mission.FOUR;
@@ -317,7 +319,6 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
-          //  if(missionRound==round.THIRD&&move_!=mission.ONE)
             if (alphaNum_ <= 0.0f)
             {
                 //////Debug.Log("alpha値が最小のため非表示にします。");
@@ -341,7 +342,7 @@ public class TutorialScript : MonoBehaviour
                 if (doorColFlag_ == true)
                 {
                     // SEの音を鳴らす
-                    SoundScript.GetInstance().PlaySound(10);
+                     SoundScript.GetInstance().PlaySound(10);
                 }
             }
         }
