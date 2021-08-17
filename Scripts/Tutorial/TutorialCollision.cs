@@ -25,6 +25,7 @@ public class TutorialCollision : MonoBehaviour
     public TutorialScript tutorialMain;    // チュートリアル用当たり判定
     private GameObject[] item_;
     private bool[] destroyCheckFlag_;// アイテムが破壊（取得）できたかのフラグ
+    public TutorialDoorAnimation tDoor;
     private bool nextMissionFlag_ = false; // true:次のミッションに移動　false:まだだめ
 
     // 実践関連
@@ -110,15 +111,26 @@ public class TutorialCollision : MonoBehaviour
                 }
             }
 
-            // 鍵の取得を確認したらドアを表示する
+            //// 鍵の取得を確認したらドアを表示する
             if (destroyCheckFlag_[(int)item.ESCAPE] == true)
             {
                 if (tutorialMain.GetCompleteFlag() == true
-                    && monochromeUI.fillAmount==0.0f)
+                    && monochromeUI.fillAmount == 0.0f)
                 {
                     item_[(int)item.DOOR].SetActive(true);
                 }
             }
+
+            //ドアと接触したら実践ミッションステージに移る
+            if (tDoor.GetOpenFlag() == true)
+            {
+                playerCol_.SetKeyItemCnt(0);   // 鍵の所持数をリセット
+                tutorialMain.SetDoorColFlag(true);
+
+                nextMissionFlag_ = true;
+                Debug.Log("ドアに接触nextMissionFlag_" + nextMissionFlag_);
+            }
+
             ItemStay();
         }
     }
@@ -153,9 +165,9 @@ public class TutorialCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (nextMissionFlag_ == true)
-        {
-            // null=鍵は取った
-            if (key == null)
+            {
+                // null=鍵は取った
+                if (key == null)
             {
                 //ドアと接触したらメインシーンに移る
                 if (other.gameObject.tag == "Door")
@@ -165,17 +177,9 @@ public class TutorialCollision : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            //ドアと接触したら実践ミッションステージに移る
-            if (other.gameObject.tag == "Door")
-            {
-                playerCol_.SetKeyItemCnt(0);   // 鍵の所持数をリセット
-                tutorialMain.SetDoorColFlag(true);
-                nextMissionFlag_ = true;
-                Debug.Log("ドアに接触nextMissionFlag_"+ nextMissionFlag_);
-            }
-        }
+        //else
+        //{
+        //}
     }
 
     private void CheckItem(item items_)

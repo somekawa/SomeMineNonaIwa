@@ -46,17 +46,10 @@ public class SystemMessage : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "TutorialScene")
-        {
-            boxMaxCnt_ = hideBoxes.transform.childCount;
-        }
-        else
-        {
-            boxMaxCnt_ = hideBoxes.transform.childCount-1;
-        }
-        //// 隠れる箱を探す
+        // Scriptがついてないオブジェクトがあるため-1をする
+        boxMaxCnt_ = hideBoxes.transform.childCount-1;
         testBox_ = new HideBox[boxMaxCnt_];
-        for (int i = 0; i < boxMaxCnt_; i++)
+        for (int i = 0; i < boxMaxCnt_; i++)        // 隠れる箱を探す
         {
             testBox_[i] = hideBoxes.transform.GetChild(i).GetComponent<HideBox>();
         }
@@ -241,11 +234,23 @@ public class SystemMessage : MonoBehaviour
 
     private void UseKeyMessage()
     {
-        if (collision.GetDoorColFlag() == false || useKeyNum_ == 8)
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
         {
-            // プレイヤーのカメラがアクティブの時
-            NonTextCommon(); 
-            return;
+            if (collision.GetDoorColFlag() == false || useKeyNum_ == 8)
+            {
+                // プレイヤーのカメラがアクティブの時
+                NonTextCommon();
+                return;
+            }
+        }
+        else
+        {
+            if (collision.GetDoorColFlag() == false || useKeyNum_ == 1)
+            {
+                // プレイヤーのカメラがアクティブの時
+                NonTextCommon();
+                return;
+            }
         }
 
         if (useKeyNum_ == collision.GetkeyItemCnt())
