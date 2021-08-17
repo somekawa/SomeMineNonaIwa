@@ -140,21 +140,22 @@ public class Recognition : MonoBehaviour
 
     private void MoveLightRange()
     {
-        float localEulerAngle = Mathf.RoundToInt((lightRange_.transform.localEulerAngles.y - 360.0f) * 0.1f) * 10.0f;
+        //float localEulerAngle = Mathf.RoundToInt((lightRange_.transform.localEulerAngles.y - 360.0f) * 0.1f) * 10.0f;
         float angle = targetAngle_ - 90.0f;
-        Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
-        if (Mathf.Abs(localEulerAngle - angle) == 0.0f)
-        {
+        //Debug.Log("localEulerAngle:" + localEulerAngle+" : "+ angle);
+        //if (Mathf.Abs(localEulerAngle - angle) == 0.0f)
+        //{
             lightRange_.transform.localEulerAngles = new Vector3(defaultAngle_.x, angle, defaultAngle_.z);
             return;
-        }
+        //}
 
-        Vector3 point = playerObj_.transform.position;
-        float period = 180.0f;
-        if (localEulerAngle > angle)
-        {
-            period = -period;
-        }
-        lightRange_.transform.RotateAround(point, Vector3.up, period * Time.deltaTime);
+        // playerを軸にして回転
+        //Vector3 point = playerObj_.transform.position;
+        //float period = 180.0f;
+        //if (localEulerAngle > angle)
+        //{
+        //    period = -period;
+        //}
+        //lightRange_.transform.RotateAround(point, Vector3.up, period * Time.deltaTime);
     }
 }
