@@ -24,6 +24,9 @@ public class RadioVoiceAudio : MonoBehaviour
     private bool nowRoundFlag_ = false; // BGM再生オブジェクトの範囲にいるかどうか
     private int nowTime = 1;            // nowVoiceが加算されるごとに1増える 1からなのはUIを表示する時間必要なため
 
+    // Sliderのワープ関連変数
+    private SlenderManCtl[] slenderManCtl_;
+
     void Start()
     {
         // AudioSourceの情報を最初に取得しておく
@@ -31,10 +34,19 @@ public class RadioVoiceAudio : MonoBehaviour
 
         eraseCnt_ = 1.0f / (int)voiceTimeMax;
         Debug.Log("eraseCnt_" + eraseCnt_);
+        slenderManCtl_ = new SlenderManCtl[4];
     }
 
     void Update()
     {
+        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        {
+            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().slenderManCtl[i] != null)
+            {
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().slenderManCtl[i];
+            }
+        }
+
         if (radioOnOffTime_ > 0.0f)
         {
             // ラジオ操作を受け付けない
@@ -44,6 +56,10 @@ public class RadioVoiceAudio : MonoBehaviour
         if (!soundFlg_)
         {
             return;
+        }
+        else
+        {
+            SlenderSpawner.GetInstance().ClosestObject(this.gameObject, 2, true, false);
         }
 
         if (soundFlg_ == true && nowTime < 2)
@@ -80,6 +96,11 @@ public class RadioVoiceAudio : MonoBehaviour
 
         if (!soundFlg_)   // SEのON
         {
+            if (slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()] != null)
+            {
+                slenderManCtl_[SlenderSpawner.GetInstance().GetMinCnt()].ringingFlag = false;
+            }
+
             if (VoiceSound != null)
             {
                 source_.clip = VoiceSound;
