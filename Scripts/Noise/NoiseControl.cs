@@ -28,7 +28,7 @@ public class NoiseControl : MonoBehaviour
     private bool randomSN_          = false;    // ランダムに表示する(ゲームオーバー時使用)
 
     // スレンダーマン画像
-    private Image slenderImage_;
+    private RawImage rawImageS_;
     private float startSI_          = 0.0f;     // スレンダーマン表示開始時間
     private float moveTimeSI_       = 1.5f;     // 一度に表示する時間(endless_がtrueの時を除く)
     private bool useSI_             = false;    // 表示中
@@ -66,18 +66,20 @@ public class NoiseControl : MonoBehaviour
                 rawImageSN_ = rawImage;
                 rawImageSN_.material.SetFloat("flag", 0.0f);
             }
+            else if (rawImage.name == "S_RawImage")
+            {
+                // スレンダーマン画像
+                rawImageS_ = rawImage;
+                if (rawImageS_.gameObject.activeSelf)
+                {
+                    // 初期時は非表示にする
+                    rawImageS_.gameObject.SetActive(false);
+                }
+            }
             else
             {
                 // 何もしない
             }
-        }
-
-        slenderImage_ = gameObject.GetComponentInChildren<Image>();
-        slenderImage_.rectTransform.sizeDelta = screenSize;
-        if(slenderImage_.gameObject.activeSelf)
-        {
-            // 初期時は非表示にする
-            slenderImage_.gameObject.SetActive(false);
         }
 
         if(SceneManager.GetActiveScene().name == "GameOverScene")
@@ -126,7 +128,7 @@ public class NoiseControl : MonoBehaviour
             if ((!endless_) && (moveTimeSN < Time.time - startSN_)) 
             {
                 rawImageSN_.material.SetFloat("flag", 0.0f);
-                slenderImage_.gameObject.SetActive(false);
+                rawImageS_.gameObject.SetActive(false);
                 startSN_ = 0.0f;
                 useSN_ = false;
             }
@@ -180,13 +182,13 @@ public class NoiseControl : MonoBehaviour
             return;
         }
 
-        Color color = slenderImage_.color;
+        Color color = rawImageS_.color;
         if ((startSI_ != 0.0f) && (Time.time - startSI_ >= moveTimeSI_))
         {
-            slenderImage_.gameObject.SetActive(false);
+            rawImageS_.gameObject.SetActive(false);
 
             color.a = 1.0f;
-            slenderImage_.material.SetColor("color_", color);
+            rawImageS_.material.SetColor("color_", color);
 
             useSI_ = true;                          // 使用済み
             return;
@@ -197,14 +199,14 @@ public class NoiseControl : MonoBehaviour
             startSI_ = Time.time;
         }
 
-        slenderImage_.gameObject.SetActive(true);
+        rawImageS_.gameObject.SetActive(true);
         color.a = 0.4f;
-        slenderImage_.material.SetColor("color_", color);
+        rawImageS_.material.SetColor("color_", color);
     }
 
     private void PulseNoiseUpdate()
     {
-        if (!slenderImage_.gameObject.activeSelf)
+        if (!rawImageS_.gameObject.activeSelf)
         {
             return;
         }
@@ -219,7 +221,7 @@ public class NoiseControl : MonoBehaviour
             usePN_ = true;
         }
 
-        slenderImage_.material.SetFloat("amount_", 0.5f * Mathf.Sin(parameterPN_ * Mathf.Deg2Rad));
+        rawImageS_.material.SetFloat("amount_", 0.5f * Mathf.Sin(parameterPN_ * Mathf.Deg2Rad));
         parameterPN_ += 30.0f;
 
         if (parameterPN_ > 180.0f) 
@@ -257,7 +259,7 @@ public class NoiseControl : MonoBehaviour
 
         if (slenderFlag)
         {
-            slenderImage_.gameObject.SetActive(true);
+            rawImageS_.gameObject.SetActive(true);
         }        
         startSN_ = Time.time;
         useSN_ = true;
