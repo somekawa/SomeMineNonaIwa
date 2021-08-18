@@ -258,13 +258,14 @@ public class SanitMng : MonoBehaviour
         {
             return;
         }
-        SoundScript.GetInstance().PlaySound(6);
         noiseControl_.DiscoveryNoiseEndless(true);
         tLightRange_.gameObject.SetActive(false);
         rTime_ = 0.0f;
         deadType_ = deadType;
         sanit_ = 0.0f;
         gameScene_.SetGameOverFlag(true);
+
+        SoundScript.GetInstance().PlaySound(6);
     }
 
     public float GetDTimeMax()
