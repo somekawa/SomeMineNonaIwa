@@ -17,6 +17,7 @@ public class SlenderManCtl : MonoBehaviour
     public bool ringingFlag = false;            // 音が鳴った場所に向かうか否かのフラグ(デフォルト：向かわない＝false)
     public bool inSightFlag = false;            // 視界内に入ったか否かのフラグ(デフォルト：入っていない＝false)
     public bool searchFlag = false;             // 範囲内で音が鳴った場所を探すか否かのフラグ(デフォルト：探さない＝false)
+    public bool stopFlag = false;
 
     private GameObject destinationPoint_;       // 移動予定地の親オブジェクト格納用
     private GameObject warpPoint_;              // ワープ予定地の親オブジェクト格納用
@@ -82,9 +83,6 @@ public class SlenderManCtl : MonoBehaviour
             }
         }
 
-        //if (navMeshAgent_.pathStatus != NavMeshPathStatus.PathInvalid)
-        //{
-        //if (navMeshAgent_.velocity.magnitude > 0)     // 移動しているかどうかの判定
         if (status == Status.WALK)
         {
             anim_.SetBool("moveFlag", true);            // 歩くモーションの開始
@@ -99,7 +97,7 @@ public class SlenderManCtl : MonoBehaviour
             if (ringingFlag == false)
             {
                 SetTargetPoint();                       // 次の移動先の決定
-                if (navMeshAgent_.hasPath == true)
+                if (navMeshAgent_.hasPath == true&& stopFlag != true)
                 {
                     status = Status.WALK;
                 }
@@ -114,7 +112,6 @@ public class SlenderManCtl : MonoBehaviour
                 status = Status.IDLE;
             }
         }
-        //}
 
         if (Vector3.Distance(gameObject.transform.position, soundPoint) <= navMeshAgent_.stoppingDistance && listenFlag == true)
         {
@@ -158,7 +155,6 @@ public class SlenderManCtl : MonoBehaviour
         {
             SetWarpPoint();
             listenFlag = false;
-            inSightFlag = false;
         }
 
         Vector3 worldDeltaPosition = navMeshAgent_.nextPosition - transform.position;
@@ -197,6 +193,7 @@ public class SlenderManCtl : MonoBehaviour
             navMeshAgent_.Warp(soundWarpPoint_);
             searchArea_.SetActive(true);
         }
+        inSightFlag = false;
         warpFlag = false;
         SetTargetPoint();
     }

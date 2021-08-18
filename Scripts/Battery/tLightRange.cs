@@ -31,9 +31,9 @@ public class tLightRange : MonoBehaviour
     {
         for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
         {
-            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().spawnSlender[i] != null)
+            if (slenderManCtl_[i] == null && SlenderSpawner.GetInstance().slenderManCtl[i] != null)
             {
-                slenderManCtl_[i] = SlenderSpawner.GetInstance().spawnSlender[i].gameObject.GetComponent<SlenderManCtl>();
+                slenderManCtl_[i] = SlenderSpawner.GetInstance().slenderManCtl[i];
             }
         }
     }
@@ -83,6 +83,14 @@ public class tLightRange : MonoBehaviour
             return;         // タグがEnemy以外なら以降の処理を行わない
         }
 
+        for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+        {
+            if (slenderManCtl_[i] != null)
+            {
+                slenderManCtl_[i].status = SlenderManCtl.Status.IDLE;
+                slenderManCtl_[i].stopFlag = true;
+            }
+        }
         rangeTime_ += Time.deltaTime;
         Debug.Log("範囲内時間：" + rangeTime_);
 
@@ -127,6 +135,7 @@ public class tLightRange : MonoBehaviour
             if (slenderManCtl_[i] != null)
             {
                 slenderManCtl_[i].status = SlenderManCtl.Status.WALK;
+                slenderManCtl_[i].stopFlag = false;
             }
         }
 
