@@ -69,6 +69,12 @@ public class SlenderManCtl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(stopFlag==true)
+        {
+            status = Status.IDLE;
+            navMeshAgent_.ResetPath();
+        }
+
         if ((gameScene_ != null)&& (gameScene_.GetStartAnimTime() <= gameScene_.GetMaxAnimTime()))
         {
             if (gameScene_.GetStartAnimTime() == gameScene_.GetMaxAnimTime())
@@ -96,11 +102,11 @@ public class SlenderManCtl : MonoBehaviour
             anim_.SetBool("moveFlag", false);           // 歩くモーションの停止
             if (ringingFlag == false)
             {
-                SetTargetPoint();                       // 次の移動先の決定
-                if (navMeshAgent_.hasPath == true&& stopFlag != true)
+                if (navMeshAgent_.hasPath == true && stopFlag != true)
                 {
                     status = Status.WALK;
                 }
+                SetTargetPoint();                       // 次の移動先の決定
                 searchFlag = false;
             }
         }
