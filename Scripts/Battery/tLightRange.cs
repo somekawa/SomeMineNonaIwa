@@ -71,8 +71,6 @@ public class tLightRange : MonoBehaviour
                     if (slenderManCtl_[i] != null)
                     {
                         slenderManCtl_[i].navMeshAgent_.ResetPath();
-                        slenderManCtl_[i].status = SlenderManCtl.Status.NULL;
-
                         slenderManCtl_[i].stopFlag = true;
                         slenderManCtl_[i].status = SlenderManCtl.Status.IDLE;
                     }
@@ -134,7 +132,6 @@ public class tLightRange : MonoBehaviour
             if (slenderManCtl_[i] != null)
             {
                 slenderManCtl_[i].stopFlag = false;
-                slenderManCtl_[i].status = SlenderManCtl.Status.WALK;
             }
         }
 

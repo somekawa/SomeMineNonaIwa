@@ -108,6 +108,7 @@ public class SlenderManCtl : MonoBehaviour
                 }
                 SetTargetPoint();                       // 次の移動先の決定
                 searchFlag = false;
+                listenFlag = false;
             }
         }
         else
