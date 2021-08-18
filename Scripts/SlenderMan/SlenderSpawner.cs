@@ -47,6 +47,7 @@ public class SlenderSpawner : MonoBehaviour
                 if (spawnSlender[0] == null)
                 {
                     spawnSlender[0] = Instantiate(slender, warpPoint_[Random.Range(1, warpPoint_.Length)].transform.position, new Quaternion(0f, 180f, 0f, 0f));
+                    slenderManCtl[0] = spawnSlender[0].GetComponent<SlenderManCtl>();
                 }
 
                 if (instantiateFlag == true && SoundScript.GetInstance().difficulty == SoundScript.Difficulty.HARD)
