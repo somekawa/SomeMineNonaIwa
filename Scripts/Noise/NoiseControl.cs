@@ -259,6 +259,9 @@ public class NoiseControl : MonoBehaviour
 
         if (slenderFlag)
         {
+            Color color = rawImageS_.color;
+            color.a = 1.0f;
+            rawImageS_.material.SetColor("color_", color);
             rawImageS_.gameObject.SetActive(true);
         }        
         startSN_ = Time.time;
