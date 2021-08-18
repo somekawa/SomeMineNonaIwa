@@ -14,7 +14,9 @@ public class GameScene : MonoBehaviour
     public Text batteryText;    // ポーズで電池残量の数値を表示
     public GameObject pauseUI;   //　ポーズした時に表示するUI
 
-    private bool pauseFlag_;    // ポーズ中かどうか
+    private bool pauseFlag_;            // ポーズ中かどうか
+    private bool gameOverFlag_ = false; // ゲームオーバーになったか
+
     // クリアシーンで使うため分と秒はpublicに
     public static int minute  = 0;          // 何分か
     public static int seconds = 0;          // 何秒か
@@ -112,7 +114,7 @@ public class GameScene : MonoBehaviour
         else
         {
             ChangePauseActive(pauseFlag_, 1.0f);
-            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
+            Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");            //Debug.Log("pauseUIアクティブ" + pauseUI.activeSelf + "(：ゲーム中true 停止中false)");
         }
 
     }
@@ -156,5 +158,15 @@ public class GameScene : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
         seconds++;        // 1秒経過したらcount_が+1される
         secondsAddFlag_ = true;
+    }
+
+    public void SetGameOverFlag(bool flag)
+    {
+        gameOverFlag_ = flag;
+    }
+
+    public bool GetGameOverFlag()
+    {
+        return gameOverFlag_;
     }
 }

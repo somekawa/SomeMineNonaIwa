@@ -23,8 +23,6 @@ public class SanitMng : MonoBehaviour
     private const float maxSanit_    = 100.0f;          // 最大正気度
     public static float sanit_;                         // 正気度(100から0に減少していく) 
 
-    private bool gameOvreFlag_       = false;           // ゲームオーバーになったか
-
     private bool loghtDecrease_      = false;           // ライトによる正気度減少
     private bool oldLightFlag_;                         // 前回のライトの状態
     private float onTime_            = 0.0f;            // 懐中電灯をオンにした時間
@@ -64,7 +62,7 @@ public class SanitMng : MonoBehaviour
             return;
         }
 
-        if (!gameOvreFlag_)
+        if (!gameScene_.GetGameOverFlag())
         {
             if (sanit_ <= 0.0f)
             {
@@ -256,16 +254,17 @@ public class SanitMng : MonoBehaviour
 
     public void GameOverSetAction(DeadType deadType)
     {
-        if(gameOvreFlag_)
+        if(gameScene_.GetGameOverFlag())
         {
             return;
         }
         SoundScript.GetInstance().PlaySound(6);
         noiseControl_.DiscoveryNoiseEndless(true);
+        tLightRange_.gameObject.SetActive(false);
         rTime_ = 0.0f;
         deadType_ = deadType;
         sanit_ = 0.0f;
-        gameOvreFlag_ = true;
+        gameScene_.SetGameOverFlag(true);
     }
 
     public float GetDTimeMax()

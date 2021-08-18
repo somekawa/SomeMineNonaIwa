@@ -113,9 +113,10 @@ public class playerController : MonoBehaviour
             }
         }
 
-        if ((hideControl_ != null) && (hideControl_.GetHideFlg()))
+        if (((hideControl_ != null) && (hideControl_.GetHideFlg())) ||    // 箱に隠れている
+            gameManager.GetGameOverFlag())                                // ゲームオーバーになった
         {
-            // 箱に隠れている
+            walkFlg_ = false;   // 立ち止まっている判定にする
             return;
         }
 
