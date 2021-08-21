@@ -27,8 +27,10 @@ public class SoundPresenter : MonoBehaviour
     public TextMeshProUGUI seVolumeText;        //SEMenuViewのvolumeTextを取得
     public Slider seSlider;                     //SEMenuViewのsliderを取得
 
-    private AudioSource slenderAudio_;
+    private AudioSource[] slenderAudio_;
     private AudioSource batteryScript_;
+
+    private GameScene gameScene_;
 
     // Start is called before the first frame update
 
@@ -47,25 +49,33 @@ public class SoundPresenter : MonoBehaviour
             {"ClearScene",SceneName.CLEAR},
             {"GameOverScene",SceneName.GAMEOVER}
         };
-
+        slenderAudio_ = new AudioSource[4];
     }
 
     void Update()
     {
-        if ((SceneManager.GetActiveScene().name == "TitleSample" || SceneManager.GetActiveScene().name == "MainScene")
-            && slenderAudio_==null)
+        if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            // メインのアニメーション中に検索した際のnullチェック
-            if (GameObject.FindGameObjectWithTag("Enemy") != null)
+            if(gameScene_==null)
             {
-                slenderAudio_ = GameObject.FindGameObjectWithTag("Enemy").GetComponent<AudioSource>();
+                gameScene_ = FindObjectOfType<GameScene>();
+            }
+
+            for (int i = 0; i < SlenderSpawner.GetInstance().spawnSlender.Length; i++)
+            {
+                if (gameScene_.GetStartAnimTime() > gameScene_.GetMaxAnimTime()&& SlenderSpawner.GetInstance().spawnSlender[i] != null)
+                {
+                    slenderAudio_[i] = SlenderSpawner.GetInstance().spawnSlender[i].GetComponent<AudioSource>();
+                    slenderAudio_[i].volume = seSlider.value;
+                }
+            }
+
+            if (batteryScript_ == null)
+            {
+                batteryScript_ = GameObject.Find("GameMng").GetComponent<AudioSource>();
             }
         }
 
-        if(SceneManager.GetActiveScene().name == "MainScene" && batteryScript_ == null)
-        {
-            batteryScript_ = GameObject.Find("GameMng").GetComponent<AudioSource>();
-        }
 
         // テストコード
         foreach (KeyValuePair<string, SceneName> mm in SoundMap_)
@@ -80,7 +90,6 @@ public class SoundPresenter : MonoBehaviour
                 }
             }
         }
-
 
         //if (SceneManager.GetActiveScene().name == "TitleSample")
         //{
@@ -126,12 +135,6 @@ public class SoundPresenter : MonoBehaviour
         //        SoundScript.GetInstance().PlayBGM(3);
         //    }
         //}
-
-        if (slenderAudio_ != null)
-        {
-            slenderAudio_.volume = seSlider.value;
-        }
-
         if(batteryScript_!=null)
         {
             batteryScript_.volume = seSlider.value;
