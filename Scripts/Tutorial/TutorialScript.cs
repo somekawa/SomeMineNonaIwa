@@ -37,7 +37,6 @@ public class TutorialScript : MonoBehaviour
     // fillAmountが1になったらラジオを使った処理のため
     public Image monochromeUI;
 
-    // public PauseScript pause;
     private GameScene gameScene_;
 
     // チュートリアル用のCollisionを使ってアイテムを拾ったか確認
@@ -69,17 +68,13 @@ public class TutorialScript : MonoBehaviour
     private bool turnFlag_ = false;
     private bool soundFlag_ = false;
 
-
-    //public Image blackPanel;
-    //private float panelAlpha_ = 0.0f;
-
     void Start()
     {
         playerCtl_ = player.GetComponent<playerController>();
         hideCtl_ = player.GetComponent<HideControl>();
         gameScene_ = FindObjectOfType<GameScene>();
 
-        missionRound = round.FIRST;
+        missionRound =  round.FIRST;//round.THIRD;//debug 
         textString = new string[(int)round.MAX, (int)mission.MAX]{ 
         {"", "前【Wキー】", "後ろ【Sキー】", "右【Dキー】", "左【Aキー】" },
         {"", "ライトON/OFF\n【左クリック】", "アイテムを拾う\n【Eキー】", "ラジオ再生\n【Eキー】", "スロースピード\n【移動+左Shiftキー】" },
@@ -234,6 +229,7 @@ public class TutorialScript : MonoBehaviour
             }
         }
         RoundCheck();
+        
     }
 
     void ThirdMissions()
@@ -265,8 +261,7 @@ public class TutorialScript : MonoBehaviour
                 nowNum_ = (int)mission.THREE;
             }
 
-
-            //ドアに触れたかどうか
+            // ドアに触れたかどうか
             if (doorColFlag_ == true)
             {
                 nowNum_ = (int)mission.FOUR;
@@ -279,7 +274,6 @@ public class TutorialScript : MonoBehaviour
                 Debug.Log(nowNum_+"番目のミッションを削除します"); 
                 status_[nowNum_].checkFlag = true;
             }
-
         }
         RoundCheck();
     }
@@ -342,7 +336,7 @@ public class TutorialScript : MonoBehaviour
                 if (doorColFlag_ == true)
                 {
                     // SEの音を鳴らす
-                     SoundScript.GetInstance().PlaySound(10);
+                    SoundScript.GetInstance().PlaySound(10);
                 }
             }
         }
@@ -364,7 +358,6 @@ public class TutorialScript : MonoBehaviour
     // 選ばれたミッション、画像のアルファ値
     private void EraseAlpha(int num, float alpha)
     {
-        //eraseM.EraseAlphaPractic(status_[num].moveText, status_[num].textBackImage, 0.005f);
         //// クリアしたミッションを徐々に消す処理
         alphaNum_ -= alpha;
         status_[num].textBackImage.color = new Color(255.0f, 255.0f, 0.0f, alphaNum_); //imageColor;
@@ -398,7 +391,7 @@ public class TutorialScript : MonoBehaviour
                     missionRound++;
                     Debug.Log("missionRound"+ missionRound);
                     // SEの音を鳴らす
-                    SoundScript.GetInstance().PlaySound(11);
+                   SoundScript.GetInstance().PlaySound(11);
 
                     //  Debug.Log("ミッションのラウンドをプラスします");
                 }
@@ -415,7 +408,6 @@ public class TutorialScript : MonoBehaviour
         }
     }
 
-
     public bool GetCompleteFlag()
     {
         // 全てのミッションを終わらせたらシーンを移す準備をする
@@ -431,6 +423,4 @@ public class TutorialScript : MonoBehaviour
     {
         doorColFlag_ = flag;
     }
-
 }
-

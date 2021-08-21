@@ -228,6 +228,7 @@ public class SystemMessage : MonoBehaviour
             }
             else
             {
+                textMessage.enabled = true;
                 // 再生されている時
                 if (radioAudio_.GetNowRound() == true)
                 {
@@ -242,6 +243,7 @@ public class SystemMessage : MonoBehaviour
             }
         }
     }
+
     private void LeamText()
     {
         if (playerCtl.GetMessageFlag() == false)
@@ -338,7 +340,6 @@ public class SystemMessage : MonoBehaviour
             TextCommon(false, text);
         }
     }
-
 
     private void TextCommon(bool flag, action text)
     {
