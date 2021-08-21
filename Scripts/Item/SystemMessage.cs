@@ -21,19 +21,19 @@ public class SystemMessage : MonoBehaviour
     }
     private action action_;
 
-    public HideControl hideCtl;         // 隠れているかのチェック
+
+    public playerController playerCtl;
     public PlayerCollision collision;   // どのアイテムを取得したかの確認
     public GameObject mainCamera;       // player側のカメラ
 
     public Image textBack;              // 文字の背景
     public Text textMessage;            // 表示する文字
-    public GameObject leanMessage;      // レーン用の文字
 
     private int useKeyNum_;     // 鍵の所持数を保存
-   
+
     /*隠れる関連*/
     public GameObject hideBoxes;// Boxの親を入れる
-    private HideBox[] testBox_;// 子どもを代入
+    private HideBox[] childBox_;// 子どもを代入
     private int boxNum_;// どの子どもの箱に入ったかを代入
     private int boxMaxCnt_;// 箱の個数
 
@@ -46,12 +46,13 @@ public class SystemMessage : MonoBehaviour
 
     void Start()
     {
+
         // Scriptがついてないオブジェクトがあるため-1をする
-        boxMaxCnt_ = hideBoxes.transform.childCount-1;
-        testBox_ = new HideBox[boxMaxCnt_];
+        boxMaxCnt_ = hideBoxes.transform.childCount - 1;
+        childBox_ = new HideBox[boxMaxCnt_];
         for (int i = 0; i < boxMaxCnt_; i++)        // 隠れる箱を探す
         {
-            testBox_[i] = hideBoxes.transform.GetChild(i).GetComponent<HideBox>();
+            childBox_[i] = hideBoxes.transform.GetChild(i).GetComponent<HideBox>();
         }
         Debug.Log("箱の個数" + boxMaxCnt_);
 
@@ -82,7 +83,7 @@ public class SystemMessage : MonoBehaviour
             {
                 FindMessage();
             }
-            else if (action.BOX_IN <= action_)
+            else if (action.BOX_IN <= action_ && action_ <= action.BOX_OUT)
             {
                 // ラジオ以降（〇〇できる系）
                 // 行動を起こすまで表示
@@ -96,6 +97,10 @@ public class SystemMessage : MonoBehaviour
             {
                 UseKeyMessage();
             }
+            else if (action.LEAN == action_)
+            {
+                LeamText();
+            }
 
             if (action_ <= action.KEY && itemFindFlag_ == false)
             {
@@ -105,7 +110,7 @@ public class SystemMessage : MonoBehaviour
     }
 
     private void ItemAction()
-    {     
+    {
         // NON以外＝何らかの行動をしているからテキストを表示
         if (action_ != action.NON)
         {
@@ -118,7 +123,7 @@ public class SystemMessage : MonoBehaviour
         if (collision.GetFindItem() != PlayerCollision.item.NON)
         {
             for (int i = 0; i < (int)PlayerCollision.item.MAX; i++)
-        {
+            {
                 // アイテム接触系
                 if (collision.GetFindItem() == (PlayerCollision.item)i)
                 {
@@ -140,7 +145,7 @@ public class SystemMessage : MonoBehaviour
         for (int i = 0; i < boxMaxCnt_; i++)
         {
             // ボックスを使える範囲にいる時
-            if (testBox_[i].InFlagCheck() == true)
+            if (childBox_[i].InFlagCheck() == true)
             {
                 action_ = action.BOX_IN;
                 boxNum_ = i;
@@ -151,6 +156,12 @@ public class SystemMessage : MonoBehaviour
         if (collision.GetDoorColFlag() == true)
         {
             action_ = action.DOOR;
+            return;
+        }
+
+        if (playerCtl.GetMessageFlag() == true)
+        {
+            action_ = action.LEAN;
             return;
         }
     }
@@ -231,6 +242,26 @@ public class SystemMessage : MonoBehaviour
             }
         }
     }
+    private void LeamText()
+    {
+        if (playerCtl.GetMessageFlag() == false)
+        {
+            // プレイヤーが何にも接触していない場合
+            NonTextCommon();
+            return;
+        }
+
+        if (playerCtl.GetHitLeanFlag() == true)
+        {
+            textBack.enabled = true;
+            textMessage.text = "【T】視点を戻す";
+        }
+        else
+        {
+            TextCommon(true, action.LEAN);   // 再生されてない時
+
+        }
+    }
 
     private void UseKeyMessage()
     {
@@ -270,7 +301,7 @@ public class SystemMessage : MonoBehaviour
     {
         Debug.Log("○○できます系のなか");
         if (mainCamera.activeSelf == true       // プレイヤーのカメラがアクティブの時
-        && testBox_[boxNum_].InFlagCheck() == false)       // ボックスの範囲外
+        && childBox_[boxNum_].InFlagCheck() == false)       // ボックスの範囲外
         {
             // プレイヤーのカメラがアクティブの時
             NonTextCommon();
@@ -278,7 +309,7 @@ public class SystemMessage : MonoBehaviour
         else
         {
             // 箱から出る時
-            if (mainCamera.activeSelf == false && testBox_[boxNum_].InFlagCheck() == false)
+            if (mainCamera.activeSelf == false && childBox_[boxNum_].InFlagCheck() == false)
             {
                 text = action.BOX_OUT;
             }
@@ -293,7 +324,6 @@ public class SystemMessage : MonoBehaviour
         if (0.0f < alpha_)
         {
             // 表示中　
-            leanMessage.SetActive(false);    // アイテム文字表示中に出ないように
             alpha_ -= 0.005f;                // 透明度を下げていく
             textMessage.color = new Color(0.0f, 0.0f, 0.0f, alpha_);
             textBack.color = new Color(255.0f, 255.0f, 255.0f, alpha_);
@@ -308,6 +338,7 @@ public class SystemMessage : MonoBehaviour
             TextCommon(false, text);
         }
     }
+
 
     private void TextCommon(bool flag, action text)
     {

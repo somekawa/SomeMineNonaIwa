@@ -1,31 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
 public class playerController : MonoBehaviour
 {
-    public Image textBack;
-    public GameObject LeanAnnounceText;   // リーン可能範囲内に入ったときにテキストを表示する
     public GameScene gameManager;
-
     private CharacterController controller_;
     private HideControl hideControl_;
 
     private string sceneName_;
-    private float speed_   = 4.0f;        // デフォルトの移動速度
+    private float speed_ = 4.0f;        // デフォルトの移動速度
     private float gravity_ = 9.8f;        // 重力
-    private bool walkFlg_  = false;       // 移動中はtrue
+    private bool walkFlg_ = false;       // 移動中はtrue
     private bool slowWalk_ = false;       // 移動速度が遅くなる場合はtrue
-    private bool quickTurnFlg_   = false; // クイックターンを行う際にtrue
+    private bool quickTurnFlg_ = false; // クイックターンを行う際にtrue
     private float quickTurnTime_ = 0.0f;  // クイックターン用のキーが時間中に2度押しされるか計測する
     private Vector3 oldRotation_;         // 1フレーム前のプレイヤー回転度
 
     private const float rotateSpeed_ = 0.5f;        // 回転速度
-    private const float speedMax_    = 4.0f;        // 移動速度の最大値
-    private const float countMax_    = 0.5f;        // エフェクト再生時間の最大値
+    private const float speedMax_ = 4.0f;        // 移動速度の最大値
+    private const float countMax_ = 0.5f;        // エフェクト再生時間の最大値
     private const float quickTurnTimeMax_ = 0.1f;   // この時間までに2度押しされたらクイックターンを行う
     private bool turnCheckFlag_ = false;            // チュートリアルでターンができたか確認用 ターンしたらtrue
     // リーン
@@ -36,6 +32,7 @@ public class playerController : MonoBehaviour
     private float startAnimTime_ = 0.0f;
     private GameScene gameScene_;
 
+    private bool messageFlag_=false;        // メッセージを出せる状態かどうか
     // リーンの計算式に必要な値をまとめた構造体
     public struct leanSt
     {
@@ -45,17 +42,14 @@ public class playerController : MonoBehaviour
     }
 
     IDictionary<string, leanSt> leanMap_;   // ボックスとの接触時に使用される値をまとめている(string->タグ名,leanSt->構造体)
-
-    //private bool clearFlag=false;
-
     void Start()
     {
-       controller_ = GetComponent<CharacterController>();
-       hideControl_ = GetComponent<HideControl>();
-       gameScene_ = FindObjectOfType<GameScene>();
+        controller_ = GetComponent<CharacterController>();
+        hideControl_ = GetComponent<HideControl>();
+        gameScene_ = FindObjectOfType<GameScene>();
 
-       // 初期化
-       leanSt[] lean = {
+        // 初期化
+        leanSt[] lean = {
             new leanSt { rotate = 1.0f , moveX = -1.0f, moveZ = 0.0f },// 黄色ボックス
             new leanSt { rotate = -1.0f, moveX = 1.0f , moveZ = 0.0f },// オレンジボックス
             new leanSt { rotate = -1.0f, moveX = 0.0f , moveZ = -1.0f},// 赤ボックス
@@ -80,13 +74,8 @@ public class playerController : MonoBehaviour
             { "LeanX_P_R", lean[7] }
         };
 
-
-        textBack.enabled = false;
-        LeanAnnounceText.SetActive(false);
-        LeanAnnounceText.GetComponent<Text>().text = "【T】通路を覗き込む";
-
         sceneName_ = SceneManager.GetActiveScene().name;
-   }
+    }
 
     void Update()
     {
@@ -126,12 +115,10 @@ public class playerController : MonoBehaviour
             leanFlg_ = !leanFlg_;
             if (leanFlg_)
             {
-                LeanAnnounceText.GetComponent<Text>().text = "【T】視点を戻す";
                 keyFlg1_ = false;
             }
             else
             {
-                LeanAnnounceText.GetComponent<Text>().text = "【T】通路を覗き込む";
                 keyFlg2_ = false;
             }
         }
@@ -178,7 +165,7 @@ public class playerController : MonoBehaviour
         // 連続押下時間を過ぎたらフラグと時間を初期値に戻す
         if (quickTurnTime_ > quickTurnTimeMax_)
         {
-            quickTurnFlg_  = false;
+            quickTurnFlg_ = false;
             quickTurnTime_ = 0.0f;
         }
 
@@ -211,7 +198,7 @@ public class playerController : MonoBehaviour
     {
         // 基本移動処理
         float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput   = Input.GetAxis("Vertical");
+        float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
 
         // 移動中かを調べてフラグを切り替える
@@ -281,8 +268,7 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerExit()
     {
-        textBack.enabled = false;
-       LeanAnnounceText.SetActive(false);
+        messageFlag_ = false;
     }
 
     private void OnTriggerStay(Collider other)
@@ -292,9 +278,7 @@ public class playerController : MonoBehaviour
         {
             return;
         }
-
-        LeanAnnounceText.SetActive(true );// falseなら表示(true)
-        textBack.enabled = true;
+        messageFlag_ = true;
 
         // キー押下中
         if (Input.GetKey(KeyCode.T))
@@ -319,5 +303,15 @@ public class playerController : MonoBehaviour
                 // 何も処理を行わない
             }
         }
+    }
+
+    public bool GetHitLeanFlag()
+    {
+        return leanFlg_;// 覗ける、視点を戻す
+    }
+
+    public bool GetMessageFlag()
+    {
+        return messageFlag_;
     }
 }
