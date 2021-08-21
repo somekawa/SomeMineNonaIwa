@@ -73,7 +73,6 @@ public class HideBox : MonoBehaviour
     {
         if (mannequin_ == null)
         {
-            Debug.Log("マネキンが見つかりません");
             Start();
         }
         mannequinFlag_ = flag;
