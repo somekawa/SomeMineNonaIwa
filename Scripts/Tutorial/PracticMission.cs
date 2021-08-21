@@ -133,7 +133,7 @@ public class PracticMission : MonoBehaviour
         {
             // Debug.Log("alpha値を減少させます");
             // 達成された表示ミッションを徐々に消す
-            EraseAlphaPractic(0.005f);
+            EraseAlphaPractic(0.5f);
         }
     }
 
@@ -150,7 +150,7 @@ public class PracticMission : MonoBehaviour
     private void EraseAlphaPractic( float alpha)
     {
         //// クリアしたミッションを徐々に消す処理
-        alphaNum_ -= alpha;
+        alphaNum_ -= alpha* Time.deltaTime;
         textBackImage.color = new Color(255, 255, 0.0f, alphaNum_); //imageColor;
         moveText.color = new Color(0.0f, 0.0f, 0.0f, alphaNum_ * 2);
     }

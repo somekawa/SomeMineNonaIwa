@@ -326,8 +326,8 @@ public class SystemMessage : MonoBehaviour
         if (0.0f < alpha_)
         {
             // 表示中　
-            alpha_ -= 0.005f;                // 透明度を下げていく
-            textMessage.color = new Color(0.0f, 0.0f, 0.0f, alpha_);
+            alpha_ -= 0.5f* Time.deltaTime;                // 透明度を下げていく
+            textMessage.color = new Color(0.0f, 0.0f, 0.0f, alpha_*2);
             textBack.color = new Color(255.0f, 255.0f, 255.0f, alpha_);
         }
         else
@@ -345,9 +345,9 @@ public class SystemMessage : MonoBehaviour
     {
         // true ずっと表示する系
         // false 表示後リセットのする系
+        textMessage.text = message_[(int)text];
         textMessage.enabled = flag;
         textBack.enabled = flag;
-        textMessage.text = message_[(int)text];
         alpha_ = 1.0f;
         textMessage.color = new Color(0.0f, 0.0f, 0.0f, alpha_);
         textBack.color = new Color(255.0f, 255.0f, 255.0f, alpha_);

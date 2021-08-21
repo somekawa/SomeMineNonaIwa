@@ -63,6 +63,7 @@ public class TutorialCollision : MonoBehaviour
             item_[i].SetActive(false);
             destroyCheckFlag_[i] = false;
         }
+        item_[(int)item.DOOR].SetActive(false);
     }
 
     void Update()

@@ -33,7 +33,6 @@ public class TutorialScript : MonoBehaviour
     private HideControl hideCtl_;
     private bool hideCheckFlag_ = false;
 
-
     // fillAmountが1になったらラジオを使った処理のため
     public Image monochromeUI;
 
@@ -60,8 +59,6 @@ public class TutorialScript : MonoBehaviour
     private float alphaNum_;        // 画像の透明度
 
     private bool completeFlag_ = false;     // ミッションを全部終わらせたらtrueに
-
-
     private bool[] roundFlag_;      // 終了したラウンドをチェック　終了=true
 
     private bool doorColFlag_ = false;
@@ -149,7 +146,13 @@ public class TutorialScript : MonoBehaviour
             Choice((mission)nowNum_);
         }
         else
-        {
+        {      
+            // fillAmounが0以上＝ラジオを使用した
+            if (0.0f < monochromeUI.fillAmount)
+            {
+                    soundFlag_ = false;
+            }
+
             if (Input.GetKeyDown(KeyCode.W))
             {
                 nowNum_ = (int)mission.ONE;
@@ -189,6 +192,11 @@ public class TutorialScript : MonoBehaviour
         }
         else
         {
+            // fillAmounが0以上＝ラジオを使用した
+            if (0.0f < monochromeUI.fillAmount)
+            {
+                soundFlag_ = false;
+            }
             // ライトonoffチェック
             if (Input.GetMouseButtonDown(0))       // マウスの左クリックをしたとき
             {
@@ -306,7 +314,7 @@ public class TutorialScript : MonoBehaviour
                 else
                 {
                     // 徐々に薄くする
-                    EraseAlpha((int)move_, 0.005f);
+                    EraseAlpha((int)move_, 0.5f);
                     Debug.Log("隠れるミッションを消します");
                 }
             }
@@ -331,7 +339,7 @@ public class TutorialScript : MonoBehaviour
             {
                 // Debug.Log("alpha値を減少させます");
                 // 達成された表示ミッションを徐々に消す
-                EraseAlpha((int)move_, 0.005f);
+                EraseAlpha((int)move_, 0.5f);
 
                 if (doorColFlag_ == true)
                 {
@@ -358,8 +366,10 @@ public class TutorialScript : MonoBehaviour
     // 選ばれたミッション、画像のアルファ値
     private void EraseAlpha(int num, float alpha)
     {
+        float test = alpha * Time.deltaTime;
         //// クリアしたミッションを徐々に消す処理
-        alphaNum_ -= alpha;
+        alphaNum_ -= alpha * Time.deltaTime;
+        Debug.Log("実際に消えるalpha"+ alphaNum_);
         status_[num].textBackImage.color = new Color(255.0f, 255.0f, 0.0f, alphaNum_); //imageColor;
         status_[num].moveText.color = new Color(0.0f, 0.0f, 0.0f, alphaNum_ * 2);
     }
