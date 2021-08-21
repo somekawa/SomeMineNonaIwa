@@ -31,6 +31,7 @@ public class HideBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (mannequinFlag_)
         {
             // マネキンが中に入っている
@@ -68,8 +69,13 @@ public class HideBox : MonoBehaviour
         return true;
     }
 
-    public void SetMannequin(bool flag)
+    public void SettestMannequin(bool flag)
     {
+        if (mannequin_ == null)
+        {
+            Debug.Log("マネキンが見つかりません");
+            Start();
+        }
         mannequinFlag_ = flag;
 
         mannequin_.SetActive(mannequinFlag_);
